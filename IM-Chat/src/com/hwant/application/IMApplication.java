@@ -5,14 +5,14 @@ import org.jivesoftware.smack.SmackAndroid;
 import android.app.Application;
 
 public class IMApplication extends Application {
-	private SmackAndroid smack = null;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-//		smack = SmackAndroid.init(getApplicationContext());
+		SmackAndroid.init(this);
 	}
-    public void exit(){
-    	
-    }
+
+	public void exit() {
+
+	}
 }
