@@ -34,7 +34,7 @@ public class AsmackInit {
 		// 判断网络发布广播
 		if (NetUtil.getNetStatus(this.service) == NetUtil.NET_STATUS_NONE) {
 			// 发布连接网络失败的广播
-			Intent intent = new Intent(RecevierConst.NET_STATUS_FAILURE);
+			Intent intent = new Intent(RecevierConst.Net_Stauts_Failure);
 			this.service.sendBroadcast(intent);
 			return null;
 		}
@@ -52,23 +52,35 @@ public class AsmackInit {
 		return connection;
 	}
 
-	public boolean setLogin(String name, String psw) {
+	/**
+	 * 开始与服务器建立连接
+	 */
+	public boolean startConnect() {
 		boolean flag = false;
 		if (connection == null) {
 			return flag;
 		}
 		try {
 			connection.connect();
-			if (!connection.isConnected()) {
-				return flag;
+			if (connection.isConnected()) {
+				flag=true;
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
+		return flag;
+	}
+
+	/**
+	 * 开始登陆账号
+	 */
+	public boolean setLogin(String name, String psw) {
+		boolean flag = false;
 		try {
-			if (connection.isConnected()) {
+			if (connection != null && connection.isConnected()) {
 				connection.login(name, psw);
-				flag = true;
+				// 判断登陆后是否认证成功
+				flag = connection.isAuthenticated();
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();
