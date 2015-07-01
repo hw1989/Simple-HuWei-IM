@@ -15,9 +15,13 @@ public class XMPPRecevier extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (RecevierConst.Connect_Server.equals(intent.getAction())) {
+		if (RecevierConst.Server_Connect.equals(intent.getAction())) {
 			if (work != null) {
-				work.dowhat(intent);
+				work.connectDoWhat(intent);
+			}
+		}else if(RecevierConst.Server_Login.equals(intent.getAction())){
+			if (work != null) {
+				work.loginDoWhat(intent);
 			}
 		}
 	}
