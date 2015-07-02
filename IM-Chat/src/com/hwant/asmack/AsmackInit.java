@@ -2,12 +2,16 @@ package com.hwant.asmack;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.PacketInterceptor;
+import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.wind.net.NetUtil;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -15,12 +19,16 @@ import com.hwant.common.RecevierConst;
 
 public class AsmackInit {
 	private static int TimeOut = 5000;
-	private Service service = null;
+	private Context context = null;
 	private ConnectionConfiguration configuration = null;
 	private XMPPConnection connection = null;
 
-	public AsmackInit(Service service) {
-		this.service = service;
+	public synchronized XMPPConnection getConnection() {
+		return connection;
+	}
+
+	public AsmackInit(Context context) {
+		this.context = context;
 	}
 
 	/**
@@ -32,10 +40,10 @@ public class AsmackInit {
 	 */
 	public XMPPConnection setConnect(String ip, int port, boolean security) {
 		// 判断网络发布广播
-		if (NetUtil.getNetStatus(this.service) == NetUtil.NET_STATUS_NONE) {
+		if (NetUtil.getNetStatus(this.context) == NetUtil.NET_STATUS_NONE) {
 			// 发布连接网络失败的广播
 			Intent intent = new Intent(RecevierConst.Net_Stauts_Failure);
-			this.service.sendBroadcast(intent);
+			this.context.sendBroadcast(intent);
 			return null;
 		}
 		configuration = new ConnectionConfiguration(ip, port);
@@ -49,6 +57,20 @@ public class AsmackInit {
 		connection = new XMPPConnection(configuration);
 		// 设置连接的监听
 		// connection.addConnectionListener(new AConnectionListener());
+		connection.addPacketInterceptor(new PacketInterceptor() {
+
+			@Override
+			public void interceptPacket(Packet packet) {
+//                 Log.e("info","intercept   "+packet.toXML());
+			}
+		}, null);
+		connection.addPacketListener(new PacketListener() {
+
+			@Override
+			public void processPacket(Packet packet) {
+//				Log.e("info","Listener   "+packet.toXML());
+			}
+		}, null);
 		return connection;
 	}
 
@@ -63,7 +85,7 @@ public class AsmackInit {
 		try {
 			connection.connect();
 			if (connection.isConnected()) {
-				flag=true;
+				flag = true;
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();

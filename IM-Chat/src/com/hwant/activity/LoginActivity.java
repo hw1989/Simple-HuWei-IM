@@ -1,16 +1,20 @@
 package com.hwant.activity;
 
+import org.jivesoftware.smack.Roster;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 import org.wind.util.PreferenceUtils;
 import org.wind.util.StringHelper;
 
+import com.hwant.application.IMApplication;
 import com.hwant.broadcast.IXMPPWork;
 import com.hwant.broadcast.XMPPRecevier;
 import com.hwant.common.RecevierConst;
 import com.hwant.dialog.LoginDialog;
+import com.hwant.services.IDoWork;
 import com.hwant.services.IMService;
 import com.hwant.services.IMService.SBinder;
+import com.hwant.services.TaskManager;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -27,8 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity implements OnClickListener,
-		IXMPPWork {
+public class LoginActivity extends Activity implements OnClickListener {
 	@ViewInject(id = R.id.btn_login)
 	private Button btn_login;
 	// 登陆名
@@ -41,16 +44,13 @@ public class LoginActivity extends Activity implements OnClickListener,
 	private IMService service = null;
 	// 登陆时的对话框
 	private LoginDialog dialog = null;
-	// 广播接受器
-	private XMPPRecevier recevier = null;
 	private PreferenceUtils sharepreference = null;
+	private TaskManager manager = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		IntentFilter filter = new IntentFilter();
-		recevier = new XMPPRecevier();
-		recevier.setIXMPPWork(this);
 
 		connection = new ServiceConnection() {
 
@@ -63,7 +63,8 @@ public class LoginActivity extends Activity implements OnClickListener,
 			public void onServiceConnected(ComponentName name, IBinder binder) {
 				SBinder sbinder = (SBinder) binder;
 				service = sbinder.getService();
-				// service.connectServer();
+				manager = sbinder.getTaskManager();
+				manager.addTask(new ConnectServer());
 			}
 		};
 		Intent intent = new Intent(this, IMService.class);
@@ -72,7 +73,6 @@ public class LoginActivity extends Activity implements OnClickListener,
 		setContentView(R.layout.login_layout);
 		filter.addAction(RecevierConst.Server_Connect);
 		filter.addAction(RecevierConst.Server_Login);
-		registerReceiver(recevier, filter);
 		bindService(intent, connection, Service.BIND_AUTO_CREATE);
 		init();
 
@@ -92,6 +92,9 @@ public class LoginActivity extends Activity implements OnClickListener,
 		if (dialog != null && dialog.isShowing()) {
 			dialog.dismiss();
 		}
+		if (manager != null) {
+			manager.removeAll();
+		}
 	}
 
 	@Override
@@ -99,9 +102,6 @@ public class LoginActivity extends Activity implements OnClickListener,
 		super.onDestroy();
 		if (connection != null) {
 			unbindService(connection);
-		}
-		if (recevier != null) {
-			unregisterReceiver(recevier);
 		}
 	}
 
@@ -111,28 +111,50 @@ public class LoginActivity extends Activity implements OnClickListener,
 		case R.id.btn_login:
 			String name = et_login_name.getText().toString();
 			String psw = et_login_psw.getText().toString();
-			if (StringHelper.isEmpty(name) || StringHelper.isEmpty(psw)) {
-				if (dialog != null && !dialog.isShowing()) {
-					dialog.init(R.layout.dialog_login_tip_layout);
-					dialog.show();
-				}
-				return;
-			}
-			service.login(name, psw);
+			// if (StringHelper.isEmpty(name) || StringHelper.isEmpty(psw)) {
+			// if (dialog != null && !dialog.isShowing()) {
+			// dialog.init(R.layout.dialog_login_tip_layout);
+			// dialog.show();
+			// }
+			// return;
+			// }
+			manager.addTask(new LoginServer());
 			break;
 		}
 	}
 
-	@Override
-	public void connectDoWhat(Intent intent) {
+	class ConnectServer implements IDoWork {
+		@Override
+		public Object doWhat() {
+			((IMApplication) getApplication()).getAsmack().startConnect();
+			return null;
+		}
 
-		Toast.makeText(this, "可以获取连接服务器的状态", Toast.LENGTH_LONG).show();
+		@Override
+		public void Finish2Do(Object obj) {
+			Toast.makeText(LoginActivity.this, "可以获取连接服务器的状态",
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
-	@Override
-	public void loginDoWhat(Intent intent) {
-		intent.getBooleanExtra("login",false);
-        intent=new Intent(this,IndexActivity.class);
-        startActivity(intent);
+	class LoginServer implements IDoWork {
+
+		@Override
+		public Object doWhat() {
+			((IMApplication) getApplication()).getAsmack().setLogin("huwei",
+					"123456");
+			return null;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+
+			Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
+			startActivity(intent);
+			LoginActivity.this.finish();
+			Toast.makeText(LoginActivity.this, "可以获取连接服务器的状态",
+					Toast.LENGTH_LONG).show();
+		}
+
 	}
 }

@@ -4,5 +4,7 @@
     <dimen name="margin_20">20dip</dimen>
     <dimen name="margin_30">30dip</dimen>
     <dimen name="margin_40">40dip</dimen>
+    <!-- login -->
     <dimen name="login_btn_hei">45dip</dimen>
+    <dimen name="index_bottom_size">60dip</dimen>
 </resources>
