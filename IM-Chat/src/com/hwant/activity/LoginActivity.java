@@ -1,5 +1,7 @@
 package com.hwant.activity;
 
+import java.lang.ref.WeakReference;
+
 import org.jivesoftware.smack.Roster;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
@@ -44,13 +46,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private IMService service = null;
 	// 登陆时的对话框
 	private LoginDialog dialog = null;
-	private PreferenceUtils sharepreference = null;
+	// private PreferenceUtils sharepreference = null;
 	private TaskManager manager = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		IntentFilter filter = new IntentFilter();
+		// IntentFilter filter = new IntentFilter();
 
 		connection = new ServiceConnection() {
 
@@ -71,8 +73,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		startService(new Intent(this, IMService.class));
 
 		setContentView(R.layout.login_layout);
-		filter.addAction(RecevierConst.Server_Connect);
-		filter.addAction(RecevierConst.Server_Login);
+		// filter.addAction(RecevierConst.Server_Connect);
+		// filter.addAction(RecevierConst.Server_Login);
 		bindService(intent, connection, Service.BIND_AUTO_CREATE);
 		init();
 
@@ -83,7 +85,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		dialog = new LoginDialog(this, R.style.dialog);
 		ActivityInject.getInstance().setInject(this);
 		btn_login.setOnClickListener(this);
-		sharepreference = PreferenceUtils.init(getApplication());
+		// sharepreference = PreferenceUtils.init(getApplication());
 	}
 
 	@Override
@@ -126,7 +128,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	class ConnectServer implements IDoWork {
 		@Override
 		public Object doWhat() {
-			((IMApplication) getApplication()).getAsmack().startConnect();
+			service.getAsmack().startConnect();
 			return null;
 		}
 
@@ -141,14 +143,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		public Object doWhat() {
-			((IMApplication) getApplication()).getAsmack().setLogin("huwei",
-					"123456");
+			service.getAsmack().setLogin("huwei", "123456");
 			return null;
 		}
 
 		@Override
 		public void Finish2Do(Object obj) {
-
+			service.addConnectListener();
 			Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
 			startActivity(intent);
 			LoginActivity.this.finish();

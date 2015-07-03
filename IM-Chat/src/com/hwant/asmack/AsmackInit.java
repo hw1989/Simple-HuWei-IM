@@ -6,6 +6,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.PacketInterceptor;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.wind.net.NetUtil;
@@ -61,14 +62,14 @@ public class AsmackInit {
 
 			@Override
 			public void interceptPacket(Packet packet) {
-//                 Log.e("info","intercept   "+packet.toXML());
+				// Log.e("info","intercept   "+packet.toXML());
 			}
 		}, null);
 		connection.addPacketListener(new PacketListener() {
 
 			@Override
 			public void processPacket(Packet packet) {
-//				Log.e("info","Listener   "+packet.toXML());
+				// Log.e("info","Listener   "+packet.toXML());
 			}
 		}, null);
 		return connection;
@@ -103,6 +104,12 @@ public class AsmackInit {
 				connection.login(name, psw);
 				// 判断登陆后是否认证成功
 				flag = connection.isAuthenticated();
+				// if (flag) {
+				// // 设置监听
+				// Roster roster=connection.getRoster();
+				// roster.addRosterListener(new
+				// MyRosterListener(connection,this.context));
+				// }
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();

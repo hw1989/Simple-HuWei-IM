@@ -47,53 +47,5 @@ public class FriendFragment extends Fragment {
 		return view;
 	}
 
-	public class GetFriend implements IDoWork {
-		@Override
-		public Object doWhat() {
-			XMPPConnection connection = application.getConnection();
-			if (connection.isConnected() && connection.isAuthenticated()) {
-				Roster roster = connection.getRoster();
-//				roster.addRosterListener(new RosterListener() {
-//
-//					@Override
-//					public void presenceChanged(Presence arg0) {
-//						// TODO Auto-generated method stub
-//
-//					}
-//
-//					@Override
-//					public void entriesUpdated(Collection<String> arg0) {
-//						// TODO Auto-generated method stub
-//
-//					}
-//
-//					@Override
-//					public void entriesDeleted(Collection<String> arg0) {
-//						// TODO Auto-generated method stub
-//
-//					}
-//
-//					@Override
-//					public void entriesAdded(Collection<String> arg0) {
-//						// TODO Auto-generated method stub
-//
-//					}
-//				});
-				Collection<RosterEntry> rosters = roster.getEntries();
-				for (RosterEntry entry : rosters) {
-					Presence presence = roster.getPresence(entry.getUser());
-					
-				}
-				// Presence presence = roster.getPresence("admin");
-				// Mode mode = presence.getMode();
-			}
-			return null;
-		}
-
-		@Override
-		public void Finish2Do(Object obj) {
-
-		}
-
-	}
+	
 }

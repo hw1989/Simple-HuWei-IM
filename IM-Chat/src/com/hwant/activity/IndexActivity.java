@@ -95,6 +95,6 @@ public class IndexActivity extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void bindFinished(TaskManager manager) {
-		manager.addTask(friend.new GetFriend());
+		// manager.addTask(friend.new GetFriend());
 	}
 }
