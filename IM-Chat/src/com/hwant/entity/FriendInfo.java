@@ -6,7 +6,7 @@ import org.wind.annotation.Field;
 import org.wind.annotation.Table;
 import org.wind.database.DataType;
 
-@Table(DTname = "FriendInfo")
+@Table(DTname = "friend")
 public class FriendInfo implements Serializable {
 
 	/**
@@ -68,5 +68,7 @@ public class FriendInfo implements Serializable {
 	// 状态
 	@Field(name = "status", type = DataType.Type_Int)
 	private int status;
-
+	//请求时间
+	@Field(name = "date", size = 20)
+    private String date;
 }
