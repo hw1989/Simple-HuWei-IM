@@ -39,6 +39,11 @@
             android:name="com.hwant.db.FriendProvider"
             android:authorities="com.hwant.im.friend"
             android:exported="false" />
+        <provider
+            android:name="com.hwant.db.ChatProvider"
+            android:authorities="org.hwant.im.chat"
+            android:exported="false" >
+        </provider>
     </application>
 
 </manifest>

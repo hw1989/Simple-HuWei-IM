@@ -5,14 +5,15 @@ import java.io.Serializable;
 import org.wind.annotation.Field;
 import org.wind.annotation.Table;
 import org.wind.database.DataType;
-@Table(DTname="chatmessage")
+
+@Table(DTname = "chatmessage")
 public class ChatMessage implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	// 来自谁的消息
-	@Field(name="mfrom")
+	@Field(name = "mfrom")
 	private String mfrom;
 
 	public String getMfrom() {
@@ -64,16 +65,18 @@ public class ChatMessage implements Serializable {
 	}
 
 	// 消息内容
-	@Field(name="message")
+	@Field(name = "message")
 	private String message;
 	// 给谁发送消息
-	@Field(name="mto")
+	@Field(name = "mto")
 	private String mto;
 	// 是否已读
-	@Field(name="read",type=DataType.Type_Int)
+	@Field(name = "read", type = DataType.Type_Int)
 	private boolean read;
-	// 消息的时间
+	// 消息的时间 
+	@Field(name = "time",type=DataType.TYPE_Real)
 	private String time;
 	// 组消息
+	@Field(name = "mgroup",size=20)
 	private String mgroup;
 }

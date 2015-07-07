@@ -55,10 +55,10 @@ public class FriendProvider extends ContentProvider {
 		String str = "";
 		switch (matcher.match(uri)) {
 		case 1:
-			str = "vnd.android.cursor.dir/org.hwant.im";
+			str = "vnd.android.cursor.dir/com.hwant.im.friend";
 			break;
 		case 2:
-			str = "vnd.android.cursor.item/org.hwant.im";
+			str = "vnd.android.cursor.item/com.hwant.im.friend";
 			break;
 		default:
 			throw new IllegalArgumentException("uri错误!");

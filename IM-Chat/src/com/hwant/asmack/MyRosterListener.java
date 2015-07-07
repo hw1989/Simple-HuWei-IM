@@ -11,7 +11,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
 import com.hwant.db.MySQLiteOpenHelper;
-import com.hwant.entity.FriendInfo;
+import com.hwant.entity.ConnectInfo;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -42,7 +42,7 @@ public class MyRosterListener implements RosterListener {
 	@Override
 	public void entriesAdded(Collection<String> arg0) {
 		RosterEntry entry = null;
-		FriendInfo info = null;
+		ConnectInfo info = null;
 		// database.beginTransaction();
 		for (String str : arg0) {
 			entry = this.roster.getEntry(str);

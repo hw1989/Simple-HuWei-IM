@@ -2,6 +2,8 @@ package com.hwant.asmack;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.PacketInterceptor;
@@ -58,20 +60,21 @@ public class AsmackInit {
 		connection = new XMPPConnection(configuration);
 		// 设置连接的监听
 		// connection.addConnectionListener(new AConnectionListener());
-		connection.addPacketInterceptor(new PacketInterceptor() {
-
-			@Override
-			public void interceptPacket(Packet packet) {
-				// Log.e("info","intercept   "+packet.toXML());
-			}
-		}, null);
-		connection.addPacketListener(new PacketListener() {
-
-			@Override
-			public void processPacket(Packet packet) {
-				// Log.e("info","Listener   "+packet.toXML());
-			}
-		}, null);
+		PacketTypeFilter filter=new PacketTypeFilter(Message.class);
+		//对发送消息进行监听
+		connection.addPacketListener(new MyPacketListener(this.context), filter);
+		 connection.addPacketInterceptor(new PacketInterceptor() {
+		
+		 @Override
+		 public void interceptPacket(Packet packet) {
+		 }
+		 }, null);
+		// connection.addPacketListener(new PacketListener() {
+		//
+		// @Override
+		// public void processPacket(Packet packet) {
+		// }
+		// }, null);
 		return connection;
 	}
 

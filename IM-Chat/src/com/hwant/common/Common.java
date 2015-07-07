@@ -8,4 +8,6 @@ public class Common {
 	public static final String IM_Config="config";
 	//数据库文件
 	public static final String DB_File_Name="IM_DB.db3";
+	//设置数据库查询的排列
+	public static final String Table_Order_ASC=" _id asc ";
 }

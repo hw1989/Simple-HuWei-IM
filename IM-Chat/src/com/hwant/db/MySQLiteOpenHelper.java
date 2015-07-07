@@ -3,7 +3,7 @@ package com.hwant.db;
 import org.wind.database.TableHelper;
 
 import com.hwant.common.Common;
-import com.hwant.entity.FriendInfo;
+import com.hwant.entity.ConnectInfo;
 
 import android.R.integer;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
@@ -25,7 +26,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		TableHelper friend = new TableHelper(FriendInfo.class);
+		TableHelper friend = new TableHelper(ConnectInfo.class);
 		db.beginTransaction();
 		try {
 			db.execSQL(friend.getSQL());
