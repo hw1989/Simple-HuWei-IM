@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="gray_1">#B1B1B1</color>
+    <color name="gray_2">#EBECED</color>
 </resources>

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.wind.adapter.ViewHolder;
+import org.wind.util.StringHelper;
 
 import com.hwant.activity.R;
 import com.hwant.entity.ConnectInfo;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ConnectAdapter extends BaseExpandableListAdapter {
@@ -93,7 +95,7 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean hasStableIds() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -105,7 +107,18 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 		}
 		TextView tv_nickname = (TextView) pholder.getView(convertView,
 				R.id.connect_list_pitem_groupname);
-		tv_nickname.setText(group.get(groupPosition));
+		ImageView iv_expand=(ImageView)pholder.getView(convertView, R.id.connect_list_pitem_expand);
+		String groupname=group.get(groupPosition);
+		if(StringHelper.isEmpty(groupname)){
+			tv_nickname.setText("我的好友");
+		}else{
+			tv_nickname.setText(String.valueOf(groupname));
+		}
+		if(isExpanded){
+			iv_expand.setImageResource(R.drawable.indicator_expanded);
+		}else{
+			iv_expand.setImageResource(R.drawable.indicator_unexpanded);
+		}
 		return convertView;
 	}
 
@@ -124,7 +137,7 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return false;
+		return true;
 	}
 
 }

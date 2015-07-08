@@ -7,4 +7,6 @@
     <!-- login -->
     <string name="login_btn">登录</string>
     <string name="login_tip1">用户名与密码不能为空!</string>
+    <!-- chat -->
+    <string name="chat_send">发送</string>
 </resources>

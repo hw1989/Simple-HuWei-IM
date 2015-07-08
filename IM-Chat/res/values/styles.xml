@@ -6,15 +6,23 @@
         <item name="android:inputType">text</item>
         <item name="android:background">@null</item>
     </style>
+
     <style name="dialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowFrame">@null</item><!--边框-->
-        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
-        <item name="android:windowIsTranslucent">false</item><!--半透明-->
-        <item name="android:windowNoTitle">true</item><!--无标题-->
-        <item name="android:windowBackground">@android:color/transparent</item><!--背景透明-->
-        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
-        
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 模糊 -->
+
     </style>
+
     <style name="txt_style_1">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">20sp</item>
@@ -26,5 +34,11 @@
         <item name="android:paddingLeft">8dip</item>
         <item name="android:paddingRight">8dip</item>
     </style>
-
+    <!-- radiobutton -->
+    <style name="rg_facepage_index">
+        <item name="android:button">@null</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/dot_page_select</item>
+    </style>
 </resources>

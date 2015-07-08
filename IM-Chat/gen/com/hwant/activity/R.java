@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class color {
         public static final int gray_1=0x7f050000;
+        public static final int gray_2=0x7f050001;
     }
     public static final class dimen {
         /** 
@@ -31,62 +32,156 @@ public final class R {
         public static final int margin_40=0x7f060003;
     }
     public static final class drawable {
-        public static final int ah=0x7f020000;
-        public static final int circle=0x7f020001;
-        public static final int default_dialog=0x7f020002;
-        public static final int eqm=0x7f020003;
-        public static final int fls=0x7f020004;
-        public static final int gsl=0x7f020005;
-        public static final int gvw=0x7f020006;
-        public static final int gvx=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int index_connect_select=0x7f020009;
-        public static final int index_message_select=0x7f02000a;
-        public static final int index_plugin_select=0x7f02000b;
-        public static final int indicator_expanded=0x7f02000c;
-        public static final int indicator_unexpanded=0x7f02000d;
-        public static final int login_btn_select=0x7f02000e;
-        public static final int menu_background=0x7f02000f;
-        public static final int shadow=0x7f020010;
-        public static final int tab_icon_contact_normal=0x7f020011;
-        public static final int tab_icon_contact_selected=0x7f020012;
-        public static final int tab_icon_conversation_normal=0x7f020013;
-        public static final int tab_icon_conversation_selected=0x7f020014;
-        public static final int tab_icon_plugin_normal=0x7f020015;
-        public static final int tab_icon_plugin_selected=0x7f020016;
+        public static final int add_face_select=0x7f020000;
+        public static final int add_icon_face_click=0x7f020001;
+        public static final int add_icon_face_nor=0x7f020002;
+        public static final int ah=0x7f020003;
+        public static final int chat_input=0x7f020004;
+        public static final int chat_send_press=0x7f020005;
+        public static final int circle=0x7f020006;
+        public static final int connect_item_bg=0x7f020007;
+        public static final int default_dialog=0x7f020008;
+        public static final int dot_page_current=0x7f020009;
+        public static final int dot_page_default=0x7f02000a;
+        public static final int dot_page_select=0x7f02000b;
+        public static final int ebg=0x7f02000c;
+        public static final int ebh=0x7f02000d;
+        public static final int ebj=0x7f02000e;
+        public static final int ebl=0x7f02000f;
+        public static final int ebn=0x7f020010;
+        public static final int ebo=0x7f020011;
+        public static final int ebp=0x7f020012;
+        public static final int ebq=0x7f020013;
+        public static final int ebr=0x7f020014;
+        public static final int ebs=0x7f020015;
+        public static final int ebt=0x7f020016;
+        public static final int ebu=0x7f020017;
+        public static final int ebv=0x7f020018;
+        public static final int ebw=0x7f020019;
+        public static final int ebz=0x7f02001a;
+        public static final int eca=0x7f02001b;
+        public static final int ecb=0x7f02001c;
+        public static final int ecc=0x7f02001d;
+        public static final int ecd=0x7f02001e;
+        public static final int ece=0x7f02001f;
+        public static final int ecf=0x7f020020;
+        public static final int ecg=0x7f020021;
+        public static final int ech=0x7f020022;
+        public static final int eci=0x7f020023;
+        public static final int ecj=0x7f020024;
+        public static final int ecl=0x7f020025;
+        public static final int ecm=0x7f020026;
+        public static final int ecn=0x7f020027;
+        public static final int eco=0x7f020028;
+        public static final int ecp=0x7f020029;
+        public static final int ecq=0x7f02002a;
+        public static final int ecr=0x7f02002b;
+        public static final int ecs=0x7f02002c;
+        public static final int ect=0x7f02002d;
+        public static final int ecu=0x7f02002e;
+        public static final int ecv=0x7f02002f;
+        public static final int ecw=0x7f020030;
+        public static final int ecx=0x7f020031;
+        public static final int ecy=0x7f020032;
+        public static final int ecz=0x7f020033;
+        public static final int eda=0x7f020034;
+        public static final int edb=0x7f020035;
+        public static final int edd=0x7f020036;
+        public static final int ede=0x7f020037;
+        public static final int edi=0x7f020038;
+        public static final int edj=0x7f020039;
+        public static final int eeo=0x7f02003a;
+        public static final int eep=0x7f02003b;
+        public static final int eeq=0x7f02003c;
+        public static final int eer=0x7f02003d;
+        public static final int ees=0x7f02003e;
+        public static final int eet=0x7f02003f;
+        public static final int eew=0x7f020040;
+        public static final int eex=0x7f020041;
+        public static final int eez=0x7f020042;
+        public static final int efa=0x7f020043;
+        public static final int efb=0x7f020044;
+        public static final int efd=0x7f020045;
+        public static final int efe=0x7f020046;
+        public static final int eff=0x7f020047;
+        public static final int efg=0x7f020048;
+        public static final int efh=0x7f020049;
+        public static final int efi=0x7f02004a;
+        public static final int efj=0x7f02004b;
+        public static final int efk=0x7f02004c;
+        public static final int efl=0x7f02004d;
+        public static final int efm=0x7f02004e;
+        public static final int efn=0x7f02004f;
+        public static final int efo=0x7f020050;
+        public static final int efr=0x7f020051;
+        public static final int efs=0x7f020052;
+        public static final int eft=0x7f020053;
+        public static final int eqm=0x7f020054;
+        public static final int fls=0x7f020055;
+        public static final int goi=0x7f020056;
+        public static final int gsl=0x7f020057;
+        public static final int gvw=0x7f020058;
+        public static final int gvx=0x7f020059;
+        public static final int ic_launcher=0x7f02005a;
+        public static final int index_connect_select=0x7f02005b;
+        public static final int index_message_select=0x7f02005c;
+        public static final int index_plugin_select=0x7f02005d;
+        public static final int indicator_expanded=0x7f02005e;
+        public static final int indicator_unexpanded=0x7f02005f;
+        public static final int login_btn_select=0x7f020060;
+        public static final int menu_background=0x7f020061;
+        public static final int shadow=0x7f020062;
+        public static final int tab_icon_contact_normal=0x7f020063;
+        public static final int tab_icon_contact_selected=0x7f020064;
+        public static final int tab_icon_conversation_normal=0x7f020065;
+        public static final int tab_icon_conversation_selected=0x7f020066;
+        public static final int tab_icon_plugin_normal=0x7f020067;
+        public static final int tab_icon_plugin_selected=0x7f020068;
     }
     public static final class id {
-        public static final int action_settings=0x7f090011;
-        public static final int btn_login=0x7f090008;
+        public static final int action_settings=0x7f090017;
+        public static final int btn_login=0x7f09000e;
+        public static final int cb_index_connect=0x7f09000a;
+        public static final int cb_index_dynamic=0x7f09000b;
+        public static final int cb_index_mess=0x7f090009;
         public static final int connect_list_citem_nickname=0x7f090000;
-        public static final int connect_list_pitem_groupname=0x7f090001;
-        public static final int elv_connect=0x7f090002;
-        public static final int et_login_name=0x7f090006;
-        public static final int et_login_psw=0x7f090007;
-        public static final int iv_background=0x7f090009;
-        public static final int iv_icon=0x7f09000f;
-        public static final int iv_shadow=0x7f09000a;
-        public static final int layout_left_menu=0x7f09000c;
-        public static final int layout_right_menu=0x7f09000e;
-        public static final int main_fragment=0x7f090003;
-        public static final int rbt_index_connect=0x7f090005;
-        public static final int rbt_index_mess=0x7f090004;
-        public static final int sv_left_menu=0x7f09000b;
-        public static final int sv_right_menu=0x7f09000d;
-        public static final int tv_title=0x7f090010;
+        public static final int connect_list_pitem_expand=0x7f090001;
+        public static final int connect_list_pitem_groupname=0x7f090002;
+        public static final int elv_connect=0x7f090007;
+        public static final int et_login_name=0x7f09000c;
+        public static final int et_login_psw=0x7f09000d;
+        public static final int gv_face=0x7f090006;
+        public static final int iv_background=0x7f09000f;
+        public static final int iv_gv_face=0x7f090003;
+        public static final int iv_icon=0x7f090015;
+        public static final int iv_shadow=0x7f090010;
+        public static final int layout_left_menu=0x7f090012;
+        public static final int layout_right_menu=0x7f090014;
+        public static final int main_fragment=0x7f090008;
+        public static final int rg_facepage_index=0x7f090005;
+        public static final int sv_left_menu=0x7f090011;
+        public static final int sv_right_menu=0x7f090013;
+        public static final int tv_title=0x7f090016;
+        public static final int vp_chat_face=0x7f090004;
     }
     public static final class layout {
-        public static final int connect_list_citem_layout=0x7f030000;
-        public static final int connect_list_pitem_layout=0x7f030001;
-        public static final int dialog_login_tip_layout=0x7f030002;
-        public static final int friends_layout=0x7f030003;
-        public static final int index_layout=0x7f030004;
-        public static final int loading_layout=0x7f030005;
-        public static final int login_layout=0x7f030006;
-        public static final int regist_layout=0x7f030007;
-        public static final int residemenu=0x7f030008;
-        public static final int residemenu_item=0x7f030009;
-        public static final int setting_layout=0x7f03000a;
+        public static final int chat_item_layout=0x7f030000;
+        public static final int chat_layout=0x7f030001;
+        public static final int connect_list_citem_layout=0x7f030002;
+        public static final int connect_list_pitem_layout=0x7f030003;
+        public static final int dialog_login_tip_layout=0x7f030004;
+        public static final int face_gvitem_layout=0x7f030005;
+        public static final int face_layout=0x7f030006;
+        public static final int face_list_layout=0x7f030007;
+        public static final int friends_layout=0x7f030008;
+        public static final int index_layout=0x7f030009;
+        public static final int loading_layout=0x7f03000a;
+        public static final int login_layout=0x7f03000b;
+        public static final int message_input_layout=0x7f03000c;
+        public static final int regist_layout=0x7f03000d;
+        public static final int residemenu=0x7f03000e;
+        public static final int residemenu_item=0x7f03000f;
+        public static final int setting_layout=0x7f030010;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -94,6 +189,9 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f040002;
         public static final int app_name=0x7f040000;
+        /**  chat 
+         */
+        public static final int chat_send=0x7f040005;
         public static final int hello_world=0x7f040001;
         /**  login 
          */
@@ -113,14 +211,17 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070004;
-        /** 模糊
+        public static final int AppBaseTheme=0x7f070005;
+        /**  模糊 
          */
         public static final int dialog=0x7f070001;
         public static final int et_style_nobg=0x7f070000;
         /**  登陆 用户名与密码 
          */
         public static final int login_et_input=0x7f070003;
+        /**  radiobutton 
+         */
+        public static final int rg_facepage_index=0x7f070004;
         public static final int txt_style_1=0x7f070002;
     }
 }

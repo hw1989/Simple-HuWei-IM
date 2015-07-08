@@ -28,20 +28,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1.0" >
 
-            <RadioButton
-                android:id="@+id/rbt_index_mess"
+            <CheckBox
+                android:id="@+id/cb_index_mess"
                 android:layout_width="@dimen/index_bottom_size"
                 android:layout_height="@dimen/index_bottom_size"
                 android:layout_centerInParent="true"
                 android:background="@drawable/index_message_select"
-                android:button="@null" />
+                android:button="@null"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="-15dip"
                 android:layout_marginTop="5dip"
-                android:layout_toRightOf="@id/rbt_index_mess"
+                android:layout_toRightOf="@id/cb_index_mess"
                 android:background="@drawable/circle"
                 android:gravity="center"
                 android:padding="3dip"
@@ -56,13 +56,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1.0" >
 
-            <RadioButton
-                android:id="@+id/rbt_index_connect"
+            <CheckBox
+                android:id="@+id/cb_index_connect"
                 android:layout_width="@dimen/index_bottom_size"
                 android:layout_height="@dimen/index_bottom_size"
                 android:layout_centerInParent="true"
                 android:background="@drawable/index_connect_select"
-                android:button="@null" />
+                android:button="@null"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -70,13 +70,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1.0" >
 
-            <RadioButton
+            <CheckBox
+                android:id="@+id/cb_index_dynamic"
                 android:layout_width="@dimen/index_bottom_size"
                 android:layout_height="@dimen/index_bottom_size"
                 android:layout_centerInParent="true"
                 android:background="@drawable/index_plugin_select"
-                android:button="@null" />
+                android:button="@null"/>
         </RelativeLayout>
     </LinearLayout>
-
-</LinearLayout>
+</LinearLayout>

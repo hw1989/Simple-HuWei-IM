@@ -31,6 +31,10 @@
             android:name=".IndexActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name="com.hwant.services.IMService" >
         </service>

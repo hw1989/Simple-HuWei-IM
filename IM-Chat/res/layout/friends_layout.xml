@@ -10,8 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:childDivider="@null"
+        android:childIndicator="@null"
         android:divider="@null"
         android:fadingEdge="none"
+        android:groupIndicator="@null"
         android:listSelector="@null"
         android:scrollbars="none" >
     </ExpandableListView>

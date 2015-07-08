@@ -3,7 +3,7 @@ package com.hwant.activity;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
-import com.hwant.fragment.FriendFragment;
+import com.hwant.fragment.ConnectFragment;
 import com.hwant.fragment.SettingFragment;
 import com.hwant.services.TaskManager;
 import com.special.ResideMenu.ResideMenu;
@@ -15,25 +15,31 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.RadioButton;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class IndexActivity extends BaseActivity implements OnClickListener {
-	private FriendFragment friend = null;
+public class IndexActivity extends BaseActivity implements OnClickListener,
+		OnCheckedChangeListener {
+	private ConnectFragment friend = null;
 	private ResideMenu menu = null;
 	private ResideMenuItem item_setting;
 	// 聊天
-	@ViewInject(id = R.id.rbt_index_mess)
-	private RadioButton rbtn_mess;
+	@ViewInject(id = R.id.cb_index_mess)
+	private CheckBox cb_mess;
 	// 联系人
-	@ViewInject(id = R.id.rbt_index_connect)
-	private RadioButton rbtn_connect;
+	@ViewInject(id = R.id.cb_index_connect)
+	private CheckBox cb_connect;
+	// 动态
+	@ViewInject(id = R.id.cb_index_dynamic)
+	private CheckBox cb_dynamic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.index_layout);
 		ActivityInject.getInstance().setInject(this);
-		friend = new FriendFragment();
+		friend = new ConnectFragment();
 		init();
 		if (savedInstanceState == null)
 			setMenuFragment(friend);
@@ -52,8 +58,9 @@ public class IndexActivity extends BaseActivity implements OnClickListener {
 		// 禁止右滑
 		menu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
 		// 设置点击事件
-		rbtn_mess.setOnClickListener(this);
-		rbtn_connect.setOnClickListener(this);
+		cb_connect.setOnCheckedChangeListener(this);
+		cb_dynamic.setOnCheckedChangeListener(this);
+		cb_mess.setOnCheckedChangeListener(this);
 	}
 
 	@Override
@@ -63,12 +70,12 @@ public class IndexActivity extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.rbt_index_mess:
-			break;
-		case R.id.rbt_index_connect:
-			break;
-		}
+		// switch (v.getId()) {
+		// case R.id.ib_index_mess:
+		// break;
+		// case R.id.ib_index_connect:
+		// break;
+		// }
 	}
 
 	class MyMenuLister implements OnMenuListener {
@@ -97,4 +104,25 @@ public class IndexActivity extends BaseActivity implements OnClickListener {
 	public void bindFinished(TaskManager manager) {
 		// manager.addTask(friend.new GetFriend());
 	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if(isChecked){
+			switch(buttonView.getId()){
+			case R.id.cb_index_connect:
+				cb_dynamic.setChecked(false);
+				cb_mess.setChecked(false);
+				break;
+			case R.id.cb_index_dynamic:
+				cb_connect.setChecked(false);
+				cb_mess.setChecked(false);
+				break;
+			case R.id.cb_index_mess:
+				cb_dynamic.setChecked(false);
+				cb_connect.setChecked(false);
+				break;
+			}
+		}
+	}
+
 }
