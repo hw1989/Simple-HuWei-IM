@@ -10,4 +10,6 @@ public class Common {
 	public static final String DB_File_Name="IM_DB.db3";
 	//设置数据库查询的排列
 	public static final String Table_Order_ASC=" _id asc ";
+	//域名
+	public static final String DomainName="@gta-huwei6";
 }

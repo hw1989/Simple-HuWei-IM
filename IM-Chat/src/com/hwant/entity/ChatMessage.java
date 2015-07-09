@@ -73,10 +73,32 @@ public class ChatMessage implements Serializable {
 	// 是否已读
 	@Field(name = "read", type = DataType.Type_Int)
 	private boolean read;
-	// 消息的时间 
-	@Field(name = "time",type=DataType.TYPE_Real)
+	// 消息的时间
+	@Field(name = "time")
 	private String time;
 	// 组消息
-	@Field(name = "mgroup",size=20)
+	@Field(name = "mgroup", size = 20)
 	private String mgroup;
+	// 多用户处理
+	@Field(name = "user", size = 20)
+	private String user;
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	// 不需要注释,发送人的信息
+	private UserInfo info;
+
+	public UserInfo getInfo() {
+		return info;
+	}
+
+	public void setInfo(UserInfo info) {
+		this.info = info;
+	}
 }

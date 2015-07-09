@@ -10,9 +10,11 @@ import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
+import com.hwant.application.IMApplication;
 import com.hwant.db.MySQLiteOpenHelper;
 import com.hwant.entity.ConnectInfo;
 
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,12 +30,13 @@ public class MyRosterListener implements RosterListener {
 	private XMPPConnection connection;
 	private ContentResolver resolver = null;
 	private Uri uri = null;
-
-	public MyRosterListener(XMPPConnection connection, Context context) {
+    private IMApplication application=null;
+	public MyRosterListener(XMPPConnection connection,Application application) {
+		this.application=(IMApplication)application;
 		this.roster = connection.getRoster();
-		helper = new MySQLiteOpenHelper(context);
+		helper = new MySQLiteOpenHelper(application.getApplicationContext());
 		// database = helper.getWritableDatabase();
-		resolver = context.getContentResolver();
+		resolver = application.getApplicationContext().getContentResolver();
 		// 日期格式
 
 	}
@@ -53,6 +56,7 @@ public class MyRosterListener implements RosterListener {
 			values.put("jid", entry.getUser());
 			values.put("date", String.valueOf(date.getTime()));
 			values.put("status", -1);
+			values.put("user", application.user.getJid());
 			uri = Uri.parse("content://com.hwant.im.friend/friend");
 			resolver.insert(uri, values);
 			// Insert insert=new Insert(FriendInfo.class);

@@ -68,7 +68,27 @@ public class ConnectInfo implements Serializable {
 	// 状态
 	@Field(name = "status", type = DataType.Type_Int)
 	private int status;
-	//请求时间
+	// 请求时间
 	@Field(name = "date", size = 20)
-    private String date;
+	private String date;
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	// 多用户处理 登陆人的jid
+	@Field(name = "user", size = 20)
+	private String user;
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
 }

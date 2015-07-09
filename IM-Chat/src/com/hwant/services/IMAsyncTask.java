@@ -14,7 +14,7 @@ public class IMAsyncTask extends AsyncTask<Void, Void, Object> {
 		Object obj = null;
 		if (!isCancelled()&&work != null) {
 			try {
-				work.doWhat();
+				obj=work.doWhat();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

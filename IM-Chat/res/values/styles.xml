@@ -41,4 +41,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/dot_page_select</item>
     </style>
-</resources>
+    <!-- setting设置 -->
+    <style name="setting_txt_left">
+        
+    </style></resources>

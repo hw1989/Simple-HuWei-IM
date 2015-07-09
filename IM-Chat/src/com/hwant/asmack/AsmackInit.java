@@ -13,9 +13,11 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.wind.net.NetUtil;
 
+import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.gsm.SmsMessage.MessageClass;
 import android.util.Log;
 
 import com.hwant.common.RecevierConst;
@@ -25,13 +27,14 @@ public class AsmackInit {
 	private Context context = null;
 	private ConnectionConfiguration configuration = null;
 	private XMPPConnection connection = null;
-
+    private Application application=null;
 	public synchronized XMPPConnection getConnection() {
 		return connection;
 	}
 
-	public AsmackInit(Context context) {
-		this.context = context;
+	public AsmackInit(Application application) {
+		this.application=application;
+		this.context = application.getApplicationContext();
 	}
 
 	/**
@@ -60,15 +63,16 @@ public class AsmackInit {
 		connection = new XMPPConnection(configuration);
 		// 设置连接的监听
 		// connection.addConnectionListener(new AConnectionListener());
-		PacketTypeFilter filter=new PacketTypeFilter(Message.class);
-		//对发送消息进行监听
-		connection.addPacketListener(new MyPacketListener(this.context), filter);
-		 connection.addPacketInterceptor(new PacketInterceptor() {
-		
-		 @Override
-		 public void interceptPacket(Packet packet) {
-		 }
-		 }, null);
+		PacketTypeFilter filter = new PacketTypeFilter(Message.class);
+		// 对发送消息进行监听
+		connection
+				.addPacketListener(new MyPacketListener(application), filter);
+		connection.addPacketInterceptor(new PacketInterceptor() {
+
+			@Override
+			public void interceptPacket(Packet packet) {
+			}
+		}, null);
 		// connection.addPacketListener(new PacketListener() {
 		//
 		// @Override
@@ -146,5 +150,29 @@ public class AsmackInit {
 		public void reconnectionSuccessful() {
 		}
 
+	}
+
+	/**
+	 * 单人聊天
+	 * 
+	 * @param from
+	 * @param to
+	 * @param content
+	 */
+	public boolean sendMessage(String from, String to, String content) {
+		Message msg = new Message();
+		msg.setFrom(from);
+		msg.setTo(to);
+		msg.setType(Message.Type.chat);
+		msg.setBody(content);
+		if (connection.isConnected() && connection.isAuthenticated()) {
+			try {
+				connection.sendPacket(msg);
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 }

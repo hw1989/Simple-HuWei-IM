@@ -1,6 +1,6 @@
 package com.hwant.activity;
 
-import com.hwant.activity.LoginActivity.ConnectServer;
+import com.hwant.application.IMApplication;
 import com.hwant.services.IMService;
 import com.hwant.services.TaskManager;
 import com.hwant.services.IMService.SBinder;
@@ -15,12 +15,27 @@ import android.support.v4.app.FragmentActivity;
 
 public class BaseActivity extends FragmentActivity {
 	private ServiceConnection connection = null;
-	private IMService service = null;
+	public IMService service = null;
 	public TaskManager manager = null;
+	// 标记是否绑定
+	public IMApplication application = null;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
+		application = (IMApplication) getApplication();
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (connection != null) {
+			unbindService(connection);
+		}
+	}
+
+	public void bindService() {
 		connection = new ServiceConnection() {
 
 			@Override
@@ -37,16 +52,7 @@ public class BaseActivity extends FragmentActivity {
 			}
 		};
 		Intent intent = new Intent(this, IMService.class);
-		// startService(intent);
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (connection != null) {
-			unbindService(connection);
-		}
 	}
 
 	public void bindFinished(TaskManager manager) {

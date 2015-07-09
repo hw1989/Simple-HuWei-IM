@@ -80,7 +80,8 @@ public class ChatProvider extends ContentProvider {
 		if(values==null){
 			throw new IllegalArgumentException("对象不能为null!");
 		}
-		if(matcher.match(uri)!=1||matcher.match(uri)!=3){
+		if(matcher.match(uri)!=1&&matcher.match(uri)!=3){
+			int i=matcher.match(uri);
 			throw new IllegalArgumentException("uri在insert中错误!");
 		}
 		database=sqlite.getWritableDatabase();

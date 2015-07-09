@@ -4,7 +4,6 @@ import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
 import com.hwant.fragment.ConnectFragment;
-import com.hwant.fragment.SettingFragment;
 import com.hwant.services.TaskManager;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenu.OnMenuListener;

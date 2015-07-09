@@ -40,7 +40,7 @@
         </service>
 
         <provider
-            android:name="com.hwant.db.FriendProvider"
+            android:name="com.hwant.db.ConnectProvider"
             android:authorities="com.hwant.im.friend"
             android:exported="false" />
         <provider

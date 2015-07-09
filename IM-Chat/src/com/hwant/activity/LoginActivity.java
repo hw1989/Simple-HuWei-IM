@@ -1,17 +1,10 @@
 package com.hwant.activity;
 
-import java.lang.ref.WeakReference;
-
-import org.jivesoftware.smack.Roster;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
-import org.wind.util.PreferenceUtils;
-import org.wind.util.StringHelper;
 
 import com.hwant.application.IMApplication;
-import com.hwant.broadcast.IXMPPWork;
-import com.hwant.broadcast.XMPPRecevier;
-import com.hwant.common.RecevierConst;
+import com.hwant.common.Common;
 import com.hwant.dialog.LoginDialog;
 import com.hwant.services.IDoWork;
 import com.hwant.services.IMService;
@@ -19,11 +12,9 @@ import com.hwant.services.IMService.SBinder;
 import com.hwant.services.TaskManager;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -48,7 +39,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private LoginDialog dialog = null;
 	// private PreferenceUtils sharepreference = null;
 	private TaskManager manager = null;
-
+    private IMApplication application=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,8 +64,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		startService(new Intent(this, IMService.class));
 
 		setContentView(R.layout.login_layout);
-		// filter.addAction(RecevierConst.Server_Connect);
-		// filter.addAction(RecevierConst.Server_Login);
+		application=(IMApplication)getApplication();
 		bindService(intent, connection, Service.BIND_AUTO_CREATE);
 		init();
 
@@ -149,6 +139,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void Finish2Do(Object obj) {
+			application.user.setJid("huwei"+Common.DomainName);
 			service.addConnectListener();
 			Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
 			startActivity(intent);

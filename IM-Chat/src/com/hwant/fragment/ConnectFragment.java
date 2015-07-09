@@ -51,7 +51,7 @@ public class ConnectFragment extends Fragment implements OnGroupCollapseListener
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.friends_layout, container, false);
+		View view = inflater.inflate(R.layout.connects_layout, container, false);
 		elv_friend = (ExpandableListView) view.findViewById(R.id.elv_connect);
 //		elv_friend.setOnGroupCollapseListener(this);
 //		elv_friend.setOnGroupExpandListener(this);
@@ -65,7 +65,7 @@ public class ConnectFragment extends Fragment implements OnGroupCollapseListener
 
 	public void getGroup() {
 		Uri uri = Uri.parse("content://com.hwant.im.friend/friend");
-		Cursor cursor = resolver.query(uri, null, null, null, null);
+		Cursor cursor = resolver.query(uri, null, " user=? ",new String[]{application.user.getJid()}, null);
 		cursor.moveToFirst();
 		ConnectInfo connect = null;
 		while (!cursor.isAfterLast()) {
@@ -94,7 +94,6 @@ public class ConnectFragment extends Fragment implements OnGroupCollapseListener
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		Toast.makeText(getActivity(),"456",Toast.LENGTH_SHORT).show();
 		ConnectInfo info=adapter.getChild(groupPosition, childPosition);
 		Intent intent=new Intent(getActivity(), ChatActivity.class);
 		intent.putExtra("info",info);
