@@ -8,6 +8,8 @@ import com.hwant.services.TaskManager;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenu.OnMenuListener;
 import com.special.ResideMenu.ResideMenuItem;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +34,7 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	// 动态
 	@ViewInject(id = R.id.cb_index_dynamic)
 	private CheckBox cb_dynamic;
+	private Intent intent = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +72,10 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		// switch (v.getId()) {
-		// case R.id.ib_index_mess:
-		// break;
-		// case R.id.ib_index_connect:
-		// break;
-		// }
+		if (v == item_setting) {
+			intent = new Intent(this, SettingActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	class MyMenuLister implements OnMenuListener {
@@ -106,8 +107,8 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if(isChecked){
-			switch(buttonView.getId()){
+		if (isChecked) {
+			switch (buttonView.getId()) {
 			case R.id.cb_index_connect:
 				cb_dynamic.setChecked(false);
 				cb_mess.setChecked(false);

@@ -3,4 +3,10 @@
     <color name="gray_1">#B1B1B1</color>
     <color name="gray_2">#EBECED</color>
     <color name="blue_1">#00ACFF</color>
+    <color name="black_1">#353535</color>
+    <color name="split_line_gray">#DBDBDB</color>
+    <color name="devide_line">#CBCED2</color>
+    <color name="setting_title_bg">#18B4ED</color>
+    <color name="setting_body_bg">#F8F9FA</color>
+    <color name="setting_select_txt">#0079FF</color>
 </resources>

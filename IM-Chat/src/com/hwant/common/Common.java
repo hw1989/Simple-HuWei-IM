@@ -1,5 +1,7 @@
 package com.hwant.common;
 
+import java.io.File;
+
 public class Common {
 	public static final int XMPP_Thread_Pool_Size = 3;
 	//数据库名称
@@ -12,4 +14,6 @@ public class Common {
 	public static final String Table_Order_ASC=" _id asc ";
 	//域名
 	public static final String DomainName="@gta-huwei6";
+	//图片存放位置
+	public static final String Path_Image=File.separator+"HWim"+File.separator+"image"+File.separator;
 }

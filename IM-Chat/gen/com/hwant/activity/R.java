@@ -11,26 +11,36 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int black_1=0x7f050003;
         public static final int blue_1=0x7f050002;
+        public static final int devide_line=0x7f050005;
         public static final int gray_1=0x7f050000;
         public static final int gray_2=0x7f050001;
+        public static final int setting_body_bg=0x7f050007;
+        public static final int setting_select_txt=0x7f050008;
+        public static final int setting_title_bg=0x7f050006;
+        public static final int split_line_gray=0x7f050004;
     }
     public static final class dimen {
+        public static final int Radiu_5=0x7f060004;
         /** 
          Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f060006;
-        public static final int index_bottom_size=0x7f060005;
+        public static final int activity_horizontal_margin=0x7f060008;
+        public static final int index_bottom_size=0x7f060006;
         /**  login 
          */
-        public static final int login_btn_hei=0x7f060004;
+        public static final int login_btn_hei=0x7f060005;
         public static final int margin_10=0x7f060000;
         public static final int margin_20=0x7f060001;
         public static final int margin_30=0x7f060002;
         public static final int margin_40=0x7f060003;
+        /**  setting 
+         */
+        public static final int setting_item_margin_top=0x7f060007;
     }
     public static final class drawable {
         public static final int add_face_select=0x7f020000;
@@ -127,31 +137,50 @@ public final class R {
         public static final int eft=0x7f02005b;
         public static final int eqm=0x7f02005c;
         public static final int fls=0x7f02005d;
-        public static final int gco=0x7f02005e;
-        public static final int goi=0x7f02005f;
-        public static final int gsl=0x7f020060;
-        public static final int gvw=0x7f020061;
-        public static final int gvx=0x7f020062;
-        public static final int ic_launcher=0x7f020063;
-        public static final int index_connect_select=0x7f020064;
-        public static final int index_message_select=0x7f020065;
-        public static final int index_plugin_select=0x7f020066;
-        public static final int indicator_expanded=0x7f020067;
-        public static final int indicator_unexpanded=0x7f020068;
-        public static final int login_btn_select=0x7f020069;
-        public static final int menu_background=0x7f02006a;
-        public static final int setting_item_bg=0x7f02006b;
-        public static final int shadow=0x7f02006c;
-        public static final int tab_icon_contact_normal=0x7f02006d;
-        public static final int tab_icon_contact_selected=0x7f02006e;
-        public static final int tab_icon_conversation_normal=0x7f02006f;
-        public static final int tab_icon_conversation_selected=0x7f020070;
-        public static final int tab_icon_plugin_normal=0x7f020071;
-        public static final int tab_icon_plugin_selected=0x7f020072;
+        public static final int gbt=0x7f02005e;
+        public static final int gco=0x7f02005f;
+        public static final int goi=0x7f020060;
+        public static final int gsl=0x7f020061;
+        public static final int gvw=0x7f020062;
+        public static final int gvx=0x7f020063;
+        public static final int hdx=0x7f020064;
+        public static final int hdy=0x7f020065;
+        public static final int ic_launcher=0x7f020066;
+        public static final int index_connect_select=0x7f020067;
+        public static final int index_message_select=0x7f020068;
+        public static final int index_plugin_select=0x7f020069;
+        public static final int indicator_expanded=0x7f02006a;
+        public static final int indicator_unexpanded=0x7f02006b;
+        public static final int item_bg_default=0x7f02006c;
+        public static final int item_bg_pressed=0x7f02006d;
+        public static final int item_bg_select=0x7f02006e;
+        public static final int item_bottombg_default=0x7f02006f;
+        public static final int item_bottombg_pressed=0x7f020070;
+        public static final int item_bottombg_select=0x7f020071;
+        public static final int item_topbg_default=0x7f020072;
+        public static final int item_topbg_pressed=0x7f020073;
+        public static final int item_topbg_select=0x7f020074;
+        public static final int koz=0x7f020075;
+        public static final int login_btn_select=0x7f020076;
+        public static final int menu_background=0x7f020077;
+        public static final int setting_item_default=0x7f020078;
+        public static final int setting_item_pressed=0x7f020079;
+        public static final int setting_item_select=0x7f02007a;
+        public static final int shadow=0x7f02007b;
+        public static final int split_line_1=0x7f02007c;
+        public static final int tab_icon_contact_normal=0x7f02007d;
+        public static final int tab_icon_contact_selected=0x7f02007e;
+        public static final int tab_icon_conversation_normal=0x7f02007f;
+        public static final int tab_icon_conversation_selected=0x7f020080;
+        public static final int tab_icon_plugin_normal=0x7f020081;
+        public static final int tab_icon_plugin_selected=0x7f020082;
     }
     public static final class id {
-        public static final int action_settings=0x7f090022;
+        public static final int action_settings=0x7f090027;
+        public static final int btn_close_selectimg=0x7f090025;
         public static final int btn_login=0x7f090017;
+        public static final int btn_pick_camera=0x7f090023;
+        public static final int btn_pick_photo=0x7f090024;
         public static final int btn_send_message=0x7f090019;
         public static final int cb_index_connect=0x7f090013;
         public static final int cb_index_dynamic=0x7f090014;
@@ -174,9 +203,11 @@ public final class R {
         public static final int layout_right_menu=0x7f09001f;
         public static final int ll_msg_left=0x7f090002;
         public static final int ll_msg_right=0x7f090006;
+        public static final int ll_select_image=0x7f090022;
         public static final int lv_chat_message=0x7f090008;
         public static final int main_fragment=0x7f090011;
         public static final int rg_facepage_index=0x7f09000f;
+        public static final int rl_change_img=0x7f090026;
         public static final int rl_chat_item_left=0x7f090000;
         public static final int rl_chat_item_right=0x7f090004;
         public static final int sv_left_menu=0x7f09001c;
@@ -203,7 +234,8 @@ public final class R {
         public static final int regist_layout=0x7f03000d;
         public static final int residemenu=0x7f03000e;
         public static final int residemenu_item=0x7f03000f;
-        public static final int setting_layout=0x7f030010;
+        public static final int select_img_layout=0x7f030010;
+        public static final int setting_layout=0x7f030011;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -211,14 +243,23 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f040002;
         public static final int app_name=0x7f040000;
+        public static final int cancel=0x7f040003;
         /**  chat 
          */
-        public static final int chat_send=0x7f040005;
+        public static final int chat_send=0x7f040006;
         public static final int hello_world=0x7f040001;
         /**  login 
          */
-        public static final int login_btn=0x7f040003;
-        public static final int login_tip1=0x7f040004;
+        public static final int login_btn=0x7f040004;
+        public static final int login_tip1=0x7f040005;
+        /**  selecticon 
+         */
+        public static final int selecticon_camera=0x7f040009;
+        public static final int selecticon_photo=0x7f04000a;
+        /**  setting 
+         */
+        public static final int setting_title=0x7f040007;
+        public static final int setting_txt_icon=0x7f040008;
     }
     public static final class style {
         /** 
@@ -233,7 +274,7 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070005;
+        public static final int AppBaseTheme=0x7f070007;
         /**  模糊 
          */
         public static final int dialog=0x7f070001;
@@ -244,6 +285,12 @@ public final class R {
         /**  radiobutton 
          */
         public static final int rg_facepage_index=0x7f070004;
+        /**  选择照片 
+         */
+        public static final int select_img_txt=0x7f070006;
+        /**  setting设置 
+         */
+        public static final int setting_txt_left=0x7f070005;
         public static final int txt_style_1=0x7f070002;
     }
 }

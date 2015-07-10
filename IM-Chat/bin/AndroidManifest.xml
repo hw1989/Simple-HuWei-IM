@@ -35,6 +35,15 @@
             android:name=".ChatActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.hwant.activity.SettingActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".SelectImgActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
         <service android:name="com.hwant.services.IMService" >
         </service>

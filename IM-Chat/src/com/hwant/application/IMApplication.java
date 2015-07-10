@@ -30,7 +30,7 @@ public class IMApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		SmackAndroid.init(this);
-		user=new UserInfo();
+		user = new UserInfo();
 		sharepreference = PreferenceUtils.init(this, Common.IM_Config);
 		// 判断是否创建过数据库
 		// hasdb = sharepreference.getBool("database", false);
@@ -39,6 +39,6 @@ public class IMApplication extends Application {
 				getFilesDir() + File.separator + Common.DB_File_Name, null);
 		helper.onCreate(database);
 		sharepreference.putBoolen("database", true);
-
 	}
+
 }
