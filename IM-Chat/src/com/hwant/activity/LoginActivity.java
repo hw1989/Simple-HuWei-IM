@@ -133,7 +133,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		public Object doWhat() {
-			service.getAsmack().setLogin("huwei", "123456");
+			service.getAsmack().setLogin("huwei"+Common.DomainName, "123456");
 			return null;
 		}
 

@@ -91,4 +91,15 @@ public class ConnectInfo implements Serializable {
 	public void setUser(String user) {
 		this.user = user;
 	}
+	//用户的头像
+	@Field(name="userimg",size=25)
+	private String userimg;
+
+	public String getUserimg() {
+		return userimg;
+	}
+
+	public void setUserimg(String userimg) {
+		this.userimg = userimg;
+	}
 }

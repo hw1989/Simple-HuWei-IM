@@ -29,7 +29,7 @@ public class IMService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		asmack = new AsmackInit(getApplication());
-		connection = asmack.setConnect("192.168.192.51", 5222, false);
+		connection = asmack.setConnect("192.168.192.86", 5222, false);
 		manager = TaskManager.init();
 	}
 
@@ -72,12 +72,4 @@ public class IMService extends Service {
 		Roster roster = connection.getRoster();
 		roster.addRosterListener(rosterlistener);
 	}
-
-//	public void addMsgListener() {
-//
-//	}
-//
-//	public void removeMsgListener() {
-//
-//	}
 }

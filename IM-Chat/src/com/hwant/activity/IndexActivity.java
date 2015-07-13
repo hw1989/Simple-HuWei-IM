@@ -22,7 +22,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class IndexActivity extends BaseActivity implements OnClickListener,
 		OnCheckedChangeListener {
-	private ConnectFragment friend = null;
+	private ConnectFragment connect = null;
 	private ResideMenu menu = null;
 	private ResideMenuItem item_setting;
 	// 聊天
@@ -41,11 +41,11 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.index_layout);
 		ActivityInject.getInstance().setInject(this);
-		friend = new ConnectFragment();
+		connect = new ConnectFragment();
 		init();
 		if (savedInstanceState == null)
-			setMenuFragment(friend);
-
+			setMenuFragment(connect);
+		bindService();
 	}
 
 	private void init() {
@@ -103,6 +103,7 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	@Override
 	public void bindFinished(TaskManager manager) {
 		// manager.addTask(friend.new GetFriend());
+		connect.refreshAdapter(manager);
 	}
 
 	@Override
@@ -125,4 +126,9 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		// 释放绑定的service
+		super.onDestroy();
+	}
 }

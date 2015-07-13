@@ -13,6 +13,17 @@
         android:paddingTop="10dip" >
 
         <TextView
+            android:id="@+id/tv_setting_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/gbk"
+            android:gravity="center_vertical"
+            android:text="@string/back"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="10dip"
+            android:textSize="16sp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -42,6 +53,7 @@
             android:textSize="16sp" />
 
         <ImageView
+            android:id="@+id/iv_userinfo_icon"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_alignParentRight="true"

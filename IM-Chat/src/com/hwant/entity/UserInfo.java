@@ -35,4 +35,14 @@ public class UserInfo implements Serializable{
 	private String name;
 	private String nickname;
 	private int status;
+	//用户头像
+	private String userimg;
+
+	public String getUserimg() {
+		return userimg;
+	}
+
+	public void setUserimg(String userimg) {
+		this.userimg = userimg;
+	}
 }

@@ -1,6 +1,9 @@
 package com.hwant.activity;
 
+import org.wind.util.FileUtils;
+
 import com.hwant.application.IMApplication;
+import com.hwant.common.Common;
 import com.hwant.services.IMService;
 import com.hwant.services.TaskManager;
 import com.hwant.services.IMService.SBinder;
@@ -10,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 
@@ -19,12 +23,17 @@ public class BaseActivity extends FragmentActivity {
 	public TaskManager manager = null;
 	// 标记是否绑定
 	public IMApplication application = null;
-
+    
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		application = (IMApplication) getApplication();
-
+		// 创建缓存文件路径
+		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
+				+ Common.Path_Cache, true);
+		// 创建目录文件路径
+		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
+				+ Common.Path_Image, true);
 	}
 
 	@Override

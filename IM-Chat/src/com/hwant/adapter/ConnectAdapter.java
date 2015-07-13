@@ -5,12 +5,17 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.wind.adapter.ViewHolder;
+import org.wind.imageloader.ImageCache;
 import org.wind.util.StringHelper;
 
 import com.hwant.activity.R;
 import com.hwant.entity.ConnectInfo;
+import com.hwant.fragment.ConnectFragment;
+import com.hwant.services.TaskManager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,32 +24,50 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ConnectAdapter extends BaseExpandableListAdapter {
-	// private HashMap<String, ArrayList<FriendInfo>> map = null;
 	private ViewHolder pholder = null;
 	private ViewHolder cholder = null;
 	private LayoutInflater inflater = null;
 	private ArrayList<String> group = null;
 	private HashMap<Integer, ArrayList<ConnectInfo>> map = null;
+	private boolean isfling = false;
+	private ConnectInfo connect = null;
+	// 设置缓存
+	private ImageCache cache = null;
+	// 网络请求任务
+	private TaskManager manager = null;
+	private ConnectFragment fragment = null;
 
-	public ConnectAdapter(Context context, ArrayList<ConnectInfo> connectInfos) {
+	public void setIsfling(boolean isfling) {
+		this.isfling = isfling;
+	}
+
+	public ConnectAdapter(Context context, ArrayList<ConnectInfo> connectInfos,
+			ConnectFragment fragment) {
 		pholder = new ViewHolder();
 		cholder = new ViewHolder();
+		this.manager = manager;
+		this.fragment = fragment;
 		this.group = new ArrayList<String>();
 		this.map = new HashMap<Integer, ArrayList<ConnectInfo>>();
-		int index=0;
+		int index = 0;
 		if (connectInfos != null && connectInfos.size() > 0) {
 			for (ConnectInfo info : connectInfos) {
-               if(!group.contains(info.getGroup())){
-            	   group.add(info.getGroup());
-               }
-               index=group.indexOf(info.getGroup());
-               if(!this.map.containsKey(index)){
-            	   this.map.put(index,new ArrayList<ConnectInfo>());
-               }
-               this.map.get(index).add(info);
+				if (!group.contains(info.getGroup())) {
+					group.add(info.getGroup());
+				}
+				index = group.indexOf(info.getGroup());
+				if (!this.map.containsKey(index)) {
+					this.map.put(index, new ArrayList<ConnectInfo>());
+				}
+				this.map.get(index).add(info);
 			}
 		}
 		inflater = LayoutInflater.from(context);
+		cache = ImageCache.init();
+	}
+
+	public void setManager(TaskManager manager) {
+		this.manager = manager;
 	}
 
 	@Override
@@ -107,16 +130,17 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 		}
 		TextView tv_nickname = (TextView) pholder.getView(convertView,
 				R.id.connect_list_pitem_groupname);
-		ImageView iv_expand=(ImageView)pholder.getView(convertView, R.id.connect_list_pitem_expand);
-		String groupname=group.get(groupPosition);
-		if(StringHelper.isEmpty(groupname)){
+		ImageView iv_expand = (ImageView) pholder.getView(convertView,
+				R.id.connect_list_pitem_expand);
+		String groupname = group.get(groupPosition);
+		if (StringHelper.isEmpty(groupname)) {
 			tv_nickname.setText("我的好友");
-		}else{
+		} else {
 			tv_nickname.setText(String.valueOf(groupname));
 		}
-		if(isExpanded){
+		if (isExpanded) {
 			iv_expand.setImageResource(R.drawable.indicator_expanded);
-		}else{
+		} else {
 			iv_expand.setImageResource(R.drawable.indicator_unexpanded);
 		}
 		return convertView;
@@ -131,7 +155,37 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 		}
 		TextView tv_nickname = (TextView) pholder.getView(convertView,
 				R.id.connect_list_citem_nickname);
-		tv_nickname.setText(group.get(groupPosition));
+		connect = map.get(groupPosition).get(childPosition);
+		tv_nickname.setText(connect.getNickname());
+		ImageView iv_image = (ImageView) pholder.getView(convertView,
+				R.id.iv_connect_list_citem);
+		iv_image.setTag(connect.getJid());
+		Bitmap bitmap = null;
+		// if (!StringHelper.isEmpty(connect.getUserimg())) {
+		// if (cache.getCache().get(connect.getUserimg()) != null) {
+		// bitmap = cache.getCache().get(connect.getUserimg());
+		// iv_image.setImageBitmap(bitmap);
+		// } else {
+		// // 在非fling状态下，添加到网络请求
+		// if (!isfling && manager != null) {
+		// manager.addTask(this.fragment.new LoadImage(connect
+		// .getJid()));
+		// }
+		// }
+		// } else {
+		// // 在非fling状态下，添加到网络请求
+		// if (!isfling && manager != null) {
+		// manager.addTask(this.fragment.new LoadImage(connect.getJid()));
+		// }
+		// }
+		if (cache.getCache().get(connect.getJid()) != null) {
+			bitmap = cache.getCache().get(connect.getJid());
+			iv_image.setImageBitmap(bitmap);
+		} else {
+			if (!isfling && manager != null) {
+				manager.addTask(this.fragment.new LoadImage(connect.getJid()));
+			}
+		}
 		return convertView;
 	}
 
@@ -140,4 +194,12 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 
+	/*
+	 * 添加到缓存中
+	 */
+	public void putCache(String key, Bitmap value) {
+		if (key != null && value != null) {
+			cache.getCache().put(key, value);
+		}
+	}
 }

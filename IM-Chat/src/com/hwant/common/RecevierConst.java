@@ -15,4 +15,6 @@ public class RecevierConst {
 	public static final String Chat_One_Get = "com.hw.chat.chat";
 	// 接收到群聊的信息
 	public static final String Chat_Group_Get = "com.hw.chat.group";
+	//个人信息改变的广播
+    public static final String User_Info_Icon="com.hw.chat.userinfo.icon";
 }

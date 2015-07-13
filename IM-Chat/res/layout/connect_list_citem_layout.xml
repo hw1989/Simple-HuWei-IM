@@ -12,6 +12,7 @@
     android:paddingTop="10dip" >
 
     <ImageView
+        android:id="@+id/iv_connect_list_citem"
         android:layout_width="60dip"
         android:layout_height="60dip"
         android:src="@drawable/gsl" />
