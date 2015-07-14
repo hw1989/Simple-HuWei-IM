@@ -75,6 +75,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener,
 		if (RecevierConst.User_Info_Icon.equals(intent.getAction())) {
 			String filename = intent.getStringExtra("value");
 			if (!StringHelper.isEmpty(filename)) {
+				//设置application里的设置
+				application.user.setUserimg(filename);
 				Bitmap bitmap = BitmapFactory.decodeFile(filename);
 				iv_userinfo_icon.setImageBitmap(bitmap);
 			}

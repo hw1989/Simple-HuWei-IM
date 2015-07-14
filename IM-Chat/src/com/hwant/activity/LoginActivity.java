@@ -39,7 +39,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private LoginDialog dialog = null;
 	// private PreferenceUtils sharepreference = null;
 	private TaskManager manager = null;
-    private IMApplication application=null;
+	private IMApplication application = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,7 +65,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		startService(new Intent(this, IMService.class));
 
 		setContentView(R.layout.login_layout);
-		application=(IMApplication)getApplication();
+		application = (IMApplication) getApplication();
 		bindService(intent, connection, Service.BIND_AUTO_CREATE);
 		init();
 
@@ -133,19 +134,42 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		public Object doWhat() {
-			service.getAsmack().setLogin("huwei"+Common.DomainName, "123456");
+			boolean flag = service.getAsmack().setLogin(
+					"huwei" + Common.DomainName, "123456");
+			return flag;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+			Boolean flag = (Boolean) obj;
+			if (obj != null || flag) {
+				application.user.setJid("huwei" + Common.DomainName);
+				service.addConnectListener();
+				Intent intent = new Intent(LoginActivity.this,
+						IndexActivity.class);
+				startActivity(intent);
+				LoginActivity.this.finish();
+				Toast.makeText(LoginActivity.this, "可以获取连接服务器的状态",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(LoginActivity.this, "登陆失败!", Toast.LENGTH_LONG)
+						.show();
+			}
+
+		}
+	}
+
+	class Register implements IDoWork {
+
+		@Override
+		public Object doWhat() {
+			// 将用户存到数据库
 			return null;
 		}
 
 		@Override
 		public void Finish2Do(Object obj) {
-			application.user.setJid("huwei"+Common.DomainName);
-			service.addConnectListener();
-			Intent intent = new Intent(LoginActivity.this, IndexActivity.class);
-			startActivity(intent);
-			LoginActivity.this.finish();
-			Toast.makeText(LoginActivity.this, "可以获取连接服务器的状态",
-					Toast.LENGTH_LONG).show();
+
 		}
 
 	}

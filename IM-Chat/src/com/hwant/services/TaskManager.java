@@ -36,6 +36,14 @@ public class TaskManager {
 		return manager;
 	}
 
+	/**
+	 * 添加带有标记的任务，方便清空同一类的标记
+	 * 
+	 * @param flag
+	 *            工作任务的标记
+	 * @param work
+	 *            工作任务
+	 */
 	public void addTask(String flag, IDoWork work) {
 		IMAsyncTask task = new IMAsyncTask(work);
 		Combination combination = new Combination();

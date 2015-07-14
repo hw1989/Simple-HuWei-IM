@@ -1,5 +1,6 @@
 package com.hwant.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -9,12 +10,15 @@ import org.wind.imageloader.ImageCache;
 import org.wind.util.StringHelper;
 
 import com.hwant.activity.R;
+import com.hwant.common.Common;
 import com.hwant.entity.ConnectInfo;
 import com.hwant.fragment.ConnectFragment;
 import com.hwant.services.TaskManager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +40,8 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 	// 网络请求任务
 	private TaskManager manager = null;
 	private ConnectFragment fragment = null;
-
+    //
+	private Bitmap bitmap=null;
 	public void setIsfling(boolean isfling) {
 		this.isfling = isfling;
 	}
@@ -153,37 +158,38 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 			convertView = inflater.inflate(R.layout.connect_list_citem_layout,
 					parent, false);
 		}
-		TextView tv_nickname = (TextView) pholder.getView(convertView,
+		TextView tv_nickname = (TextView) cholder.getView(convertView,
 				R.id.connect_list_citem_nickname);
 		connect = map.get(groupPosition).get(childPosition);
 		tv_nickname.setText(connect.getNickname());
-		ImageView iv_image = (ImageView) pholder.getView(convertView,
+		ImageView iv_image = (ImageView) cholder.getView(convertView,
 				R.id.iv_connect_list_citem);
 		iv_image.setTag(connect.getJid());
-		Bitmap bitmap = null;
-		// if (!StringHelper.isEmpty(connect.getUserimg())) {
-		// if (cache.getCache().get(connect.getUserimg()) != null) {
-		// bitmap = cache.getCache().get(connect.getUserimg());
-		// iv_image.setImageBitmap(bitmap);
-		// } else {
-		// // 在非fling状态下，添加到网络请求
-		// if (!isfling && manager != null) {
-		// manager.addTask(this.fragment.new LoadImage(connect
-		// .getJid()));
-		// }
-		// }
-		// } else {
-		// // 在非fling状态下，添加到网络请求
-		// if (!isfling && manager != null) {
-		// manager.addTask(this.fragment.new LoadImage(connect.getJid()));
-		// }
-		// }
 		if (cache.getCache().get(connect.getJid()) != null) {
 			bitmap = cache.getCache().get(connect.getJid());
 			iv_image.setImageBitmap(bitmap);
 		} else {
-			if (!isfling && manager != null) {
-				manager.addTask(this.fragment.new LoadImage(connect.getJid()));
+			// 文件是否存在
+			boolean isexists = false;
+			if (!StringHelper.isEmpty(connect.getUserimg())) {
+				// 对文件是否存在进行判断
+				File file = new File(Environment.getExternalStorageDirectory()
+						.toString() + Common.Path_Image, connect.getUserimg());
+				if (file.exists() && file.isFile()) {
+					isexists = true;
+					bitmap=BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()
+						.toString() + Common.Path_Image+connect.getUserimg());
+					//存入缓存
+					cache.getCache().put(connect.getJid(),bitmap);
+					iv_image.setImageBitmap(bitmap);
+				}
+			}
+			if (!isexists) {
+				// 当对象中的文件名不存在时，对头像进行请求
+				if (!isfling && manager != null) {
+					manager.addTask(this.fragment.new LoadImage(connect
+							.getJid()));
+				}
 			}
 		}
 		return convertView;

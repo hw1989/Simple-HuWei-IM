@@ -14,6 +14,7 @@ import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
 import com.hwant.entity.UserInfo;
 import com.hwant.services.IDoWork;
+import com.hwant.view.faceview.FaceView;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,6 +38,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private Button btn_send;
 	@ViewInject(id=R.id.lv_chat_message)
 	private ListView lv_message;
+	@ViewInject(id=R.id.iv_add_face)
+	private ImageView iv_addface;
+	@ViewInject(id=R.id.fv_facelist)
+	private FaceView fv_face;
 	private ConnectInfo connect = null;
 	
     private Uri inserUri=null;
@@ -63,6 +69,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 	private void init() {
 		btn_send.setOnClickListener(this);
+		iv_addface.setOnClickListener(this);
 		lv_message.setAdapter(adapter);
 	}
 
@@ -76,6 +83,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				return;
 			}
 			service.manager.addTask(new SendMessage());
+			break;
+		case R.id.iv_add_face:
+			fv_face.setVisibility(View.VISIBLE);
 			break;
 		}
 	}

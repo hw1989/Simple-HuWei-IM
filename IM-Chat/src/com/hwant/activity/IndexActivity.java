@@ -4,6 +4,7 @@ import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
 import com.hwant.fragment.ConnectFragment;
+import com.hwant.services.IDoWork;
 import com.hwant.services.TaskManager;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenu.OnMenuListener;
@@ -130,5 +131,22 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	protected void onDestroy() {
 		// 释放绑定的service
 		super.onDestroy();
+	}
+
+	/**
+	 * 获取用户信息的任务
+	 */
+	class UserInfo implements IDoWork {
+
+		@Override
+		public Object doWhat() {
+			return null;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+
+		}
+
 	}
 }

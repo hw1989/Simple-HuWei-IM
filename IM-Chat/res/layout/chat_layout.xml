@@ -22,6 +22,7 @@
         layout="@layout/message_input_layout" />
 
     <com.hwant.view.faceview.FaceView
+        android:id="@+id/fv_facelist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:visibility="gone"/>

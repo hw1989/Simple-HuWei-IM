@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name="com.hwant.application.IMApplication"
         android:allowBackup="true"
@@ -55,6 +56,11 @@
         <provider
             android:name="com.hwant.db.ChatProvider"
             android:authorities="org.hwant.im.chat"
+            android:exported="false" >
+        </provider>
+        <provider
+            android:name="com.hwant.db.UserProvider"
+            android:authorities="com.hwant.im.login"
             android:exported="false" >
         </provider>
     </application>

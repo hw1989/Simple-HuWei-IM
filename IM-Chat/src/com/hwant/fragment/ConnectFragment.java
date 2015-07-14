@@ -23,6 +23,7 @@ import com.hwant.entity.ConnectInfo;
 import com.hwant.services.IDoWork;
 import com.hwant.services.TaskManager;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -137,9 +138,9 @@ public class ConnectFragment extends Fragment implements
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		if (scrollState == SCROLL_STATE_FLING) {
-
+			adapter.setIsfling(true);
 		} else {
-
+			adapter.setIsfling(false);
 		}
 	}
 
@@ -156,12 +157,15 @@ public class ConnectFragment extends Fragment implements
 		private String user = "";
 		private FileOutputStream fos = null;
 		private SimpleDateFormat format = null;
+		// 文件名
+		private String filename = "";
 
 		public LoadImage(String user) {
 			this.user = user;
 			vcard = new VCard();
 			weakReference = new WeakReference<Fragment>(ConnectFragment.this);
 			format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			filename = format.format(new Date()) + ".png";
 		}
 
 		@Override
@@ -170,11 +174,11 @@ public class ConnectFragment extends Fragment implements
 			if (StringHelper.isEmpty(user)) {
 				return null;
 			}
-			if(!activity.service.getConnection().isConnected()||!activity.service.getConnection().isAuthenticated()){
+			if (!activity.service.getConnection().isConnected()
+					|| !activity.service.getConnection().isAuthenticated()) {
 				return null;
 			}
 			try {
-				
 				vcard.load(activity.service.getConnection(), user);
 				if (vcard != null && vcard.getAvatar() != null) {
 					bitmap = BitmapFactory.decodeByteArray(vcard.getAvatar(),
@@ -184,11 +188,11 @@ public class ConnectFragment extends Fragment implements
 				e.printStackTrace();
 			}
 			if (bitmap != null) {
-				String name = format.format(new Date()) + ".png";
+				// String name = format.format(new Date()) + ".png";
 				try {
 					fos = new FileOutputStream(new File(
 							Environment.getExternalStorageDirectory()
-									+ Common.Path_Image, name));
+									+ Common.Path_Image, filename));
 					bitmap.compress(CompressFormat.PNG, 1, fos);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -208,9 +212,16 @@ public class ConnectFragment extends Fragment implements
 		@Override
 		public void Finish2Do(Object obj) {
 			if (obj != null || weakReference.get() != null) {
-				// 同时需要写入数据库
+				if (resolver != null) {
+					// 同时需要写入数据库
+					Uri uri = Uri.parse("content://com.hwant.im.friend/friend");
+					ContentValues values = new ContentValues();
+					values.put("userimg", filename);
+					resolver.update(uri, values, " jid=? ",
+							new String[] { user });
+				}
 				ImageView iv_img = (ImageView) elv_friend.findViewWithTag(user);
-				if(iv_img!=null){
+				if (iv_img != null) {
 					adapter.putCache(user, (Bitmap) obj);
 					iv_img.setImageBitmap((Bitmap) obj);
 				}
@@ -221,5 +232,10 @@ public class ConnectFragment extends Fragment implements
 	public void refreshAdapter(TaskManager manager) {
 		adapter.setManager(manager);
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 	}
 }
