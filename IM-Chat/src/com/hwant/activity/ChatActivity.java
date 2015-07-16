@@ -1,6 +1,8 @@
 package com.hwant.activity;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.wind.annotation.ActivityInject;
@@ -15,13 +17,18 @@ import com.hwant.common.RecevierConst;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
 import com.hwant.entity.UserInfo;
+import com.hwant.pulltorefresh.PullToRefreshBase;
+import com.hwant.pulltorefresh.PullToRefreshBase.OnRefreshListener;
+import com.hwant.pulltorefresh.PullToRefreshListView;
 import com.hwant.services.IDoWork;
 import com.hwant.view.faceview.FaceView;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -43,7 +50,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	@ViewInject(id = R.id.btn_send_message)
 	private Button btn_send;
 	@ViewInject(id = R.id.lv_chat_message)
-	private ListView lv_message;
+	private PullToRefreshListView lv_message;
 	@ViewInject(id = R.id.iv_add_face)
 	private ImageView iv_addface;
 	@ViewInject(id = R.id.fv_facelist)
@@ -83,6 +90,21 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		btn_send.setOnClickListener(this);
 		iv_addface.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
+		// 设置下拉时的加载
+		lv_message.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                ChatMessage lastmsg=adapter.getLastObj();
+                PreChatRecord record=null;
+                if(lastmsg==null){
+                	Date date=new Date();
+                	record=new PreChatRecord(ChatActivity.this,application.user.getJid(),connect.getJid(),String.valueOf(date.getTime()));
+                }else{
+                	record=new PreChatRecord(ChatActivity.this,application.user.getJid(),connect.getJid(),lastmsg.getTime());
+                }
+                service.manager.addTask(record);
+			}
+		});
 		lv_message.setAdapter(adapter);
 
 		if (application.user.getUserimg() != null) {
@@ -164,4 +186,57 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	class PreChatRecord implements IDoWork {
+		private ContentResolver resolver = null;
+		private String login = "";
+		private String chatto = "";
+		private String lasttime = "";
+		private WeakReference<Activity> weak = null;
+
+		/**
+		 * 获取当前用户(多用户登陆)的聊天信息 ，防止不同用户出现混乱
+		 * 
+		 * @param user登陆用户
+		 * @param chatto当前用户的联系人
+		 * @param lasttime最后一条记录的时间
+		 */
+		public PreChatRecord(Activity activity, String login, String chatto,
+				String lasttime) {
+			this.login = login;
+			this.chatto = chatto;
+			this.lasttime = lasttime;
+			weak = new WeakReference<Activity>(activity);
+		}
+
+		@Override
+		public Object doWhat() {
+			ArrayList<ChatMessage> list = new ArrayList<ChatMessage>();
+			// 防止当前activity被销毁
+			resolver = getApplicationContext().getContentResolver();
+			Uri uri = Uri.parse("content://org.hwant.im.chat/chat");
+			Cursor cursor = resolver.query(uri, null,
+					"  user=? and time<? and ( mfrom=? or mto=?)  ",
+					new String[] { login, lasttime, chatto, chatto },
+					" order by time asc ");
+			cursor.moveToFirst();
+			while (cursor.isAfterLast()) {
+				ChatMessage message = new ChatMessage();
+				message.setMfrom(cursor.getString(cursor
+						.getColumnIndex("mfrom")));
+				message.setMessage(cursor.getString(cursor
+						.getColumnIndex("message")));
+				// message.setInfo(application.user);
+				list.add(message);
+				cursor.moveToNext();
+			}
+			cursor.close();
+			return list;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+            
+		}
+
+	}
 }

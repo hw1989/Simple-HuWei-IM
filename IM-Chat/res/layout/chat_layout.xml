@@ -33,7 +33,7 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <ListView
+    <!-- <ListView
         android:id="@+id/lv_chat_message"
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -42,8 +42,20 @@
         android:fadingEdge="none"
         android:listSelector="@null"
         android:scrollbars="none" >
-    </ListView>
-
+    </ListView> -->
+    <com.hwant.pulltorefresh.PullToRefreshListView 
+        android:id="@+id/lv_chat_message"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0"
+        android:divider="@null"
+        android:fadingEdge="none"
+        android:listSelector="@null"
+        android:scrollbars="none" 
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"/>
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

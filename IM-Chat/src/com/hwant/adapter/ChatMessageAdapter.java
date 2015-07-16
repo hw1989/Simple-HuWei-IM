@@ -57,11 +57,29 @@ public class ChatMessageAdapter extends BaseAdapter {
 		return position;
 	}
 
+	// 添加单个聊天
 	public void addMessage(ChatMessage message) {
 		if (message != null) {
 			list.add(message);
 			notifyDataSetChanged();
 		}
+	}
+
+	// 添加多个聊天记录
+	public void addMessage(ArrayList<ChatMessage> messages) {
+		if (messages != null && messages.size() > 0) {
+			list.addAll(0, messages);
+			notifyDataSetChanged();
+		}
+	}
+
+	public ChatMessage getLastObj() {
+		if (list == null || list.size() == 0) {
+			return null;
+		} else {
+			return list.get(getCount() - 1);
+		}
+
 	}
 
 	@Override
@@ -83,7 +101,8 @@ public class ChatMessageAdapter extends BaseAdapter {
 		ImageView iv_right = (ImageView) ViewHolder.getInstance().getView(
 				convertView, R.id.iv_chat_right);
 		message = getItem(position);
-		if (application.user.getJid().equals(message.getInfo().getJid())) {
+		// if (application.user.getJid().equals(message.getInfo().getJid()))
+		if (application.user.getJid().equals(message.getMfrom())) {
 			ll_left.setVisibility(View.GONE);
 			ll_right.setVisibility(View.VISIBLE);
 			tv_self.setText(String.valueOf(message.getMessage()));

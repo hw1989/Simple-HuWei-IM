@@ -12,7 +12,10 @@ import android.os.Environment;
 
 public class FileUtils {
 	public static boolean isExistsImg(String filename) {
-		if (filename != null && StringHelper.isEmpty(filename.trim())) {
+		if (filename == null) {
+			return false;
+		}
+		if(StringHelper.isEmpty(filename.trim())){
 			return false;
 		}
 		File file = new File(Environment.getExternalStorageDirectory()+Common.Path_Image,

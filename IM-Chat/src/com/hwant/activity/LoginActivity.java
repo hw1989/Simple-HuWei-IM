@@ -86,11 +86,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 			super(handler);
 			// TODO Auto-generated constructor stub
 		}
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-        	// TODO Auto-generated method stub
-        	super.onChange(selfChange, uri);
-        }
+
+		@Override
+		public void onChange(boolean selfChange, Uri uri) {
+			// TODO Auto-generated method stub
+			super.onChange(selfChange, uri);
+		}
 	}
 
 	private void init() {
@@ -164,19 +165,21 @@ public class LoginActivity extends Activity implements OnClickListener {
 		@Override
 		public void Finish2Do(Object obj) {
 			Boolean flag = (Boolean) obj;
-			if (obj != null &&flag) {
+			if (obj != null && flag) {
 				application.user.setJid("huwei" + Common.DomainName);
-				//插入登陆用户的信息，已经做了重复的处理
+				// 插入登陆用户的信息，已经做了重复的处理
 				Uri uri = Uri.parse("content://com.hwant.im.login/user");
 				ContentValues values = new ContentValues();
 				values.put("jid", "huwei" + Common.DomainName);
 				values.put("password", "123456");
 				resolver.insert(uri, values);
-				//获取登陆用户的信息
-				Cursor cursor=resolver.query(uri,null," jid=? ",new String[]{"huwei" + Common.DomainName},null);
+				// 获取登陆用户的信息
+				Cursor cursor = resolver.query(uri, null, " jid=? ",
+						new String[] { "huwei" + Common.DomainName }, null);
 				cursor.moveToFirst();
-				while(!cursor.isAfterLast()){
-					application.user.setUserimg(cursor.getString(cursor.getColumnIndex("userimg")));
+				while (!cursor.isAfterLast()) {
+					application.user.setUserimg(cursor.getString(cursor
+							.getColumnIndex("userimg")));
 					cursor.moveToNext();
 				}
 				cursor.close();
@@ -195,18 +198,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	class Register implements IDoWork {
-
-		@Override
-		public Object doWhat() {
-			// 将用户存到数据库
-			return null;
-		}
-
-		@Override
-		public void Finish2Do(Object obj) {
-
-		}
-
-	}
+//	class Register implements IDoWork {
+//
+//		@Override
+//		public Object doWhat() {
+//			// 将用户存到数据库
+//			return null;
+//		}
+//
+//		@Override
+//		public void Finish2Do(Object obj) {
+//
+//		}
+//
+//	}
 }
