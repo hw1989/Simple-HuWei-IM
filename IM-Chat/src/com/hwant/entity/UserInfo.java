@@ -15,7 +15,7 @@ public class UserInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Field(name = "jid", size = 20)
+	@Field(name = "jid", size = 20, unique = true)
 	private String jid;
 
 	public String getJid() {
@@ -57,7 +57,7 @@ public class UserInfo implements Serializable {
 	@Field(name = "status", type = DataType.Type_Int)
 	private int status;
 	// 用户头像
-	@Field(name = "nickname", size = 25)
+	@Field(name = "userimg", size = 25)
 	private String userimg;
 
 	public String getUserimg() {
@@ -66,5 +66,17 @@ public class UserInfo implements Serializable {
 
 	public void setUserimg(String userimg) {
 		this.userimg = userimg;
+	}
+
+	// 用户头像
+	@Field(name = "password", size = 35)
+	private String password;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

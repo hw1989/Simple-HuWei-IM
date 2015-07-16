@@ -4,8 +4,10 @@ import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
 import com.hwant.fragment.ConnectFragment;
+import com.hwant.fragment.MessageFragment;
 import com.hwant.services.IDoWork;
 import com.hwant.services.TaskManager;
+import com.hwant.utils.FileUtils;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenu.OnMenuListener;
 import com.special.ResideMenu.ResideMenuItem;
@@ -19,11 +21,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class IndexActivity extends BaseActivity implements OnClickListener,
 		OnCheckedChangeListener {
 	private ConnectFragment connect = null;
+	private MessageFragment message = null;
 	private ResideMenu menu = null;
 	private ResideMenuItem item_setting;
 	// 聊天
@@ -35,6 +39,8 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	// 动态
 	@ViewInject(id = R.id.cb_index_dynamic)
 	private CheckBox cb_dynamic;
+	@ViewInject(id = R.id.iv_index_icon)
+	private ImageView iv_myicon;
 	private Intent intent = null;
 
 	@Override
@@ -43,10 +49,13 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		setContentView(R.layout.index_layout);
 		ActivityInject.getInstance().setInject(this);
 		connect = new ConnectFragment();
+		message = new MessageFragment();
 		init();
 		if (savedInstanceState == null)
 			setMenuFragment(connect);
 		bindService();
+		// 设置登陆用户的图片
+		setImage();
 	}
 
 	private void init() {
@@ -64,6 +73,8 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		cb_connect.setOnCheckedChangeListener(this);
 		cb_dynamic.setOnCheckedChangeListener(this);
 		cb_mess.setOnCheckedChangeListener(this);
+		iv_myicon.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -76,6 +87,12 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		if (v == item_setting) {
 			intent = new Intent(this, SettingActivity.class);
 			startActivity(intent);
+		} else {
+			switch (v.getId()) {
+			case R.id.iv_index_icon:
+				menu.openMenu(ResideMenu.DIRECTION_LEFT);
+				break;
+			}
 		}
 	}
 
@@ -112,6 +129,7 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		if (isChecked) {
 			switch (buttonView.getId()) {
 			case R.id.cb_index_connect:
+				setMenuFragment(connect);
 				cb_dynamic.setChecked(false);
 				cb_mess.setChecked(false);
 				break;
@@ -120,6 +138,7 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 				cb_mess.setChecked(false);
 				break;
 			case R.id.cb_index_mess:
+				setMenuFragment(message);
 				cb_dynamic.setChecked(false);
 				cb_connect.setChecked(false);
 				break;
@@ -148,5 +167,17 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 
 		}
 
+	}
+
+	/**
+	 * 设置图片
+	 */
+	public void setImage() {
+		String filename = application.user.getUserimg();
+		if (FileUtils.isExistsImg(filename)) {
+			iv_myicon.setImageBitmap(FileUtils.getImageBitemap(filename));
+		} else {
+			// 图片不存在，需要在服务器上获取
+		}
 	}
 }

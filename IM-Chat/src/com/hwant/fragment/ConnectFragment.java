@@ -102,7 +102,7 @@ public class ConnectFragment extends Fragment implements
 			connect.setGroup(cursor.getString(cursor.getColumnIndex("fgroup")));
 			connect.setNickname(cursor.getString(cursor
 					.getColumnIndex("nickname")));
-			connect.setUserimg(cursor.getString(cursor.getColumnIndex("fgroup")));
+			connect.setUserimg(cursor.getString(cursor.getColumnIndex("userimg")));
 			list.add(connect);
 			cursor.moveToNext();
 		}

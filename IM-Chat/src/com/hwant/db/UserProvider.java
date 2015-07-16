@@ -1,6 +1,9 @@
 package com.hwant.db;
 
+import java.util.ArrayList;
+
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -70,7 +73,29 @@ public class UserProvider extends ContentProvider {
 			throw new IllegalArgumentException("insert时参数不能为空错误!");
 		}
 		database = sqlite.getWritableDatabase();
-		database.insert("usertable", "jid", values);
+		// database.insert("usertable", "jid", values);
+		// long id = database.replace("usertable", null, values);
+		// Uri uri2 = ContentUris.withAppendedId(uri, id);
+		// insert or ignore into table (fields) values (values);或replace into
+		// table (fields) values (values);
+		StringBuilder builder = new StringBuilder(
+				"insert or ignore into usertable (");
+		for (String field : values.keySet()) {
+			builder.append(field).append(",");
+		}
+		builder.deleteCharAt(builder.lastIndexOf(","));
+		builder.append(") values (");
+		for (String field : values.keySet()) {
+			builder.append("?,");
+		}
+		builder.deleteCharAt(builder.lastIndexOf(","));
+		builder.append(")");
+		// Object[] objects=new Object[values.size()];
+		ArrayList<Object> objects = new ArrayList<Object>();
+		for (String field : values.keySet()) {
+			objects.add(values.get(field));
+		}
+		database.execSQL(builder.toString(), objects.toArray());
 		return uri;
 	}
 

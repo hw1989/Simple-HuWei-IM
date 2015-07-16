@@ -1,5 +1,7 @@
 package com.hwant.db;
 
+import java.util.ArrayList;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -33,7 +35,7 @@ public class ConnectProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		database = sqlite.getReadableDatabase();
 		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-		builder.setTables("friend");
+		builder.setTables("connect");
 		switch (matcher.match(uri)) {
 		case 1:
 			break;
@@ -75,9 +77,29 @@ public class ConnectProvider extends ContentProvider {
 			throw new IllegalArgumentException("ContentValues对象不能为空");
 		}
 		database = sqlite.getWritableDatabase();
-		long rowid = database.insert("friend", "_id", values);
-		Uri newuri = ContentUris.withAppendedId(uri, rowid);
-		return newuri;
+		// long rowid = database.insert("friend", "_id", values);
+		// 防止重复插入
+		// long rowid = database.replace("connect", null, values);
+		// Uri newuri = ContentUris.withAppendedId(uri, rowid);
+		StringBuilder builder = new StringBuilder(
+				"insert or ignore into connect (");
+		for (String field : values.keySet()) {
+			builder.append(field).append(",");
+		}
+		builder.deleteCharAt(builder.lastIndexOf(","));
+		builder.append(") values (");
+		for (String field : values.keySet()) {
+			builder.append("?,");
+		}
+		builder.deleteCharAt(builder.lastIndexOf(","));
+		builder.append(")");
+		// Object[] objects=new Object[values.size()];
+		ArrayList<Object> objects = new ArrayList<Object>();
+		for (String field : values.keySet()) {
+			objects.add(values.get(field));
+		}
+		database.execSQL(builder.toString(), objects.toArray());
+		return uri;
 	}
 
 	@Override
@@ -86,7 +108,7 @@ public class ConnectProvider extends ContentProvider {
 			throw new IllegalArgumentException("uri错误!");
 		}
 		database = sqlite.getWritableDatabase();
-		int rowid = database.delete("friend", selection, selectionArgs);
+		int rowid = database.delete("connect", selection, selectionArgs);
 		return rowid;
 	}
 
@@ -97,7 +119,8 @@ public class ConnectProvider extends ContentProvider {
 			throw new IllegalArgumentException("uri错误!");
 		}
 		database = sqlite.getWritableDatabase();
-		int count = database.update("friend", values, selection, selectionArgs);
+		int count = database
+				.update("connect", values, selection, selectionArgs);
 		return count;
 	}
 

@@ -16,11 +16,11 @@
             android:id="@+id/tv_setting_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
             android:drawableLeft="@drawable/gbk"
             android:gravity="center_vertical"
             android:text="@string/back"
             android:textColor="#ffffff"
-            android:layout_marginLeft="10dip"
             android:textSize="16sp" />
 
         <TextView
@@ -38,10 +38,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/setting_item_margin_top"
         android:background="@drawable/setting_item_select"
-        android:paddingBottom="5dip"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="5dip" >
+        android:paddingBottom="@dimen/setting_item_padding_tb"
+        android:paddingLeft="@dimen/setting_item_padding_lr"
+        android:paddingRight="@dimen/setting_item_padding_lr"
+        android:paddingTop="@dimen/setting_item_padding_tb" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
             android:layout_centerVertical="true"
             android:text="@string/setting_txt_icon"
             android:textColor="@color/black_1"
-            android:textSize="16sp" />
+            android:textSize="@dimen/setting_item_txtsize" />
 
         <ImageView
             android:id="@+id/iv_userinfo_icon"
@@ -60,5 +60,10 @@
             android:layout_centerVertical="true"
             android:src="@drawable/gco" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_setting_chat_clear"
+        style="@style/setting_item_normal"
+        android:text="@string/setting_chat_clear"/>
 
 </LinearLayout>

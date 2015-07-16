@@ -1,5 +1,6 @@
 package com.hwant.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.wind.adapter.ViewHolder;
@@ -7,13 +8,17 @@ import org.wind.adapter.ViewHolder;
 import com.hwant.activity.R;
 import com.hwant.application.IMApplication;
 import com.hwant.entity.ChatMessage;
+import com.hwant.entity.ConnectInfo;
+import com.hwant.entity.UserInfo;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +28,7 @@ public class ChatMessageAdapter extends BaseAdapter {
 	private ArrayList<ChatMessage> list = null;
 	private ChatMessage message = null;
 	private IMApplication application;
+	private Bitmap selfimg = null, connectimg = null;
 
 	public ChatMessageAdapter(Application application,
 			ArrayList<ChatMessage> list) {
@@ -72,17 +78,45 @@ public class ChatMessageAdapter extends BaseAdapter {
 				convertView, R.id.tv_chat_righttxt);
 		TextView tv_other = (TextView) ViewHolder.getInstance().getView(
 				convertView, R.id.tv_chat_lefttxt);
+		ImageView iv_left = (ImageView) ViewHolder.getInstance().getView(
+				convertView, R.id.iv_chat_left);
+		ImageView iv_right = (ImageView) ViewHolder.getInstance().getView(
+				convertView, R.id.iv_chat_right);
 		message = getItem(position);
 		if (application.user.getJid().equals(message.getInfo().getJid())) {
 			ll_left.setVisibility(View.GONE);
 			ll_right.setVisibility(View.VISIBLE);
 			tv_self.setText(String.valueOf(message.getMessage()));
+			if (selfimg == null) {
+				iv_right.setImageResource(R.drawable.gco);
+			} else {
+				iv_right.setImageBitmap(selfimg);
+			}
 		} else {
 			ll_right.setVisibility(View.GONE);
 			ll_left.setVisibility(View.VISIBLE);
 			tv_other.setText(String.valueOf(message.getMessage()));
+			if (connectimg == null) {
+				iv_left.setImageResource(R.drawable.gco);
+			} else {
+				iv_left.setImageBitmap(connectimg);
+			}
 		}
 		return convertView;
 	}
 
+	/*
+	 * 当头像发生改变时调用
+	 */
+	public void setChatImg(Bitmap self, Bitmap connect) {
+		if (self != null) {
+			selfimg = self;
+		}
+		if (connect != null) {
+			connectimg = connect;
+		}
+		if (self != null && connect != null) {
+			notifyDataSetChanged();
+		}
+	}
 }

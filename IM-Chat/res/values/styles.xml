@@ -44,13 +44,27 @@
     <!-- setting设置 -->
     <style name="setting_txt_left"></style>
     <!-- 选择照片 -->
-     <style name="select_img_txt">
-         <item name="android:layout_width">match_parent</item>
-         <item name="android:layout_height">wrap_content</item>
-         <item name="android:textColor">@color/setting_select_txt</item>
-         <item name="android:paddingTop">10dip</item>
-         <item name="android:paddingBottom">10dip</item>
-         <item name="android:gravity">center</item>
-         <item name="android:textSize">20sp</item>
-     </style>
-</resources>
+    <style name="select_img_txt">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/setting_select_txt</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <!-- 设置中的普通item -->
+    <style name="setting_item_normal">
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingLeft">@dimen/setting_item_padding_lr</item>
+        <item name="android:paddingRight">@dimen/setting_item_padding_lr</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:textColor">@color/black_1</item>
+        <item name="android:textSize">@dimen/setting_item_txtsize</item>
+        <item name="android:background">@drawable/setting_item_select</item>
+        <item name="android:drawableRight">@drawable/ihr</item>
+    </style>
+</resources>

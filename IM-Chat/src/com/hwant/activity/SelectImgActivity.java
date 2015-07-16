@@ -205,7 +205,9 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 				}
 			}
 			try {
-				tempFile.delete();
+				if (tempFile != null) {
+					tempFile.delete();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -325,9 +327,10 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 				// 发送个人信息改变的广播
 				intent = new Intent();
 				intent.setAction(RecevierConst.User_Info_Icon);
-				File file = new File(Environment.getExternalStorageDirectory()
-						+ Common.Path_Image, filename);
-				intent.putExtra("value", file.getAbsolutePath());
+//				File file = new File(Environment.getExternalStorageDirectory()
+//						+ Common.Path_Image, filename);
+//				intent.putExtra("value", file.getAbsolutePath());
+				intent.putExtra("value",filename);
 				sendBroadcast(intent);
 				if (weak.get() != null) {
 					finish();

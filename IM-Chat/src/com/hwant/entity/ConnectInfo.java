@@ -6,14 +6,14 @@ import org.wind.annotation.Field;
 import org.wind.annotation.Table;
 import org.wind.database.DataType;
 
-@Table(DTname = "friend")
+@Table(DTname = "connect")
 public class ConnectInfo implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Field(name = "jid", size = 20)
+	@Field(name = "jid", size = 20,unique=true)
 	private String jid;
 
 	public String getJid() {

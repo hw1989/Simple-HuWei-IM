@@ -4,6 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/index_top_title"
+        android:paddingBottom="8dip"
+        android:paddingLeft="6dip"
+        android:paddingRight="6dip"
+        android:paddingTop="8dip" >
+
+        <ImageView
+            android:id="@+id/iv_index_icon"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/gco" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/index_title_connect"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/index_add_connect"
+            android:textColor="#ffffff"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
     <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
@@ -34,7 +67,7 @@
                 android:layout_height="@dimen/index_bottom_size"
                 android:layout_centerInParent="true"
                 android:background="@drawable/index_message_select"
-                android:button="@null"/>
+                android:button="@null" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,7 +95,7 @@
                 android:layout_height="@dimen/index_bottom_size"
                 android:layout_centerInParent="true"
                 android:background="@drawable/index_connect_select"
-                android:button="@null"/>
+                android:button="@null" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -76,7 +109,8 @@
                 android:layout_height="@dimen/index_bottom_size"
                 android:layout_centerInParent="true"
                 android:background="@drawable/index_plugin_select"
-                android:button="@null"/>
+                android:button="@null" />
         </RelativeLayout>
     </LinearLayout>
-</LinearLayout>
+
+</LinearLayout>
