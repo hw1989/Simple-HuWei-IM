@@ -11,7 +11,11 @@
         android:layout_width="40dip"
         android:layout_height="40dip"
         android:src="@drawable/add_face_select" />
-
+    <ImageView
+        android:id="@+id/iv_chat_more"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:src="@drawable/chat_more_select" />
     <EditText
         android:id="@+id/et_input_message"
         android:layout_width="0dip"
@@ -37,5 +41,5 @@
         android:paddingTop="8dip"
         android:text="@string/chat_send"
         android:textColor="#ffffff" />
-
+    
 </LinearLayout>

@@ -4,41 +4,59 @@ import java.io.File;
 
 import org.jivesoftware.smack.SmackAndroid;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smackx.carbons.Carbon.Private;
 import org.wind.util.PreferenceUtils;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.GeofenceClient;
+import com.baidu.location.LocationClient;
 import com.hwant.asmack.AsmackInit;
 import com.hwant.common.Common;
 import com.hwant.db.MySQLiteOpenHelper;
 import com.hwant.entity.UserInfo;
 
 import android.app.Application;
+import android.app.Service;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+import android.os.Vibrator;
 
-public class IMApplication extends Application {
-	// 确定是否连接
-	// public boolean isconnect = false;
-	// 确定是否登陆成功
-	// public boolean islogin = false;
+public class IMApplication extends Application implements BDLocationListener{
 	private PreferenceUtils sharepreference = null;
-	// public boolean hasdb = false;
 	// 标记是否创建过数据库
 	public MySQLiteOpenHelper helper = null;
 	// 登陆人的信息
 	public UserInfo user = null;
-
+    //-------------------百度地图初始化------------------------
+	private LocationClient mLocationClient=null;
+	private GeofenceClient mGeofenceClient=null;
+	 public Vibrator mVibrator=null;
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		SmackAndroid.init(this);
 		user = new UserInfo();
 		sharepreference = PreferenceUtils.init(this, Common.IM_Config);
-		// 判断是否创建过数据库
-		// hasdb = sharepreference.getBool("database", false);
 		helper = new MySQLiteOpenHelper(this);
 		SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(
 				getFilesDir() + File.separator + Common.DB_File_Name, null);
 		helper.onCreate(database);
 		sharepreference.putBoolen("database", true);
+		//-----------------------------------------------
+		mLocationClient=new LocationClient(getApplicationContext());
+		mLocationClient.registerLocationListener(this);
+		mGeofenceClient=new GeofenceClient(getApplicationContext());
+		mVibrator=(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
 	}
+	@Override
+	public void onReceiveLocation(BDLocation arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

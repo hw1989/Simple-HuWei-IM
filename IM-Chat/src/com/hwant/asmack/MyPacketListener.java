@@ -29,7 +29,8 @@ public class MyPacketListener implements PacketListener {
 
 	public MyPacketListener(Application application) {
 		this.application = (IMApplication) application;
-		this.resolver=application.getApplicationContext().getContentResolver();
+		this.resolver = application.getApplicationContext()
+				.getContentResolver();
 	}
 
 	@Override
@@ -44,8 +45,20 @@ public class MyPacketListener implements PacketListener {
 				// 单人聊天
 				Uri uri = Uri.parse("content://org.hwant.im.chat/chat");
 				ContentValues values = new ContentValues();
-				values.put("mfrom", mess.getFrom());
-				values.put("mto", application.user.getJid());
+				int indexfrom = mess.getFrom().lastIndexOf("/");
+				int indexto = mess.getTo().lastIndexOf("/");
+				String mfrom = "", mto = "";
+				if (indexfrom >= 0) {
+					mfrom = mess.getFrom().substring(0, indexfrom);
+				}
+				if (indexto >= 0) {
+					mto = mess.getTo().substring(0, indexto);
+				}
+				values.put("mfrom", mfrom);
+				values.put("mto", mto);
+				//服务器传过来有后缀 /Spark /Smack
+				// values.put("mfrom", mess.getFrom());
+				// values.put("mto", application.user.getJid());
 				values.put("message", mess.getBody());
 				values.put("read", "0");
 				values.put("user", application.user.getJid());
@@ -55,7 +68,7 @@ public class MyPacketListener implements PacketListener {
 				intent = new Intent();
 				//
 				ChatMessage message = new ChatMessage();
-				
+
 				message.setMfrom(mess.getFrom());
 				message.setMessage(mess.getBody());
 				message.setMto(application.user.getJid());
@@ -64,7 +77,7 @@ public class MyPacketListener implements PacketListener {
 				message.setInfo(info);
 				intent.setAction(RecevierConst.Chat_One_Get);
 				intent.putExtra("msg", message);
-				//发送广播
+				// 发送广播
 				application.getApplicationContext().sendBroadcast(intent);
 			} else if (mess.getType() == Message.Type.groupchat) {
 				// 群聊人聊天

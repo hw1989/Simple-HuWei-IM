@@ -33,29 +33,20 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <!-- <ListView
+    <com.hwant.pulltorefresh.PullToRefreshListView
         android:id="@+id/lv_chat_message"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1.0"
         android:divider="@null"
         android:fadingEdge="none"
-        android:listSelector="@null"
-        android:scrollbars="none" >
-    </ListView> -->
-    <com.hwant.pulltorefresh.PullToRefreshListView 
-        android:id="@+id/lv_chat_message"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1.0"
-        android:divider="@null"
-        android:fadingEdge="none"
-        android:listSelector="@null"
-        android:scrollbars="none" 
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:smoothScrollbar="true"/>
+        android:listSelector="@null"
+        android:scrollbars="none"
+        android:smoothScrollbar="true" />
+
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,5 +57,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
+    <com.hwant.view.otherview.OtherView
+        android:id="@+id/ov_otherslist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
+    </com.hwant.view.otherview.OtherView>
 
 </LinearLayout>

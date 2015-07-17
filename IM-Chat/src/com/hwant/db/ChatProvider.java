@@ -49,7 +49,8 @@ public class ChatProvider extends ContentProvider {
 			throw new IllegalArgumentException("uri错误!");
 		}
 		database=sqlite.getReadableDatabase();
-		Cursor cursor =builder.query(database, projection, selection, selectionArgs, null,null,Common.Table_Order_ASC);
+//		Cursor cursor =builder.query(database, projection, selection, selectionArgs, null,null,Common.Table_Order_ASC);
+		Cursor cursor =builder.query(database, projection, selection, selectionArgs, null,null,sortOrder);
 		return cursor;
 	}
 

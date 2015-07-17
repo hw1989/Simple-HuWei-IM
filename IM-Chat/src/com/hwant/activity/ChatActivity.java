@@ -22,6 +22,7 @@ import com.hwant.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import com.hwant.pulltorefresh.PullToRefreshListView;
 import com.hwant.services.IDoWork;
 import com.hwant.view.faceview.FaceView;
+import com.hwant.view.otherview.OtherView;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -53,8 +54,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private PullToRefreshListView lv_message;
 	@ViewInject(id = R.id.iv_add_face)
 	private ImageView iv_addface;
+	// 添加更多
+	@ViewInject(id = R.id.iv_chat_more)
+	private ImageView iv_other;
+	// 表情控件
 	@ViewInject(id = R.id.fv_facelist)
 	private FaceView fv_face;
+	// 其他功能控件
+	@ViewInject(id = R.id.ov_otherslist)
+	private OtherView ov_other;
 	@ViewInject(id = R.id.tv_chat_back)
 	private TextView tv_back;
 	private ConnectInfo connect = null;
@@ -90,19 +98,24 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		btn_send.setOnClickListener(this);
 		iv_addface.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
+		iv_other.setOnClickListener(this);
 		// 设置下拉时的加载
 		lv_message.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                ChatMessage lastmsg=adapter.getLastObj();
-                PreChatRecord record=null;
-                if(lastmsg==null){
-                	Date date=new Date();
-                	record=new PreChatRecord(ChatActivity.this,application.user.getJid(),connect.getJid(),String.valueOf(date.getTime()));
-                }else{
-                	record=new PreChatRecord(ChatActivity.this,application.user.getJid(),connect.getJid(),lastmsg.getTime());
-                }
-                service.manager.addTask(record);
+				ChatMessage lastmsg = adapter.getFristObj();
+				PreChatRecord record = null;
+				if (lastmsg == null) {
+					Date date = new Date();
+					record = new PreChatRecord(ChatActivity.this,
+							application.user.getJid(), connect.getJid(), String
+									.valueOf(date.getTime()));
+				} else {
+					record = new PreChatRecord(ChatActivity.this,
+							application.user.getJid(), connect.getJid(),
+							lastmsg.getTime());
+				}
+				service.manager.addTask(record);
 			}
 		});
 		lv_message.setAdapter(adapter);
@@ -137,10 +150,23 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			service.manager.addTask(new SendMessage());
 			break;
 		case R.id.iv_add_face:
-			fv_face.setVisibility(View.VISIBLE);
+			ov_other.setVisibility(View.GONE);
+			if (fv_face.getVisibility() == View.GONE) {
+				fv_face.setVisibility(fv_face.VISIBLE);
+			} else {
+				fv_face.setVisibility(fv_face.GONE);
+			}
 			break;
 		case R.id.tv_chat_back:
 			finish();
+			break;
+		case R.id.iv_chat_more:
+			fv_face.setVisibility(View.GONE);
+			if (ov_other.getVisibility() == View.GONE) {
+				ov_other.setVisibility(fv_face.VISIBLE);
+			} else {
+				ov_other.setVisibility(fv_face.GONE);
+			}
 			break;
 		}
 	}
@@ -217,17 +243,18 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			Cursor cursor = resolver.query(uri, null,
 					"  user=? and time<? and ( mfrom=? or mto=?)  ",
 					new String[] { login, lasttime, chatto, chatto },
-					" order by time asc ");
-			cursor.moveToFirst();
-			while (cursor.isAfterLast()) {
+					"  time desc limit 0,10");
+			// 显示的结果与查询的结果顺序相反
+			cursor.moveToLast();
+			while (!cursor.isBeforeFirst()) {
 				ChatMessage message = new ChatMessage();
 				message.setMfrom(cursor.getString(cursor
 						.getColumnIndex("mfrom")));
 				message.setMessage(cursor.getString(cursor
 						.getColumnIndex("message")));
-				// message.setInfo(application.user);
+				message.setTime(cursor.getString(cursor.getColumnIndex("time")));
 				list.add(message);
-				cursor.moveToNext();
+				cursor.moveToPrevious();
 			}
 			cursor.close();
 			return list;
@@ -235,7 +262,17 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void Finish2Do(Object obj) {
-            
+			if (weak != null) {
+				if (weak.get() != null) {
+					lv_message.onRefreshComplete();
+					if (obj != null) {
+						ArrayList<ChatMessage> list = (ArrayList<ChatMessage>) obj;
+						if (list.size() > 0) {
+							adapter.addMessage(list);
+						}
+					}
+				}
+			}
 		}
 
 	}

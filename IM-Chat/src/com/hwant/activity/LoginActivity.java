@@ -4,6 +4,7 @@ import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
 import com.hwant.application.IMApplication;
+import com.hwant.asmack.AsmackInit;
 import com.hwant.common.Common;
 import com.hwant.dialog.LoginDialog;
 import com.hwant.services.IDoWork;
@@ -66,6 +67,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 			public void onServiceConnected(ComponentName name, IBinder binder) {
 				SBinder sbinder = (SBinder) binder;
 				service = sbinder.getService();
+				AsmackInit init= service.getAsmack();
+				if(init!=null){
+					if(init.getConnection().isConnected()&&init.getConnection().isAuthenticated()){
+						//已经连接并登陆成功
+						Intent intent=new Intent(LoginActivity.this,IndexActivity.class);
+						startActivity(intent);
+					}
+				}
 				manager = sbinder.getTaskManager();
 				manager.addTask(new ConnectServer());
 			}
@@ -84,12 +93,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		public mContentObserver(Handler handler) {
 			super(handler);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
-			// TODO Auto-generated method stub
 			super.onChange(selfChange, uri);
 		}
 	}
@@ -198,18 +205,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 
-//	class Register implements IDoWork {
-//
-//		@Override
-//		public Object doWhat() {
-//			// 将用户存到数据库
-//			return null;
-//		}
-//
-//		@Override
-//		public void Finish2Do(Object obj) {
-//
-//		}
-//
-//	}
+	// class Register implements IDoWork {
+	//
+	// @Override
+	// public Object doWhat() {
+	// // 将用户存到数据库
+	// return null;
+	// }
+	//
+	// @Override
+	// public void Finish2Do(Object obj) {
+	//
+	// }
+	//
+	// }
 }

@@ -1,6 +1,5 @@
 package com.hwant.asmack;
 
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
@@ -17,10 +16,8 @@ import com.hwant.entity.ConnectInfo;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.text.format.DateFormat;
 
 public class MyRosterListener implements RosterListener {
 	private Roster roster = null;
