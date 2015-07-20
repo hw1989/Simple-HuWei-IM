@@ -34,6 +34,9 @@
     <string name="more_pgone">IM电话</string>
     <string name="more_photo">照片</string>
     <string name="more_shake">抖一抖</string>
+    <!-- search -->
+    <string name="search_title">搜索</string>
+    <string name="search_btn">搜索</string>
     <!--  -->
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Release to refresh…</string>

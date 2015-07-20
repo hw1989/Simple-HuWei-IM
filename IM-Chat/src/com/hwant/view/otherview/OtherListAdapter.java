@@ -41,7 +41,8 @@ public class OtherListAdapter extends BaseAdapter {
 
 	@Override
 	public Integer getItem(int position) {
-		return sparseArray.get(sparseArray.keyAt(position));
+		//某一页的position
+		return sparseArray.get(sparseArray.keyAt(position+8*page));
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class IndexActivity extends BaseActivity implements OnClickListener,
@@ -41,6 +42,8 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	private CheckBox cb_dynamic;
 	@ViewInject(id = R.id.iv_index_icon)
 	private ImageView iv_myicon;
+	@ViewInject(id = R.id.tv_index_addconnect)
+	private TextView tv_addconnect;
 	private Intent intent = null;
 
 	@Override
@@ -74,6 +77,7 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		cb_dynamic.setOnCheckedChangeListener(this);
 		cb_mess.setOnCheckedChangeListener(this);
 		iv_myicon.setOnClickListener(this);
+		tv_addconnect.setOnClickListener(this);
 
 	}
 
@@ -92,6 +96,9 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 			case R.id.iv_index_icon:
 				menu.openMenu(ResideMenu.DIRECTION_LEFT);
 				break;
+			case R.id.tv_index_addconnect:
+				intent = new Intent(this, SearchConnectActivity.class);
+				startActivity(intent);
 			}
 		}
 	}

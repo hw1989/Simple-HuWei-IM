@@ -15,6 +15,7 @@ import com.hwant.asmack.AsmackInit;
 import com.hwant.common.Common;
 import com.hwant.db.MySQLiteOpenHelper;
 import com.hwant.entity.UserInfo;
+import com.hwant.utils.MessageUtils;
 
 import android.app.Application;
 import android.app.Service;
@@ -24,16 +25,23 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Vibrator;
 
-public class IMApplication extends Application implements BDLocationListener{
+public class IMApplication extends Application implements BDLocationListener {
 	private PreferenceUtils sharepreference = null;
 	// 标记是否创建过数据库
 	public MySQLiteOpenHelper helper = null;
 	// 登陆人的信息
 	public UserInfo user = null;
-    //-------------------百度地图初始化------------------------
-	private LocationClient mLocationClient=null;
-	private GeofenceClient mGeofenceClient=null;
-	 public Vibrator mVibrator=null;
+	// -------------------百度地图初始化------------------------
+	public LocationClient mLocationClient = null;
+	public GeofenceClient mGeofenceClient = null;
+	public Vibrator mVibrator = null;
+	// 定位系统的消息内容
+	private BDLocation bdLocation = null;
+
+	public BDLocation getBdLocation() {
+		return bdLocation;
+	}
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -45,18 +53,17 @@ public class IMApplication extends Application implements BDLocationListener{
 				getFilesDir() + File.separator + Common.DB_File_Name, null);
 		helper.onCreate(database);
 		sharepreference.putBoolen("database", true);
-		//-----------------------------------------------
-		mLocationClient=new LocationClient(getApplicationContext());
+		// -----------------------------------------------
+		mLocationClient = new LocationClient(getApplicationContext());
 		mLocationClient.registerLocationListener(this);
-		mGeofenceClient=new GeofenceClient(getApplicationContext());
-		mVibrator=(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
-	}
-	@Override
-	public void onReceiveLocation(BDLocation arg0) {
-		// TODO Auto-generated method stub
-		
+		mGeofenceClient = new GeofenceClient(getApplicationContext());
+		mVibrator = (Vibrator) getApplicationContext().getSystemService(
+				Service.VIBRATOR_SERVICE);
 	}
 
-	
+	@Override
+	public void onReceiveLocation(BDLocation arg0) {
+		this.bdLocation = arg0;
+	}
 
 }

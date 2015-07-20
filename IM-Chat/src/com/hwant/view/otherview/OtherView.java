@@ -13,13 +13,16 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.LinearLayout.LayoutParams;
 
-public class OtherView extends LinearLayout implements OnPageChangeListener {
+public class OtherView extends LinearLayout implements OnPageChangeListener,
+		OnItemClickListener {
 	// private ArrayList<String> faces = new ArrayList<String>();
 	private SparseIntArray otherArray = null;
 	private ViewPager vp_face = null;
@@ -30,6 +33,15 @@ public class OtherView extends LinearLayout implements OnPageChangeListener {
 	private OtherListAdapter listadapter = null;
 	// 页面的索引
 	private RadioGroup rg_index = null;
+	// 设置item点击的监听
+	private IOtherListItemListener otherListItemListener = null;
+
+	
+
+	public void setOtherListItemListener(
+			IOtherListItemListener otherListItemListener) {
+		this.otherListItemListener = otherListItemListener;
+	}
 
 	public OtherView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -79,7 +91,6 @@ public class OtherView extends LinearLayout implements OnPageChangeListener {
 		for (int i = 0; i < pages; i++) {
 			RadioButton rb_page = new RadioButton(context);
 			rb_page.setButtonDrawable(android.R.color.transparent);
-
 			rb_page.setBackgroundResource(R.drawable.dot_page_select);
 			rb_page.setLayoutParams(params);
 			rg_index.addView(rb_page, params);
@@ -87,6 +98,8 @@ public class OtherView extends LinearLayout implements OnPageChangeListener {
 					false);
 			GridView gv_face = (GridView) facelist.findViewById(R.id.gv_others);
 			listadapter = new OtherListAdapter(context, otherArray, i);
+			// 设置item被点击
+			gv_face.setOnItemClickListener(this);
 			gv_face.setAdapter(listadapter);
 			views.add(facelist);
 		}
@@ -125,5 +138,14 @@ public class OtherView extends LinearLayout implements OnPageChangeListener {
 	private void setDotSelect(int index) {
 		RadioButton rb_select = (RadioButton) rg_index.getChildAt(index);
 		rb_select.setChecked(true);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (otherListItemListener != null) {
+			otherListItemListener.OVitemclick(vp_face.getCurrentItem(), position);
+		}
+
 	}
 }

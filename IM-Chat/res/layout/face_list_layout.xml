@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:numColumns="7"
         android:gravity="center"
-        android:scrollbars="none" >
+        android:scrollbars="none" 
+        android:listSelector="@null">
     </GridView>
 
 </LinearLayout>

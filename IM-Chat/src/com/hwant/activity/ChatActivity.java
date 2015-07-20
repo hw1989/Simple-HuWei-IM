@@ -9,10 +9,16 @@ import org.wind.annotation.ActivityInject;
 import org.wind.annotation.Field;
 import org.wind.annotation.ViewInject;
 import org.wind.util.StringHelper;
+import org.xbill.DNS.APLRecord;
 
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 import com.hwant.adapter.ChatMessageAdapter;
+import com.hwant.application.IMApplication;
 import com.hwant.broadcast.ChatReceiver;
 import com.hwant.common.Common;
+import com.hwant.common.MapCommon;
 import com.hwant.common.RecevierConst;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
@@ -21,13 +27,16 @@ import com.hwant.pulltorefresh.PullToRefreshBase;
 import com.hwant.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import com.hwant.pulltorefresh.PullToRefreshListView;
 import com.hwant.services.IDoWork;
+import com.hwant.utils.MessageUtils;
 import com.hwant.view.faceview.FaceView;
+import com.hwant.view.otherview.IOtherListItemListener;
 import com.hwant.view.otherview.OtherView;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -37,7 +46,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.renderscript.FieldPacker;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,7 +57,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChatActivity extends BaseActivity implements OnClickListener {
+public class ChatActivity extends BaseActivity implements OnClickListener,
+		IOtherListItemListener {
 	@ViewInject(id = R.id.et_input_message)
 	private EditText et_input;
 	@ViewInject(id = R.id.btn_send_message)
@@ -75,6 +88,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	// 头像
 	private Bitmap selfimg = null;
 	private Bitmap connectimg = null;
+	private InputMethodManager manager = null;
+	// 定位信息
+	private LocationClient client;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -95,10 +111,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void init() {
+		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		// 设置其他功能的item点击监听
+		ov_other.setOtherListItemListener(this);
 		btn_send.setOnClickListener(this);
 		iv_addface.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
 		iv_other.setOnClickListener(this);
+		// 初始化地位信息
+		client = application.mLocationClient;
 		// 设置下拉时的加载
 		lv_message.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
@@ -147,9 +168,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				Toast.makeText(this, "内容不能为空!", Toast.LENGTH_SHORT).show();
 				return;
 			}
-			service.manager.addTask(new SendMessage());
+			service.manager.addTask(new SendMessage(message));
 			break;
 		case R.id.iv_add_face:
+			// et_input.clearFocus();
+			manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 			ov_other.setVisibility(View.GONE);
 			if (fv_face.getVisibility() == View.GONE) {
 				fv_face.setVisibility(fv_face.VISIBLE);
@@ -161,6 +184,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.iv_chat_more:
+			manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 			fv_face.setVisibility(View.GONE);
 			if (ov_other.getVisibility() == View.GONE) {
 				ov_other.setVisibility(fv_face.VISIBLE);
@@ -177,14 +201,23 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		if (receiver != null) {
 			unregisterReceiver(receiver);
 		}
+		client.stop();
 	}
 
 	class SendMessage implements IDoWork {
+		private String content = "";
+
+		public SendMessage(String content) {
+			this.content = content;
+		}
+
 		@Override
 		public Object doWhat() {
+			// boolean flag = service.getAsmack().sendMessage(
+			// application.user.getJid(), connect.getJid(),
+			// et_input.getText().toString());
 			boolean flag = service.getAsmack().sendMessage(
-					application.user.getJid(), connect.getJid(),
-					et_input.getText().toString());
+					application.user.getJid(), connect.getJid(), content);
 			return flag;
 		}
 
@@ -194,10 +227,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			Boolean flag = (Boolean) obj;
 			ContentValues values = new ContentValues();
 			// if(flag){
-			// Toast.makeText(ChatActivity.this,"发送:"+flag,Toast.LENGTH_SHORT).show();
 			values.put("mfrom", application.user.getJid());
 			values.put("mto", connect.getJid());
-			values.put("message", et_input.getText().toString());
+			// values.put("message", et_input.getText().toString());
+			values.put("message", content);
 			values.put("read", "1");
 			values.put("user", application.user.getJid());
 			Date date = new Date();
@@ -205,7 +238,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			resolver.insert(inserUri, values);
 			ChatMessage message = new ChatMessage();
 			message.setMfrom(application.user.getJid());
-			message.setMessage(et_input.getText().toString());
+			// message.setMessage(et_input.getText().toString());
+			message.setMessage(content);
 			message.setInfo(application.user);
 			adapter.addMessage(message);
 			// }
@@ -276,4 +310,32 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 
 	}
+
+	private void initLocation() {
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(LocationMode.Hight_Accuracy);
+		option.setCoorType(MapCommon.TYPE_Loc_Gcj);
+		int span = 1000;
+		option.setScanSpan(span);
+		option.setIsNeedAddress(true);
+		client.setLocOption(option);
+	}
+
+	@Override
+	public void OVitemclick(int page, int position) {
+		if (page == 0) {
+			if (position == 4) {
+				client.start();
+				// 定位，发送位置
+				initLocation();
+				if (application.getBdLocation() == null) {
+					Toast.makeText(this, "获取位置失败!", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				service.manager.addTask(new SendMessage(MessageUtils.setLocation(application.getBdLocation())));
+				client.stop();
+			}
+		}
+	}
+
 }
