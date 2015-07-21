@@ -16,6 +16,7 @@
     <!-- chat -->
     <string name="chat_send">发送</string>
     <string name="chat_msg_back">消息</string>
+    <string name="chat_longpress">长按语音</string>
     <!-- setting -->
     <string name="setting_title">设置</string>
     <string name="setting_txt_icon">头像</string>

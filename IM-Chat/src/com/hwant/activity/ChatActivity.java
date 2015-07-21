@@ -45,20 +45,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.renderscript.FieldPacker;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChatActivity extends BaseActivity implements OnClickListener,
-		IOtherListItemListener {
+		IOtherListItemListener, OnCheckedChangeListener,OnTouchListener{
 	@ViewInject(id = R.id.et_input_message)
 	private EditText et_input;
 	@ViewInject(id = R.id.btn_send_message)
@@ -78,6 +87,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	private OtherView ov_other;
 	@ViewInject(id = R.id.tv_chat_back)
 	private TextView tv_back;
+	// 发送内容的类型
+	@ViewInject(id = R.id.cb_msg_type)
+	private CheckBox cb_msgtype;
+	// 输入型的
+	@ViewInject(id = R.id.ll_msg_input)
+	private LinearLayout ll_input;
+	// 长按录音的按键
+	@ViewInject(id=R.id.btn_msg_voice)
+	private Button btn_voice;
 	private ConnectInfo connect = null;
 
 	private Uri inserUri = null;
@@ -118,6 +136,33 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		iv_addface.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
 		iv_other.setOnClickListener(this);
+		// 设置选择状态发生改变的监听
+		cb_msgtype.setOnCheckedChangeListener(this);
+		//开始录音
+		btn_voice.setOnTouchListener(this);
+		//输入文本是显示发送的按钮
+		et_input.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if("".equals(s)){
+					btn_send.setVisibility(View.GONE);
+					cb_msgtype.setVisibility(View.VISIBLE);
+				}else{
+					btn_send.setVisibility(View.VISIBLE);
+					cb_msgtype.setVisibility(View.GONE);
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 		// 初始化地位信息
 		client = application.mLocationClient;
 		// 设置下拉时的加载
@@ -332,14 +377,44 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 					Toast.makeText(this, "获取位置失败!", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				// String
-				// s=MessageUtils.setLocation(application.getBdLocation());
-
 				service.manager.addTask(new SendMessage(MessageUtils
 						.setLocation(application.getBdLocation())));
 				client.stop();
 			}
 		}
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		switch (buttonView.getId()) {
+		case R.id.cb_msg_type:
+			if (isChecked) {
+				// 显示语音的界面
+                ll_input.setVisibility(View.GONE);
+                btn_voice.setVisibility(View.VISIBLE);
+			} else {
+				// 显示文本的界面
+				ll_input.setVisibility(View.VISIBLE);
+				btn_voice.setVisibility(View.GONE);
+			}
+			break;
+		}
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			
+			break;
+		case MotionEvent.ACTION_UP:
+			
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			
+			break;
+		}
+		return true;
 	}
 
 }

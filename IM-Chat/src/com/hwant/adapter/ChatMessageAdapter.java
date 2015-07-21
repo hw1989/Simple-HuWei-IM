@@ -80,13 +80,15 @@ public class ChatMessageAdapter extends BaseAdapter {
 			return list.get(getCount() - 1);
 		}
 	}
-    public ChatMessage getFristObj(){
-    	if (list == null || list.size() == 0) {
+
+	public ChatMessage getFristObj() {
+		if (list == null || list.size() == 0) {
 			return null;
 		} else {
 			return list.get(0);
 		}
-    }
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
