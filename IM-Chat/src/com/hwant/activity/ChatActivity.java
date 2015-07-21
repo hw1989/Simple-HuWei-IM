@@ -332,7 +332,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 					Toast.makeText(this, "获取位置失败!", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				service.manager.addTask(new SendMessage(MessageUtils.setLocation(application.getBdLocation())));
+				// String
+				// s=MessageUtils.setLocation(application.getBdLocation());
+
+				service.manager.addTask(new SendMessage(MessageUtils
+						.setLocation(application.getBdLocation())));
 				client.stop();
 			}
 		}
