@@ -32,6 +32,15 @@ public class MessageUtils {
 	}
 
 	/**
+	 * 将语音信息转化为发送的信息
+	 */
+	public static String setVoice(String voice2str) {
+		StringBuilder builder = new StringBuilder("(loc:");
+		builder.append(voice2str).append(")");
+		return builder.toString();
+	}
+
+	/**
 	 * 使用正则表达式解析出 (type:content)里的信息
 	 * 
 	 * @param content服务器返回的字符串

@@ -15,18 +15,18 @@ public class FileUtils {
 		if (filename == null) {
 			return false;
 		}
-		if(StringHelper.isEmpty(filename.trim())){
+		if (StringHelper.isEmpty(filename.trim())) {
 			return false;
 		}
-		File file = new File(Environment.getExternalStorageDirectory()+Common.Path_Image,
-				filename);
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ Common.Path_Image, filename);
 		return file.exists();
 	}
-	public static Bitmap getImageBitemap(String filename){
-		File file = new File(Environment.getExternalStorageDirectory()+Common.Path_Image,
-				filename);
-		Bitmap bitmap=BitmapFactory.decodeFile(file.getAbsolutePath());
+   
+	public static Bitmap getImageBitemap(String filename) {
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ Common.Path_Image, filename);
+		Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 		return bitmap;
-		
 	}
 }

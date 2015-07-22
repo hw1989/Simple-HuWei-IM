@@ -23,17 +23,12 @@ public class BaseActivity extends FragmentActivity {
 	public TaskManager manager = null;
 	// 标记是否绑定
 	public IMApplication application = null;
-    
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		application = (IMApplication) getApplication();
-		// 创建缓存文件路径
-		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
-				+ Common.Path_Cache, true);
-		// 创建目录文件路径
-		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
-				+ Common.Path_Image, true);
+		createPath();
 	}
 
 	@Override
@@ -62,6 +57,18 @@ public class BaseActivity extends FragmentActivity {
 		};
 		Intent intent = new Intent(this, IMService.class);
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
+	}
+
+	public void createPath() {
+		// 创建缓存文件路径
+		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
+				+ Common.Path_Cache, true);
+		// 创建目录文件路径
+		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
+				+ Common.Path_Image, true);
+		// 创建媒体的文件的路径
+		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
+				+ Common.Path_Media, true);
 	}
 
 	public void bindFinished(TaskManager manager) {

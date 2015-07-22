@@ -2,18 +2,26 @@ package com.hwant.activity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.Field;
 import org.wind.annotation.ViewInject;
+import org.wind.media.MediaComm;
+import org.wind.media.VoiceManager;
+import org.wind.util.FileUtils;
 import org.wind.util.StringHelper;
 import org.xbill.DNS.APLRecord;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.baidu.navisdk.ui.widget.NewerGuideDialog;
 import com.hwant.adapter.ChatMessageAdapter;
 import com.hwant.application.IMApplication;
 import com.hwant.broadcast.ChatReceiver;
@@ -44,6 +52,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.renderscript.FieldPacker;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -67,7 +77,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChatActivity extends BaseActivity implements OnClickListener,
-		IOtherListItemListener, OnCheckedChangeListener,OnTouchListener{
+		IOtherListItemListener, OnCheckedChangeListener, OnTouchListener {
 	@ViewInject(id = R.id.et_input_message)
 	private EditText et_input;
 	@ViewInject(id = R.id.btn_send_message)
@@ -94,7 +104,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	@ViewInject(id = R.id.ll_msg_input)
 	private LinearLayout ll_input;
 	// 长按录音的按键
-	@ViewInject(id=R.id.btn_msg_voice)
+	@ViewInject(id = R.id.btn_msg_voice)
 	private Button btn_voice;
 	private ConnectInfo connect = null;
 
@@ -109,6 +119,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	private InputMethodManager manager = null;
 	// 定位信息
 	private LocationClient client;
+	private Handler handler = null;
+	// 产生时间的文件名
+	private String filename = "";
+	private SimpleDateFormat format = null;
+	// 文件转换
+	private FileTransferManager ftmanager = null;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -130,6 +146,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 
 	private void init() {
 		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		// 设置其他功能的item点击监听
 		ov_other.setOtherListItemListener(this);
 		btn_send.setOnClickListener(this);
@@ -138,27 +155,28 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		iv_other.setOnClickListener(this);
 		// 设置选择状态发生改变的监听
 		cb_msgtype.setOnCheckedChangeListener(this);
-		//开始录音
+		// 开始录音
 		btn_voice.setOnTouchListener(this);
-		//输入文本是显示发送的按钮
+		// 输入文本是显示发送的按钮
 		et_input.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if("".equals(s)){
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				if ("".equals(s)) {
 					btn_send.setVisibility(View.GONE);
 					cb_msgtype.setVisibility(View.VISIBLE);
-				}else{
+				} else {
 					btn_send.setVisibility(View.VISIBLE);
 					cb_msgtype.setVisibility(View.GONE);
 				}
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
@@ -202,6 +220,21 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 			}
 		}
 		adapter.setChatImg(selfimg, connectimg);
+		handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				if (msg.what == MediaComm.What_Voice_Finish) {
+					// // 将音频文件转为字符串
+					// byte[] buffere=FileUtils.file2ByteArray(filename);
+					// //文件转换后的字符串
+					// String file2str=StringHelper.byteArray2Base64(buffere);
+					// service.manager.addTask(new
+					// SendMessage(MessageUtils.setVoice(file2str)));
+					// 确认连接正常
+					service.manager.addTask(new TransferFile(filename));
+				}
+			}
+		};
 	}
 
 	@Override
@@ -390,8 +423,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		case R.id.cb_msg_type:
 			if (isChecked) {
 				// 显示语音的界面
-                ll_input.setVisibility(View.GONE);
-                btn_voice.setVisibility(View.VISIBLE);
+				ll_input.setVisibility(View.GONE);
+				btn_voice.setVisibility(View.VISIBLE);
 			} else {
 				// 显示文本的界面
 				ll_input.setVisibility(View.VISIBLE);
@@ -401,20 +434,61 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 
+	private VoiceManager voiceManager = null;
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		switch(event.getAction()){
+		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			
+			createPath();
+			filename = Environment.getExternalStorageDirectory()
+					+ Common.Path_Media + format.format(new Date()) + ".3gp";
+			voiceManager = new VoiceManager(filename, handler);
+			voiceManager.startRecord();
 			break;
 		case MotionEvent.ACTION_UP:
-			
+			if (voiceManager != null) {
+				voiceManager.stopRecord();
+			}
 			break;
 		case MotionEvent.ACTION_CANCEL:
-			
+			if (voiceManager != null) {
+				voiceManager.stopRecord();
+			}
 			break;
 		}
 		return true;
 	}
 
+	class TransferFile implements IDoWork {
+		private String filepath;
+
+		public TransferFile(String filepath) {
+			this.filepath = filepath;
+		}
+
+		@Override
+		public Object doWhat() {
+			if (service.getConnection().isConnected()
+					&& service.getConnection().isAuthenticated()) {
+				ftmanager = new FileTransferManager(service.getConnection());
+				OutgoingFileTransfer transfer = ftmanager
+						.createOutgoingFileTransfer(connect.getJid() + "/Smack");
+				File file = new File(this.filepath);
+				try {
+					transfer.sendFile(file, "huwei");
+				} catch (XMPPException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
 }

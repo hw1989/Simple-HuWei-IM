@@ -1,10 +1,18 @@
 package com.hwant.asmack;
 
+import java.io.File;
+
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.filetransfer.FileTransferListener;
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
+import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
+import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.PacketInterceptor;
 import org.jivesoftware.smack.PacketListener;
@@ -17,9 +25,11 @@ import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.telephony.gsm.SmsMessage.MessageClass;
 import android.util.Log;
 
+import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
 
 public class AsmackInit {
@@ -27,13 +37,15 @@ public class AsmackInit {
 	private Context context = null;
 	private ConnectionConfiguration configuration = null;
 	private XMPPConnection connection = null;
-    private Application application=null;
+	private Application application = null;
+//	private FileTransferListener ftlistener = null;
+
 	public synchronized XMPPConnection getConnection() {
 		return connection;
 	}
 
 	public AsmackInit(Application application) {
-		this.application=application;
+		this.application = application;
 		this.context = application.getApplicationContext();
 	}
 
@@ -65,14 +77,14 @@ public class AsmackInit {
 		// connection.addConnectionListener(new AConnectionListener());
 		PacketTypeFilter filter = new PacketTypeFilter(Message.class);
 		// 对发送消息进行监听
-		connection
-				.addPacketListener(new MyPacketListener(application), filter);
+		connection.addPacketListener(new MyPacketListener(application), filter);
 		connection.addPacketInterceptor(new PacketInterceptor() {
 
 			@Override
 			public void interceptPacket(Packet packet) {
 			}
 		}, null);
+		
 		// connection.addPacketListener(new PacketListener() {
 		//
 		// @Override
@@ -94,6 +106,17 @@ public class AsmackInit {
 			connection.connect();
 			if (connection.isConnected()) {
 				flag = true;
+				// 文件传输时的监听
+				ServiceDiscoveryManager sdmanager = ServiceDiscoveryManager
+						.getInstanceFor(connection);
+				if(sdmanager==null){
+					sdmanager=new ServiceDiscoveryManager(connection);
+				}
+				sdmanager.addFeature("http://jabber.org/protocol/disco#info");
+				sdmanager.addFeature("jabber:iq:privacy");
+				FileTransferManager manager = new FileTransferManager(connection);
+				FileTransferNegotiator.setServiceEnabled(connection, true);
+				manager.addFileTransferListener(new ChatFileTransferListener());
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();
@@ -175,4 +198,5 @@ public class AsmackInit {
 		}
 		return false;
 	}
+
 }

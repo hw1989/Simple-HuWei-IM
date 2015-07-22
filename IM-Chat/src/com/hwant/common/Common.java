@@ -17,7 +17,11 @@ public class Common {
 	// 图片存放位置
 	public static final String Path_Image = File.separator + "HWim"
 			+ File.separator + "image" + File.separator;
+	// 媒体的缓存存放位置
+	public static final String Path_Media = File.separator + "HWim"
+			+ File.separator + "media" + File.separator;
 	// 放缓存文件的位置
 	public static final String Path_Cache = File.separator + "HWim"
 			+ File.separator + "cache" + File.separator;
+
 }

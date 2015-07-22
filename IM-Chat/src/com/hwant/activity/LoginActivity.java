@@ -2,6 +2,7 @@ package com.hwant.activity;
 
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
+import org.wind.util.StringHelper;
 
 import com.hwant.application.IMApplication;
 import com.hwant.asmack.AsmackInit;
@@ -67,11 +68,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 			public void onServiceConnected(ComponentName name, IBinder binder) {
 				SBinder sbinder = (SBinder) binder;
 				service = sbinder.getService();
-				AsmackInit init= service.getAsmack();
-				if(init!=null){
-					if(init.getConnection().isConnected()&&init.getConnection().isAuthenticated()){
-						//已经连接并登陆成功
-						Intent intent=new Intent(LoginActivity.this,IndexActivity.class);
+				AsmackInit init = service.getAsmack();
+				if (init != null) {
+					if (init.getConnection().isConnected()
+							&& init.getConnection().isAuthenticated()) {
+						// 已经连接并登陆成功
+						Intent intent = new Intent(LoginActivity.this,
+								IndexActivity.class);
 						startActivity(intent);
 					}
 				}
@@ -134,14 +137,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.btn_login:
 			String name = et_login_name.getText().toString();
 			String psw = et_login_psw.getText().toString();
-			// if (StringHelper.isEmpty(name) || StringHelper.isEmpty(psw)) {
-			// if (dialog != null && !dialog.isShowing()) {
-			// dialog.init(R.layout.dialog_login_tip_layout);
-			// dialog.show();
-			// }
-			// return;
-			// }
-			manager.addTask(new LoginServer());
+			if (StringHelper.isEmpty(name) || StringHelper.isEmpty(psw)) {
+				if (dialog != null && !dialog.isShowing()) {
+					dialog.init(R.layout.dialog_login_tip_layout);
+					dialog.show();
+				}
+				return;
+			}
+			manager.addTask(new LoginServer(name, psw));
 			break;
 		}
 	}
@@ -161,11 +164,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	class LoginServer implements IDoWork {
+		private String username;
+		private String userpsw;
+
+		public LoginServer(String username, String userpsw) {
+			this.username = username;
+			this.userpsw = userpsw;
+		}
 
 		@Override
 		public Object doWhat() {
 			boolean flag = service.getAsmack().setLogin(
-					"huwei" + Common.DomainName, "123456");
+					this.username + Common.DomainName, this.userpsw);
 			return flag;
 		}
 
@@ -173,16 +183,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 		public void Finish2Do(Object obj) {
 			Boolean flag = (Boolean) obj;
 			if (obj != null && flag) {
-				application.user.setJid("huwei" + Common.DomainName);
+				application.user.setJid(this.username + Common.DomainName);
 				// 插入登陆用户的信息，已经做了重复的处理
 				Uri uri = Uri.parse("content://com.hwant.im.login/user");
 				ContentValues values = new ContentValues();
-				values.put("jid", "huwei" + Common.DomainName);
-				values.put("password", "123456");
+				values.put("jid", this.username + Common.DomainName);
+				values.put("password", this.userpsw);
 				resolver.insert(uri, values);
 				// 获取登陆用户的信息
 				Cursor cursor = resolver.query(uri, null, " jid=? ",
-						new String[] { "huwei" + Common.DomainName }, null);
+						new String[] { this.username + Common.DomainName },
+						null);
 				cursor.moveToFirst();
 				while (!cursor.isAfterLast()) {
 					application.user.setUserimg(cursor.getString(cursor
