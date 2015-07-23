@@ -10,7 +10,7 @@ public class MessageUtils {
 	// 是图片
 	public static final String TYPE_IMG = "img";
 	// 定位信息
-	public static final String TYPE_LOC = "location";
+	public static final String TYPE_LOC = "loc";
 	// 语音信息
 	public static final String TYPE_VOICE = "voice";
 	// 表情图片
@@ -21,7 +21,8 @@ public class MessageUtils {
 	 */
 	public static String setLocation(BDLocation location) {
 
-		StringBuilder builder = new StringBuilder("(loc:");
+		StringBuilder builder = new StringBuilder("(").append(TYPE_LOC);
+		builder.append(":");
 		// 经度
 		builder.append(location.getLongitude()).append(",");
 		// 纬度
@@ -35,7 +36,8 @@ public class MessageUtils {
 	 * 将语音信息转化为发送的信息
 	 */
 	public static String setVoice(String voice2str) {
-		StringBuilder builder = new StringBuilder("(loc:");
+		StringBuilder builder = new StringBuilder("(").append(TYPE_VOICE);
+		builder.append(":");
 		builder.append(voice2str).append(")");
 		return builder.toString();
 	}

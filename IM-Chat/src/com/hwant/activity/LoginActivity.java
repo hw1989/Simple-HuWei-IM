@@ -2,6 +2,7 @@ package com.hwant.activity;
 
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
+import org.wind.util.PreferenceUtils;
 import org.wind.util.StringHelper;
 
 import com.hwant.application.IMApplication;
@@ -110,6 +111,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 		ActivityInject.getInstance().setInject(this);
 		btn_login.setOnClickListener(this);
 		// sharepreference = PreferenceUtils.init(getApplication());
+		String username = PreferenceUtils.getString(Common.SP_UserName, "");
+		String userpsw = PreferenceUtils.getString(Common.SP_UserPsw, "");
+		if (!StringHelper.isEmpty(username)) {
+			et_login_name.setText(username);
+			if (!StringHelper.isEmpty(userpsw)) {
+				et_login_psw.setText(userpsw);
+			}
+		}
 	}
 
 	@Override
@@ -202,6 +211,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 				}
 				cursor.close();
 				service.addConnectListener();
+				// 存储当前用户的信息
+				PreferenceUtils.putString(Common.SP_UserName, this.username);
+				PreferenceUtils.putString(Common.SP_UserPsw, this.userpsw);
 				Intent intent = new Intent(LoginActivity.this,
 						IndexActivity.class);
 				startActivity(intent);

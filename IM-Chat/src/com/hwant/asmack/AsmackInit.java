@@ -116,7 +116,8 @@ public class AsmackInit {
 				sdmanager.addFeature("jabber:iq:privacy");
 				FileTransferManager manager = new FileTransferManager(connection);
 				FileTransferNegotiator.setServiceEnabled(connection, true);
-				manager.addFileTransferListener(new ChatFileTransferListener());
+				//设置文件传输的监听
+				manager.addFileTransferListener(new ChatFileTransferListener(this.application));
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();

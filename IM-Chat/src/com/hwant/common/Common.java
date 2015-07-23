@@ -3,6 +3,9 @@ package com.hwant.common;
 import java.io.File;
 
 public class Common {
+	public static final String SP_UserName="username"; 
+	public static final String SP_UserPsw="userpsw"; 
+	//工作线程池的大小
 	public static final int XMPP_Thread_Pool_Size = 3;
 	// 数据库名称
 	public static final String DB_Name = "im_db";

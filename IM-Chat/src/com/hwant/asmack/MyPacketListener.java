@@ -47,7 +47,7 @@ public class MyPacketListener implements PacketListener {
 				ContentValues values = new ContentValues();
 				int indexfrom = mess.getFrom().lastIndexOf("/");
 				int indexto = mess.getTo().lastIndexOf("/");
-				String mfrom = "", mto = "";
+				String mfrom = mess.getFrom(), mto = mess.getTo();
 				if (indexfrom >= 0) {
 					mfrom = mess.getFrom().substring(0, indexfrom);
 				}
@@ -66,17 +66,19 @@ public class MyPacketListener implements PacketListener {
 				values.put("time", String.valueOf(date.getTime()));
 				resolver.insert(uri, values);
 				intent = new Intent();
-				//
-				ChatMessage message = new ChatMessage();
-
-				message.setMfrom(mess.getFrom());
-				message.setMessage(mess.getBody());
-				message.setMto(application.user.getJid());
-				UserInfo info = new UserInfo();
-				info.setJid(mess.getFrom());
-				message.setInfo(info);
-				intent.setAction(RecevierConst.Chat_One_Get);
-				intent.putExtra("msg", message);
+				//A与B聊天，C发消息给A会异常(当前界面出现C的消息)
+//				ChatMessage message = new ChatMessage();
+//				message.setMfrom(mess.getFrom());
+//				message.setMessage(mess.getBody());
+//				message.setMto(application.user.getJid());
+//				UserInfo info = new UserInfo();
+//				info.setJid(mess.getFrom());
+//				message.setInfo(info);
+//				intent.setAction(RecevierConst.Chat_One_Get);
+//				intent.putExtra("msg", message);
+				intent.setAction(RecevierConst.Chat_DB_Get);
+				intent.putExtra("mfrom", mfrom);
+				intent.putExtra("mto", mto);
 				// 发送广播
 				application.getApplicationContext().sendBroadcast(intent);
 			} else if (mess.getType() == Message.Type.groupchat) {

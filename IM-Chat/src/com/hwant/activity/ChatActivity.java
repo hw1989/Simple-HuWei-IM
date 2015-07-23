@@ -10,38 +10,32 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.wind.annotation.ActivityInject;
-import org.wind.annotation.Field;
 import org.wind.annotation.ViewInject;
 import org.wind.media.MediaComm;
 import org.wind.media.VoiceManager;
-import org.wind.util.FileUtils;
 import org.wind.util.StringHelper;
-import org.xbill.DNS.APLRecord;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.baidu.navisdk.ui.widget.NewerGuideDialog;
 import com.hwant.adapter.ChatMessageAdapter;
-import com.hwant.application.IMApplication;
 import com.hwant.broadcast.ChatReceiver;
 import com.hwant.common.Common;
 import com.hwant.common.MapCommon;
 import com.hwant.common.RecevierConst;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
-import com.hwant.entity.UserInfo;
 import com.hwant.pulltorefresh.PullToRefreshBase;
 import com.hwant.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import com.hwant.pulltorefresh.PullToRefreshListView;
 import com.hwant.services.IDoWork;
+import com.hwant.services.TaskManager;
 import com.hwant.utils.MessageUtils;
 import com.hwant.view.faceview.FaceView;
 import com.hwant.view.otherview.IOtherListItemListener;
 import com.hwant.view.otherview.OtherView;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -54,16 +48,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.FieldPacker;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -106,12 +96,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	// 长按录音的按键
 	@ViewInject(id = R.id.btn_msg_voice)
 	private Button btn_voice;
+	// 录音的动画
+	@ViewInject(id = R.id.ll_voice_anim)
+	private LinearLayout ll_voice;
 	private ConnectInfo connect = null;
 
 	private Uri inserUri = null;
 	private ContentResolver resolver = null;
 	private ChatMessageAdapter adapter = null;
-	// 广播接收器
+	// 广播接收器 可以使用 ContentObserver替代
 	private ChatReceiver receiver = null;
 	// 头像
 	private Bitmap selfimg = null;
@@ -133,15 +126,20 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		connect = (ConnectInfo) getIntent().getSerializableExtra("info");
 		ActivityInject.getInstance().setInject(this);
 		adapter = new ChatMessageAdapter(getApplication(), null);
-		receiver = new ChatReceiver(adapter);
+		receiver = new ChatReceiver(adapter, application.user.getJid(),
+				connect.getJid());
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(RecevierConst.Chat_One_Get);
+		filter.addAction(RecevierConst.Chat_DB_Get);
 		registerReceiver(receiver, filter);
 		// 绑定服务
 		bindService();
 		init();
 		inserUri = Uri.parse("content://org.hwant.im.chat/chat");
 		resolver = getContentResolver();
+
+		// ContentProvider provider=null;
+		// resolver.registerContentObserver(uri, notifyForDescendents, observer)
 	}
 
 	private void init() {
@@ -187,7 +185,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		lv_message.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				ChatMessage lastmsg = adapter.getFristObj();
+				ChatMessage lastmsg = adapter.getFristItem();
 				PreChatRecord record = null;
 				if (lastmsg == null) {
 					Date date = new Date();
@@ -319,7 +317,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 			// message.setMessage(et_input.getText().toString());
 			message.setMessage(content);
 			message.setInfo(application.user);
-			adapter.addMessage(message);
+			// adapter.addMessage(message);
+			adapter.addItem(message, adapter.getCount());
 			// }
 		}
 	}
@@ -380,7 +379,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 					if (obj != null) {
 						ArrayList<ChatMessage> list = (ArrayList<ChatMessage>) obj;
 						if (list.size() > 0) {
-							adapter.addMessage(list);
+							// adapter.addMessage(list);
+							adapter.addItems(list, 0);
 						}
 					}
 				}
@@ -440,6 +440,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
+			ll_voice.setVisibility(View.VISIBLE);
 			createPath();
 			filename = Environment.getExternalStorageDirectory()
 					+ Common.Path_Media + format.format(new Date()) + ".3gp";
@@ -447,11 +448,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 			voiceManager.startRecord();
 			break;
 		case MotionEvent.ACTION_UP:
+			ll_voice.setVisibility(View.GONE);
 			if (voiceManager != null) {
 				voiceManager.stopRecord();
 			}
 			break;
 		case MotionEvent.ACTION_CANCEL:
+			ll_voice.setVisibility(View.GONE);
 			if (voiceManager != null) {
 				voiceManager.stopRecord();
 			}
@@ -486,9 +489,14 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 
 		@Override
 		public void Finish2Do(Object obj) {
-			// TODO Auto-generated method stub
-
 		}
 
+	}
+
+	@Override
+	public void bindFinished(TaskManager manager) {
+		service.manager.addTask(new PreChatRecord(this, application.user
+				.getJid(), connect.getJid(), String.valueOf(new Date()
+				.getTime())));
 	}
 }

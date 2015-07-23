@@ -3,6 +3,7 @@ package com.hwant.adapter;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.wind.adapter.OtherAdapter;
 import org.wind.adapter.ViewHolder;
 
 import com.hwant.activity.R;
@@ -23,71 +24,77 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ChatMessageAdapter extends BaseAdapter {
-	private LayoutInflater inflater = null;
-	private ArrayList<ChatMessage> list = null;
+public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
+
+	// private LayoutInflater inflater = null;
+	// private ArrayList<ChatMessage> list = null;
 	private ChatMessage message = null;
 	private IMApplication application;
 	private Bitmap selfimg = null, connectimg = null;
 
-	public ChatMessageAdapter(Application application,
-			ArrayList<ChatMessage> list) {
-		this.application = (IMApplication) application;
-		this.inflater = LayoutInflater
-				.from(application.getApplicationContext());
-		if (list == null) {
-			this.list = new ArrayList<ChatMessage>();
-		} else {
-			this.list = list;
-		}
+	public ChatMessageAdapter(Context context, ArrayList<ChatMessage> list) {
+		super(context, list);
+		this.application = (IMApplication) context;
 	}
 
-	@Override
-	public int getCount() {
-		return list.size();
-	}
+	// public ChatMessageAdapter(Application application,
+	// ArrayList<ChatMessage> list) {
+	// this.application = (IMApplication) application;
+	// this.inflater = LayoutInflater
+	// .from(application.getApplicationContext());
+	// if (list == null) {
+	// this.list = new ArrayList<ChatMessage>();
+	// } else {
+	// this.list = list;
+	// }
+	// }
 
-	@Override
-	public ChatMessage getItem(int position) {
-		return list.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
-
-	// 添加单个聊天
-	public void addMessage(ChatMessage message) {
-		if (message != null) {
-			list.add(message);
-			notifyDataSetChanged();
-		}
-	}
-
-	// 添加多个聊天记录
-	public void addMessage(ArrayList<ChatMessage> messages) {
-		if (messages != null && messages.size() > 0) {
-			list.addAll(0, messages);
-			notifyDataSetChanged();
-		}
-	}
-
-	public ChatMessage getLastObj() {
-		if (list == null || list.size() == 0) {
-			return null;
-		} else {
-			return list.get(getCount() - 1);
-		}
-	}
-
-	public ChatMessage getFristObj() {
-		if (list == null || list.size() == 0) {
-			return null;
-		} else {
-			return list.get(0);
-		}
-	}
+	// @Override
+	// public int getCount() {
+	// return list.size();
+	// }
+	//
+	// @Override
+	// public ChatMessage getItem(int position) {
+	// return list.get(position);
+	// }
+	//
+	// @Override
+	// public long getItemId(int position) {
+	// return position;
+	// }
+	//
+	// // 添加单个聊天
+	// public void addMessage(ChatMessage message) {
+	// if (message != null) {
+	// list.add(message);
+	// notifyDataSetChanged();
+	// }
+	// }
+	//
+	// // 添加多个聊天记录
+	// public void addMessage(ArrayList<ChatMessage> messages) {
+	// if (messages != null && messages.size() > 0) {
+	// list.addAll(0, messages);
+	// notifyDataSetChanged();
+	// }
+	// }
+	//
+	// public ChatMessage getLastObj() {
+	// if (list == null || list.size() == 0) {
+	// return null;
+	// } else {
+	// return list.get(getCount() - 1);
+	// }
+	// }
+	//
+	// public ChatMessage getFristObj() {
+	// if (list == null || list.size() == 0) {
+	// return null;
+	// } else {
+	// return list.get(0);
+	// }
+	// }
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
