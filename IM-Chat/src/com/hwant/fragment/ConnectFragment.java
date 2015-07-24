@@ -19,6 +19,7 @@ import com.hwant.activity.R;
 import com.hwant.adapter.ConnectAdapter;
 import com.hwant.application.IMApplication;
 import com.hwant.common.Common;
+import com.hwant.db.IndexContentObserver;
 import com.hwant.entity.ConnectInfo;
 import com.hwant.services.IDoWork;
 import com.hwant.services.TaskManager;
@@ -32,6 +33,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -56,10 +59,12 @@ public class ConnectFragment extends Fragment implements
 	private TaskManager manager = null;
 	private IndexActivity activity = null;
 	private ExpandableListView elv_friend = null;
-	private ArrayList<ConnectInfo> list = null;
+
 	// 内容接受者
 	private ContentResolver resolver = null;
 	private ConnectAdapter adapter = null;
+
+	// private Handler handler = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +72,17 @@ public class ConnectFragment extends Fragment implements
 		activity = (IndexActivity) getActivity();
 		application = (IMApplication) (getActivity().getApplication());
 		manager = activity.manager;
-		list = new ArrayList<ConnectInfo>();
+
 		resolver = getActivity().getContentResolver();
+		// handler = new Handler() {
+		// @Override
+		// public void handleMessage(Message msg) {
+		// if (msg.what == IndexContentObserver.Code_Connect) {
+		// // 联系人发生变化
+		//
+		// }
+		// }
+		// };
 	}
 
 	@Override
@@ -83,13 +97,17 @@ public class ConnectFragment extends Fragment implements
 		// 对fling状态的处理
 		elv_friend.setOnScrollListener(this);
 		// elv_friend.setOnItemClickListener(this);
-		getGroup();
-		adapter = new ConnectAdapter(getActivity(), list, this);
+		// getGroup();
+		// adapter = new ConnectAdapter(getActivity(), list, this);
+		adapter = new ConnectAdapter(getActivity(), null, this);
 		elv_friend.setAdapter(adapter);
+		getGroup();
 		return view;
 	}
 
 	public void getGroup() {
+		ArrayList<ConnectInfo> list = null;
+		list = new ArrayList<ConnectInfo>();
 		Uri uri = Uri.parse("content://com.hwant.im.friend/friend");
 		Cursor cursor = resolver.query(uri, null, " user=? ",
 				new String[] { application.user.getJid() }, null);
@@ -102,11 +120,13 @@ public class ConnectFragment extends Fragment implements
 			connect.setGroup(cursor.getString(cursor.getColumnIndex("fgroup")));
 			connect.setNickname(cursor.getString(cursor
 					.getColumnIndex("nickname")));
-			connect.setUserimg(cursor.getString(cursor.getColumnIndex("userimg")));
+			connect.setUserimg(cursor.getString(cursor
+					.getColumnIndex("userimg")));
 			list.add(connect);
 			cursor.moveToNext();
 		}
 		cursor.close();
+		adapter.setAdapterData(list);
 	}
 
 	@Override

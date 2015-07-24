@@ -50,27 +50,46 @@ public class ConnectAdapter extends BaseExpandableListAdapter {
 			ConnectFragment fragment) {
 		pholder = new ViewHolder();
 		cholder = new ViewHolder();
-		this.manager = manager;
 		this.fragment = fragment;
 		this.group = new ArrayList<String>();
 		this.map = new HashMap<Integer, ArrayList<ConnectInfo>>();
-		int index = 0;
-		if (connectInfos != null && connectInfos.size() > 0) {
-			for (ConnectInfo info : connectInfos) {
-				if (!group.contains(info.getGroup())) {
-					group.add(info.getGroup());
-				}
-				index = group.indexOf(info.getGroup());
-				if (!this.map.containsKey(index)) {
-					this.map.put(index, new ArrayList<ConnectInfo>());
-				}
-				this.map.get(index).add(info);
-			}
-		}
+//		int index = 0;
+//		if (connectInfos != null && connectInfos.size() > 0) {
+//			for (ConnectInfo info : connectInfos) {
+//				if (!group.contains(info.getGroup())) {
+//					group.add(info.getGroup());
+//				}
+//				index = group.indexOf(info.getGroup());
+//				if (!this.map.containsKey(index)) {
+//					this.map.put(index, new ArrayList<ConnectInfo>());
+//				}
+//				this.map.get(index).add(info);
+//			}
+//		}
 		inflater = LayoutInflater.from(context);
 		cache = ImageCache.init();
 	}
-
+    public void setAdapterData(ArrayList<ConnectInfo> connectInfos){
+    	if(connectInfos!=null){
+    		if(connectInfos.size()>0){
+    			this.map.clear();
+    			int index = 0;
+//    			if (connectInfos != null && connectInfos.size() > 0) {
+    				for (ConnectInfo info : connectInfos) {
+    					if (!group.contains(info.getGroup())) {
+    						group.add(info.getGroup());
+    					}
+    					index = group.indexOf(info.getGroup());
+    					if (!this.map.containsKey(index)) {
+    						this.map.put(index, new ArrayList<ConnectInfo>());
+    					}
+    					this.map.get(index).add(info);
+    				}
+//    			}
+    			notifyDataSetChanged();
+    		}
+    	}
+    }
 	public void setManager(TaskManager manager) {
 		this.manager = manager;
 	}

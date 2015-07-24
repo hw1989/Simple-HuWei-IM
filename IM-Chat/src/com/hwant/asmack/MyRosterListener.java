@@ -35,7 +35,6 @@ public class MyRosterListener implements RosterListener {
 		// database = helper.getWritableDatabase();
 		resolver = application.getApplicationContext().getContentResolver();
 		// 日期格式
-
 	}
 
 	// 添加联系人

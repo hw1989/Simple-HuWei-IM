@@ -6,14 +6,14 @@ import org.wind.annotation.Field;
 import org.wind.annotation.Table;
 import org.wind.database.DataType;
 
-@Table(DTname = "connect")
+@Table(DTname = "connect",UnionKey="jid,user")
 public class ConnectInfo implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Field(name = "jid", size = 20,unique=true)
+	@Field(name = "jid", size = 25)
 	private String jid;
 
 	public String getJid() {
@@ -81,7 +81,7 @@ public class ConnectInfo implements Serializable {
 	}
 
 	// 多用户处理 登陆人的jid
-	@Field(name = "user", size = 20)
+	@Field(name = "user", size = 25)
 	private String user;
 
 	public String getUser() {
@@ -91,8 +91,9 @@ public class ConnectInfo implements Serializable {
 	public void setUser(String user) {
 		this.user = user;
 	}
-	//用户的头像
-	@Field(name="userimg",size=25)
+
+	// 用户的头像
+	@Field(name = "userimg", size = 25)
 	private String userimg;
 
 	public String getUserimg() {

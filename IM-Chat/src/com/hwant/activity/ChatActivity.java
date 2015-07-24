@@ -310,12 +310,14 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 			values.put("read", "1");
 			values.put("user", application.user.getJid());
 			Date date = new Date();
-			values.put("time", String.valueOf(date.getTime()));
+			String time=String.valueOf(date.getTime());
+			values.put("time", time);
 			resolver.insert(inserUri, values);
 			ChatMessage message = new ChatMessage();
 			message.setMfrom(application.user.getJid());
 			// message.setMessage(et_input.getText().toString());
 			message.setMessage(content);
+			message.setTime(time);
 			message.setInfo(application.user);
 			// adapter.addMessage(message);
 			adapter.addItem(message, adapter.getCount());

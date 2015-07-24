@@ -31,7 +31,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		TableHelper connect = new TableHelper(ConnectInfo.class);
 		TableHelper chatMessage = new TableHelper(ChatMessage.class);
 		TableHelper user=new TableHelper(UserInfo.class);
-//		String sql=user.getSQL();
+		String sql=connect.getSQL();
 		db.beginTransaction();
 		try {
 			db.execSQL(connect.getSQL());

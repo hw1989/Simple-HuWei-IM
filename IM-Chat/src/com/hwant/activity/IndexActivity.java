@@ -1,8 +1,21 @@
 package com.hwant.activity;
 
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Mode;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
+import com.hwant.application.IMApplication;
+import com.hwant.db.IndexContentObserver;
 import com.hwant.fragment.ConnectFragment;
 import com.hwant.fragment.MessageFragment;
 import com.hwant.services.IDoWork;
@@ -12,10 +25,19 @@ import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenu.OnMenuListener;
 import com.special.ResideMenu.ResideMenuItem;
 
+import android.app.Application;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.ContentObservable;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +46,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class IndexActivity extends BaseActivity implements OnClickListener,
 		OnCheckedChangeListener {
@@ -45,6 +68,10 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	@ViewInject(id = R.id.tv_index_addconnect)
 	private TextView tv_addconnect;
 	private Intent intent = null;
+	private Handler handler = null;
+	// 内容监听器
+	private IndexContentObserver observer = null;
+	private ContentResolver resolver = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +83,22 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		init();
 		if (savedInstanceState == null)
 			setMenuFragment(connect);
+		observer = new IndexContentObserver(handler);
+		resolver = getContentResolver();
+		// 对uri下的uri都监听，在里面进行相应的匹配
+		Uri uri = Uri.parse("content://org.hwant.im");
+		resolver.registerContentObserver(uri, true, observer);
 		bindService();
 		// 设置登陆用户的图片
 		setImage();
+		handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+			}
+		};
+
 	}
 
 	private void init() {
@@ -114,7 +154,6 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		public void closeMenu() {
 
 		}
-
 	}
 
 	public void setMenuFragment(Fragment fragment) {
@@ -128,6 +167,7 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	@Override
 	public void bindFinished(TaskManager manager) {
 		// manager.addTask(friend.new GetFriend());
+		manager.addTask(new GetConnects(connect));
 		connect.refreshAdapter(manager);
 	}
 
@@ -157,24 +197,82 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	protected void onDestroy() {
 		// 释放绑定的service
 		super.onDestroy();
+		// 取消相应的绑定
+		if (resolver != null && observer != null) {
+			resolver.unregisterContentObserver(observer);
+		}
 	}
 
-	/**
-	 * 获取用户信息的任务
-	 */
-	class UserInfo implements IDoWork {
+	class GetConnects implements IDoWork {
+		private WeakReference<Fragment> weakReference = null;
+		private IMApplication application = null;
+		private Uri uri = null;
+		private ContentResolver resolver = null;
+
+		// private SimpleDateFormat format=null;
+		public GetConnects(Fragment fragment) {
+			this.weakReference = new WeakReference<Fragment>(fragment);
+			this.application = (IMApplication) getApplication();
+			uri = Uri.parse("content://com.hwant.im.friend/friend");
+			// format=new SimpleDateFormat("yyyyMMddHHmmss");
+		}
 
 		@Override
 		public Object doWhat() {
+			// 获取所有的好友
+			if (service.getConnection().isConnected()
+					&& service.getConnection().isAuthenticated()) {
+//				Collection<RosterEntry> entries = service.getConnection()
+//						.getRoster().getEntries();
+				Roster roster=service.getConnection().getRoster();
+				Iterator<RosterEntry> iterator = roster.getEntries().iterator();
+				resolver = application.getContentResolver();
+				
+				Presence presence = null;
+				while (iterator.hasNext()) {
+					RosterEntry entry = iterator.next();
+					ContentValues values = new ContentValues();
+					values.put("jid", entry.getUser());
+					// 当前用户人
+					values.put("user", application.user.getJid());
+					values.put("date", new Date().getTime());
+					values.put("status", -1);
+					presence = roster.getPresence(entry.getUser());
+//					Toast.makeText(application, presence.getMode()+"", Toast.LENGTH_SHORT).show();
+					Log.i("info", presence.getStatus()+"-----"+presence.getType()+"  "+presence.getMode());
+					resolver.insert(uri, values);
+				}
+			}
 			return null;
 		}
 
 		@Override
 		public void Finish2Do(Object obj) {
+			if (weakReference.get() != null) {
+				// 更新联系人的列表
+				connect.getGroup();
+			}
 
 		}
 
 	}
+
+	// /**
+	// * 获取用户信息的任务
+	// */
+	// class UserInfo implements IDoWork {
+	//
+	// @Override
+	// public Object doWhat() {
+	// return null;
+	// }
+	//
+	// @Override
+	// public void Finish2Do(Object obj) {
+	//
+	// }
+	//
+	// }
 
 	/**
 	 * 设置图片

@@ -377,92 +377,94 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int voice_anim_bg=0x7f0200af;
     }
     public static final class id {
-        public static final int action_settings=0x7f060056;
+        public static final int action_settings=0x7f060058;
         public static final int both=0x7f060003;
-        public static final int btn_close_selectimg=0x7f060051;
-        public static final int btn_login=0x7f06002c;
-        public static final int btn_msg_voice=0x7f060031;
-        public static final int btn_pick_camera=0x7f06004f;
-        public static final int btn_pick_photo=0x7f060050;
-        public static final int btn_send_message=0x7f060032;
+        public static final int btn_close_selectimg=0x7f060053;
+        public static final int btn_login=0x7f06002e;
+        public static final int btn_msg_voice=0x7f060033;
+        public static final int btn_pick_camera=0x7f060051;
+        public static final int btn_pick_photo=0x7f060052;
+        public static final int btn_send_message=0x7f060034;
         public static final int cb_index_connect=0x7f060028;
         public static final int cb_index_dynamic=0x7f060029;
         public static final int cb_index_mess=0x7f060027;
-        public static final int cb_msg_type=0x7f060033;
+        public static final int cb_msg_type=0x7f060035;
         public static final int connect_list_citem_nickname=0x7f06001c;
         public static final int connect_list_pitem_expand=0x7f06001d;
         public static final int connect_list_pitem_groupname=0x7f06001e;
         public static final int disabled=0x7f060000;
         public static final int elv_connect=0x7f06001f;
-        public static final int et_input_connect=0x7f06004a;
-        public static final int et_input_message=0x7f060030;
-        public static final int et_login_name=0x7f06002a;
-        public static final int et_login_psw=0x7f06002b;
-        public static final int fl_inner=0x7f060039;
+        public static final int et_input_connect=0x7f06004c;
+        public static final int et_input_message=0x7f060032;
+        public static final int et_login_name=0x7f06002c;
+        public static final int et_login_psw=0x7f06002d;
+        public static final int fl_inner=0x7f06003b;
         public static final int flip=0x7f060008;
         public static final int fv_facelist=0x7f060017;
         public static final int gridview=0x7f060009;
         public static final int gv_face=0x7f060023;
-        public static final int gv_others=0x7f060036;
-        public static final int iv_add_face=0x7f06002e;
-        public static final int iv_background=0x7f06003e;
+        public static final int gv_others=0x7f060038;
+        public static final int iv_add_face=0x7f060030;
+        public static final int iv_background=0x7f060040;
         public static final int iv_chat_left=0x7f06000f;
-        public static final int iv_chat_more=0x7f06002f;
+        public static final int iv_chat_more=0x7f060031;
         public static final int iv_chat_right=0x7f060013;
         public static final int iv_connect_list_citem=0x7f06001b;
         public static final int iv_gv_face=0x7f060020;
-        public static final int iv_gv_others=0x7f060034;
-        public static final int iv_icon=0x7f060044;
+        public static final int iv_gv_others=0x7f060036;
+        public static final int iv_icon=0x7f060046;
         public static final int iv_index_icon=0x7f060024;
-        public static final int iv_search_img=0x7f060046;
-        public static final int iv_search_inputclear=0x7f06004b;
-        public static final int iv_shadow=0x7f06003f;
-        public static final int iv_userinfo_icon=0x7f060054;
-        public static final int layout_left_menu=0x7f060041;
-        public static final int layout_right_menu=0x7f060043;
-        public static final int ll_msg_input=0x7f06002d;
+        public static final int iv_search_img=0x7f060048;
+        public static final int iv_search_inputclear=0x7f06004d;
+        public static final int iv_shadow=0x7f060041;
+        public static final int iv_userinfo_icon=0x7f060056;
+        public static final int layout_left_menu=0x7f060043;
+        public static final int layout_right_menu=0x7f060045;
+        public static final int ll_msg_input=0x7f06002f;
         public static final int ll_msg_left=0x7f060010;
         public static final int ll_msg_right=0x7f060014;
-        public static final int ll_select_image=0x7f06004e;
+        public static final int ll_select_image=0x7f060050;
         public static final int ll_voice_anim=0x7f06001a;
         public static final int lv_chat_message=0x7f060019;
-        public static final int lv_search=0x7f06004d;
+        public static final int lv_search=0x7f06004f;
         public static final int main_fragment=0x7f060026;
         public static final int manualOnly=0x7f060004;
+        public static final int mv_location=0x7f06002b;
         public static final int ov_otherslist=0x7f060018;
         public static final int pullDownFromTop=0x7f060005;
         public static final int pullFromEnd=0x7f060002;
         public static final int pullFromStart=0x7f060001;
         public static final int pullUpFromBottom=0x7f060006;
-        public static final int pull_to_refresh_image=0x7f06003a;
-        public static final int pull_to_refresh_progress=0x7f06003b;
-        public static final int pull_to_refresh_sub_text=0x7f06003d;
-        public static final int pull_to_refresh_text=0x7f06003c;
+        public static final int pull_to_refresh_image=0x7f06003c;
+        public static final int pull_to_refresh_progress=0x7f06003d;
+        public static final int pull_to_refresh_sub_text=0x7f06003f;
+        public static final int pull_to_refresh_text=0x7f06003e;
         public static final int rg_facepage_index=0x7f060022;
-        public static final int rg_otherpage_index=0x7f060038;
-        public static final int rl_change_img=0x7f060053;
+        public static final int rg_otherpage_index=0x7f06003a;
+        public static final int rl_change_img=0x7f060055;
         public static final int rl_chat_item_left=0x7f06000e;
         public static final int rl_chat_item_right=0x7f060012;
         public static final int rotate=0x7f060007;
         public static final int scrollview=0x7f06000b;
-        public static final int sv_left_menu=0x7f060040;
-        public static final int sv_right_menu=0x7f060042;
+        public static final int sv_left_menu=0x7f060042;
+        public static final int sv_right_menu=0x7f060044;
         public static final int tv_chat_back=0x7f060016;
         public static final int tv_chat_delete_cancel=0x7f06000d;
         public static final int tv_chat_delete_sure=0x7f06000c;
         public static final int tv_chat_lefttxt=0x7f060011;
         public static final int tv_chat_righttxt=0x7f060015;
-        public static final int tv_connect_search=0x7f06004c;
-        public static final int tv_gv_othersname=0x7f060035;
+        public static final int tv_connect_search=0x7f06004e;
+        public static final int tv_gv_othersname=0x7f060037;
         public static final int tv_index_addconnect=0x7f060025;
-        public static final int tv_search_back=0x7f060049;
-        public static final int tv_search_jid=0x7f060047;
-        public static final int tv_search_nickname=0x7f060048;
-        public static final int tv_setting_back=0x7f060052;
-        public static final int tv_setting_chat_clear=0x7f060055;
-        public static final int tv_title=0x7f060045;
+        public static final int tv_location_back=0x7f06002a;
+        public static final int tv_search_back=0x7f06004b;
+        public static final int tv_search_jid=0x7f060049;
+        public static final int tv_search_nickname=0x7f06004a;
+        public static final int tv_setting_back=0x7f060054;
+        public static final int tv_setting_chat_clear=0x7f060057;
+        public static final int tv_title=0x7f060047;
         public static final int vp_chat_face=0x7f060021;
-        public static final int vp_chat_otherview=0x7f060037;
+        public static final int vp_chat_otherview=0x7f060039;
         public static final int webview=0x7f06000a;
     }
     public static final class layout {
@@ -479,22 +481,23 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int face_list_layout=0x7f03000a;
         public static final int index_layout=0x7f03000b;
         public static final int loading_layout=0x7f03000c;
-        public static final int login_layout=0x7f03000d;
-        public static final int message_input_layout=0x7f03000e;
-        public static final int message_list_item_layout=0x7f03000f;
-        public static final int message_list_layout=0x7f030010;
-        public static final int others_gvitem_layout=0x7f030011;
-        public static final int others_list_layout=0x7f030012;
-        public static final int otherview_layout=0x7f030013;
-        public static final int pull_to_refresh_header_horizontal=0x7f030014;
-        public static final int pull_to_refresh_header_vertical=0x7f030015;
-        public static final int regist_layout=0x7f030016;
-        public static final int residemenu=0x7f030017;
-        public static final int residemenu_item=0x7f030018;
-        public static final int search_connect_item_layout=0x7f030019;
-        public static final int search_layout=0x7f03001a;
-        public static final int select_img_layout=0x7f03001b;
-        public static final int setting_layout=0x7f03001c;
+        public static final int location_layout=0x7f03000d;
+        public static final int login_layout=0x7f03000e;
+        public static final int message_input_layout=0x7f03000f;
+        public static final int message_list_item_layout=0x7f030010;
+        public static final int message_list_layout=0x7f030011;
+        public static final int others_gvitem_layout=0x7f030012;
+        public static final int others_list_layout=0x7f030013;
+        public static final int otherview_layout=0x7f030014;
+        public static final int pull_to_refresh_header_horizontal=0x7f030015;
+        public static final int pull_to_refresh_header_vertical=0x7f030016;
+        public static final int regist_layout=0x7f030017;
+        public static final int residemenu=0x7f030018;
+        public static final int residemenu_item=0x7f030019;
+        public static final int search_connect_item_layout=0x7f03001a;
+        public static final int search_layout=0x7f03001b;
+        public static final int select_img_layout=0x7f03001c;
+        public static final int setting_layout=0x7f03001d;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -515,6 +518,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /**  index 
          */
         public static final int index_title_connect=0x7f050006;
+        /**  位置 
+         */
+        public static final int location_title=0x7f05001e;
         /**  login 
          */
         public static final int login_btn=0x7f050008;
@@ -532,14 +538,14 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int more_videophone=0x7f050013;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
          */
-        public static final int pull_to_refresh_from_bottom_pull_label=0x7f050021;
-        public static final int pull_to_refresh_from_bottom_refreshing_label=0x7f050023;
-        public static final int pull_to_refresh_from_bottom_release_label=0x7f050022;
+        public static final int pull_to_refresh_from_bottom_pull_label=0x7f050022;
+        public static final int pull_to_refresh_from_bottom_refreshing_label=0x7f050024;
+        public static final int pull_to_refresh_from_bottom_release_label=0x7f050023;
         /**   
          */
-        public static final int pull_to_refresh_pull_label=0x7f05001e;
-        public static final int pull_to_refresh_refreshing_label=0x7f050020;
-        public static final int pull_to_refresh_release_label=0x7f05001f;
+        public static final int pull_to_refresh_pull_label=0x7f05001f;
+        public static final int pull_to_refresh_refreshing_label=0x7f050021;
+        public static final int pull_to_refresh_release_label=0x7f050020;
         public static final int search_btn=0x7f05001d;
         /**  search 
          */

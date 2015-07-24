@@ -14,6 +14,7 @@
         android:headerDividersEnabled="false"
         android:listSelector="@null"
         android:scrollbars="none"
+        android:transcriptMode="alwaysScroll" 
         android:smoothScrollbar="true" />
 
     <LinearLayout

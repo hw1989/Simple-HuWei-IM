@@ -7,6 +7,8 @@ import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smackx.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -38,7 +40,8 @@ public class AsmackInit {
 	private ConnectionConfiguration configuration = null;
 	private XMPPConnection connection = null;
 	private Application application = null;
-//	private FileTransferListener ftlistener = null;
+
+	// private FileTransferListener ftlistener = null;
 
 	public synchronized XMPPConnection getConnection() {
 		return connection;
@@ -84,7 +87,7 @@ public class AsmackInit {
 			public void interceptPacket(Packet packet) {
 			}
 		}, null);
-		
+
 		// connection.addPacketListener(new PacketListener() {
 		//
 		// @Override
@@ -109,15 +112,17 @@ public class AsmackInit {
 				// 文件传输时的监听
 				ServiceDiscoveryManager sdmanager = ServiceDiscoveryManager
 						.getInstanceFor(connection);
-				if(sdmanager==null){
-					sdmanager=new ServiceDiscoveryManager(connection);
+				if (sdmanager == null) {
+					sdmanager = new ServiceDiscoveryManager(connection);
 				}
 				sdmanager.addFeature("http://jabber.org/protocol/disco#info");
 				sdmanager.addFeature("jabber:iq:privacy");
-				FileTransferManager manager = new FileTransferManager(connection);
+				FileTransferManager manager = new FileTransferManager(
+						connection);
 				FileTransferNegotiator.setServiceEnabled(connection, true);
-				//设置文件传输的监听
-				manager.addFileTransferListener(new ChatFileTransferListener(this.application));
+				// 设置文件传输的监听
+				manager.addFileTransferListener(new ChatFileTransferListener(
+						this.application));
 			}
 		} catch (XMPPException e) {
 			e.printStackTrace();
@@ -135,6 +140,8 @@ public class AsmackInit {
 				connection.login(name, psw);
 				// 判断登陆后是否认证成功
 				flag = connection.isAuthenticated();
+				Presence presence = new Presence(Type.available);
+				connection.sendPacket(presence);
 				// if (flag) {
 				// // 设置监听
 				// Roster roster=connection.getRoster();
