@@ -10,11 +10,15 @@ import com.hwant.activity.R;
 import com.hwant.application.IMApplication;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
+import com.hwant.entity.ContentEntity;
 import com.hwant.entity.UserInfo;
+import com.hwant.utils.MessageUtils;
 
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,70 +35,13 @@ public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
 	private ChatMessage message = null;
 	private IMApplication application;
 	private Bitmap selfimg = null, connectimg = null;
+	private ArrayList<ContentEntity> entities = null;
+	private CharSequence builder = null;
 
 	public ChatMessageAdapter(Context context, ArrayList<ChatMessage> list) {
 		super(context, list);
 		this.application = (IMApplication) context;
 	}
-
-	// public ChatMessageAdapter(Application application,
-	// ArrayList<ChatMessage> list) {
-	// this.application = (IMApplication) application;
-	// this.inflater = LayoutInflater
-	// .from(application.getApplicationContext());
-	// if (list == null) {
-	// this.list = new ArrayList<ChatMessage>();
-	// } else {
-	// this.list = list;
-	// }
-	// }
-
-	// @Override
-	// public int getCount() {
-	// return list.size();
-	// }
-	//
-	// @Override
-	// public ChatMessage getItem(int position) {
-	// return list.get(position);
-	// }
-	//
-	// @Override
-	// public long getItemId(int position) {
-	// return position;
-	// }
-	//
-	// // 添加单个聊天
-	// public void addMessage(ChatMessage message) {
-	// if (message != null) {
-	// list.add(message);
-	// notifyDataSetChanged();
-	// }
-	// }
-	//
-	// // 添加多个聊天记录
-	// public void addMessage(ArrayList<ChatMessage> messages) {
-	// if (messages != null && messages.size() > 0) {
-	// list.addAll(0, messages);
-	// notifyDataSetChanged();
-	// }
-	// }
-	//
-	// public ChatMessage getLastObj() {
-	// if (list == null || list.size() == 0) {
-	// return null;
-	// } else {
-	// return list.get(getCount() - 1);
-	// }
-	// }
-	//
-	// public ChatMessage getFristObj() {
-	// if (list == null || list.size() == 0) {
-	// return null;
-	// } else {
-	// return list.get(0);
-	// }
-	// }
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -116,10 +63,17 @@ public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
 				convertView, R.id.iv_chat_right);
 		message = getItem(position);
 		// if (application.user.getJid().equals(message.getInfo().getJid()))
+		entities = MessageUtils.getMessageContent(message.getMessage());
 		if (application.user.getJid().equals(message.getMfrom())) {
 			ll_left.setVisibility(View.GONE);
 			ll_right.setVisibility(View.VISIBLE);
-			tv_self.setText(String.valueOf(message.getMessage()));
+			if (entities.size() > 0) {
+				builder = MessageUtils.getFaceContent(application,
+						String.valueOf(message.getMessage()), entities);
+				tv_self.setText(builder);
+			}else{
+				tv_self.setText(message.getMessage());
+			}
 			if (selfimg == null) {
 				iv_right.setImageResource(R.drawable.gco);
 			} else {
@@ -128,7 +82,14 @@ public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
 		} else {
 			ll_right.setVisibility(View.GONE);
 			ll_left.setVisibility(View.VISIBLE);
-			tv_other.setText(String.valueOf(message.getMessage()));
+			if (entities.size() > 0) {
+				builder = MessageUtils.getFaceContent(application,
+						String.valueOf(message.getMessage()), entities);
+				tv_other.setText(builder);
+			}else{
+				tv_other.setText(message.getMessage());
+			}
+			// tv_other.setText(String.valueOf(message.getMessage()));
 			if (connectimg == null) {
 				iv_left.setImageResource(R.drawable.gco);
 			} else {

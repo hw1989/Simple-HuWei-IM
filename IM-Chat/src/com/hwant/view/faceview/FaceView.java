@@ -2,6 +2,8 @@ package com.hwant.view.faceview;
 
 import java.util.ArrayList;
 
+import org.wind.util.StringHelper;
+
 import com.hwant.activity.R;
 
 import android.content.Context;
@@ -10,13 +12,16 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class FaceView extends LinearLayout implements OnPageChangeListener {
+public class FaceView extends LinearLayout implements OnPageChangeListener,
+		OnItemClickListener {
 	private ArrayList<String> faces = new ArrayList<String>();
 	private ViewPager vp_face = null;
 	private View pageview = null;
@@ -94,20 +99,22 @@ public class FaceView extends LinearLayout implements OnPageChangeListener {
 		pages = faces.size() % 20 == 0 ? faces.size() / 20
 				: faces.size() / 20 + 1;
 		ArrayList<View> views = new ArrayList<View>();
-        LayoutParams params=new LayoutParams(30, 30);
-        params.setMargins(20, 0, 20, 0);
+		LayoutParams params = new LayoutParams(30, 30);
+		params.setMargins(20, 0, 20, 0);
 		for (int i = 0; i < pages; i++) {
 			RadioButton rb_page = new RadioButton(context);
 			// TextView tv=new TextView(context);
 			rb_page.setButtonDrawable(android.R.color.transparent);
-            
+
 			rb_page.setBackgroundResource(R.drawable.dot_page_select);
 			rb_page.setLayoutParams(params);
 			// rb_page.setTextAppearance(getContext(),
 			// R.style.rg_facepage_index);
-			rg_index.addView(rb_page,params);
+			rg_index.addView(rb_page, params);
 			facelist = inflater.inflate(R.layout.face_list_layout, null, false);
 			GridView gv_face = (GridView) facelist.findViewById(R.id.gv_face);
+			// 设置点击item的事件
+			gv_face.setOnItemClickListener(this);
 			int end = Math.min(20 * (i + 1) - 1, faces.size());
 			listadapter = new FaceListAdapter(context, getList(faces, 20 * i,
 					end));
@@ -149,5 +156,25 @@ public class FaceView extends LinearLayout implements OnPageChangeListener {
 	private void setDotSelect(int index) {
 		RadioButton rb_select = (RadioButton) rg_index.getChildAt(index);
 		rb_select.setChecked(true);
+	}
+
+	private FaceViewListener listener = null;
+
+	public void setListener(FaceViewListener listener) {
+		this.listener = listener;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (listener != null) {
+			FaceListAdapter adapter = (FaceListAdapter) parent.getAdapter();
+			String str=adapter.getItem(position);
+			if(StringHelper.isEmpty(str.trim())){
+				listener.onFaceItemClick(position, "");
+			}else{
+				listener.onFaceItemClick(position,str);
+			}
+		}
 	}
 }

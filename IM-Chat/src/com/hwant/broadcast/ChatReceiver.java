@@ -43,7 +43,7 @@ public class ChatReceiver extends BroadcastReceiver {
 			// cmadapter.addMessage(message);
 			cmadapter.addItem(message, 0);
 		} else if (RecevierConst.Chat_DB_Get.equals(intent.getAction())) {
-			String s=intent.getStringExtra("mto");
+//			String s=intent.getStringExtra("mto");
 			// 判断消息是否来自当前人
 			if (!mto.equals(intent.getStringExtra("mfrom"))) {
 				return;

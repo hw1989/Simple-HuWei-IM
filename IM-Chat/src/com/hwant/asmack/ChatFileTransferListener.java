@@ -48,7 +48,7 @@ public class ChatFileTransferListener implements FileTransferListener {
 			File file = new File(Environment.getExternalStorageDirectory()
 					+ Common.Path_Media + request.getFileName());
 			if (!file.exists()) {
-				Log.i("have no file", file.getPath());
+//				Log.i("have no file", file.getPath());
 				try {
 					file.createNewFile();
 				} catch (IOException e) {

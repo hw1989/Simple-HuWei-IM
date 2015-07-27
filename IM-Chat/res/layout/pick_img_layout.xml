@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/setting_title_bg"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:drawableLeft="@drawable/gbk"
+            android:gravity="center_vertical"
+            android:text="@string/back"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/photo_title"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+       <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:gravity="center_vertical"
+            android:text="@string/sure"
+            android:textColor="#ffffff"
+            android:layout_alignParentRight="true"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0" 
+        android:scrollbars="none">
+    </GridView>
+
+</LinearLayout>

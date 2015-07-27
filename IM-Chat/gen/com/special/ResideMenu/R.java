@@ -22,8 +22,8 @@ public final class R {
 		public static final int tv_title = 0x7f060047;
 	}
 	public static final class layout {
-		public static final int residemenu = 0x7f030018;
-		public static final int residemenu_item = 0x7f030019;
+		public static final int residemenu = 0x7f03001a;
+		public static final int residemenu_item = 0x7f03001b;
 	}
 	public static final class string {
 		public static final int app_name = 0x7f050000;

@@ -25,6 +25,7 @@ import com.hwant.common.MapCommon;
 import com.hwant.common.RecevierConst;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
+import com.hwant.entity.ContentEntity;
 import com.hwant.pulltorefresh.PullToRefreshBase;
 import com.hwant.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import com.hwant.pulltorefresh.PullToRefreshListView;
@@ -32,9 +33,11 @@ import com.hwant.services.IDoWork;
 import com.hwant.services.TaskManager;
 import com.hwant.utils.MessageUtils;
 import com.hwant.view.faceview.FaceView;
+import com.hwant.view.faceview.FaceViewListener;
 import com.hwant.view.otherview.IOtherListItemListener;
 import com.hwant.view.otherview.OtherView;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -49,6 +52,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -151,6 +155,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		iv_addface.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
 		iv_other.setOnClickListener(this);
+		fv_face.setListener(new FaceItemClick());
 		// 设置选择状态发生改变的监听
 		cb_msgtype.setOnCheckedChangeListener(this);
 		// 开始录音
@@ -310,7 +315,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 			values.put("read", "1");
 			values.put("user", application.user.getJid());
 			Date date = new Date();
-			String time=String.valueOf(date.getTime());
+			String time = String.valueOf(date.getTime());
 			values.put("time", time);
 			resolver.insert(inserUri, values);
 			ChatMessage message = new ChatMessage();
@@ -500,5 +505,34 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		service.manager.addTask(new PreChatRecord(this, application.user
 				.getJid(), connect.getJid(), String.valueOf(new Date()
 				.getTime())));
+	}
+
+	class FaceItemClick implements FaceViewListener {
+		@Override
+		public void onFaceItemClick(int position, String content) {
+			if (position != 20) {
+				String faceStr = MessageUtils.setFace(content);
+				
+				ContentEntity entity = new ContentEntity();
+				entity.setType(MessageUtils.TYPE_FACE);
+				entity.setMessage(content);
+				entity.setStart(0);
+				entity.setEnd(faceStr.length());
+				SpannableStringBuilder builder = MessageUtils.getFaceContent(
+						ChatActivity.this, faceStr, entity);
+				et_input.append(builder);
+				// et_input.setText(builder);
+			} else {
+				if (et_input.getText().length() > 0) {
+					int posi = getEditCursor(et_input);
+					et_input.getText().delete(posi - 1, posi);
+				}
+			}
+		}
+	}
+
+	// 获取光标的位置
+	public int getEditCursor(EditText editText) {
+		return editText.getSelectionStart();
 	}
 }

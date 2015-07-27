@@ -40,6 +40,8 @@
     <string name="search_btn">搜索</string>
     <!-- 位置 -->
     <string name="location_title">位置</string>
+    <!-- 相册 -->
+    <string name="photo_title">相册</string>
     <!--  -->
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Release to refresh…</string>

@@ -489,15 +489,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int others_gvitem_layout=0x7f030012;
         public static final int others_list_layout=0x7f030013;
         public static final int otherview_layout=0x7f030014;
-        public static final int pull_to_refresh_header_horizontal=0x7f030015;
-        public static final int pull_to_refresh_header_vertical=0x7f030016;
-        public static final int regist_layout=0x7f030017;
-        public static final int residemenu=0x7f030018;
-        public static final int residemenu_item=0x7f030019;
-        public static final int search_connect_item_layout=0x7f03001a;
-        public static final int search_layout=0x7f03001b;
-        public static final int select_img_layout=0x7f03001c;
-        public static final int setting_layout=0x7f03001d;
+        public static final int pick_img_layout=0x7f030015;
+        public static final int pick_item_layout=0x7f030016;
+        public static final int pull_to_refresh_header_horizontal=0x7f030017;
+        public static final int pull_to_refresh_header_vertical=0x7f030018;
+        public static final int regist_layout=0x7f030019;
+        public static final int residemenu=0x7f03001a;
+        public static final int residemenu_item=0x7f03001b;
+        public static final int search_connect_item_layout=0x7f03001c;
+        public static final int search_layout=0x7f03001d;
+        public static final int select_img_layout=0x7f03001e;
+        public static final int setting_layout=0x7f03001f;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -536,16 +538,19 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /**  显示更多 
          */
         public static final int more_videophone=0x7f050013;
+        /**  相册 
+         */
+        public static final int photo_title=0x7f05001f;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
          */
-        public static final int pull_to_refresh_from_bottom_pull_label=0x7f050022;
-        public static final int pull_to_refresh_from_bottom_refreshing_label=0x7f050024;
-        public static final int pull_to_refresh_from_bottom_release_label=0x7f050023;
+        public static final int pull_to_refresh_from_bottom_pull_label=0x7f050023;
+        public static final int pull_to_refresh_from_bottom_refreshing_label=0x7f050025;
+        public static final int pull_to_refresh_from_bottom_release_label=0x7f050024;
         /**   
          */
-        public static final int pull_to_refresh_pull_label=0x7f05001f;
-        public static final int pull_to_refresh_refreshing_label=0x7f050021;
-        public static final int pull_to_refresh_release_label=0x7f050020;
+        public static final int pull_to_refresh_pull_label=0x7f050020;
+        public static final int pull_to_refresh_refreshing_label=0x7f050022;
+        public static final int pull_to_refresh_release_label=0x7f050021;
         public static final int search_btn=0x7f05001d;
         /**  search 
          */
