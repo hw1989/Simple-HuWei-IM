@@ -42,6 +42,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -420,6 +421,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 				service.manager.addTask(new SendMessage(MessageUtils
 						.setLocation(application.getBdLocation())));
 				client.stop();
+			}else if(position==7){
+				Intent intent=new Intent(this,PickImgActivity.class);
+				startActivity(intent);
 			}
 		}
 	}

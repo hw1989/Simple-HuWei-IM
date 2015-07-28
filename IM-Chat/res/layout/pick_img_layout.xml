@@ -13,6 +13,7 @@
         android:paddingTop="10dip" >
 
         <TextView
+            android:id="@+id/tv_pick_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
@@ -29,22 +30,26 @@
             android:text="@string/photo_title"
             android:textColor="#ffffff"
             android:textSize="18sp" />
-       <TextView
+
+        <TextView
+            android:id="@+id/tv_pick_sure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="10dip"
             android:gravity="center_vertical"
             android:text="@string/sure"
             android:textColor="#ffffff"
-            android:layout_alignParentRight="true"
             android:textSize="16sp" />
     </RelativeLayout>
 
     <GridView
+        android:id="@+id/gv_pick_images"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1.0" 
-        android:scrollbars="none">
+        android:layout_weight="1.0"
+        android:numColumns="3"
+        android:scrollbars="none" >
     </GridView>
 
 </LinearLayout>
