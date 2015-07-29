@@ -8,10 +8,10 @@
         android:id="@+id/gv_face"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="7"
         android:gravity="center"
-        android:scrollbars="none" 
-        android:listSelector="@null">
+        android:listSelector="@null"
+        android:numColumns="7"
+        android:scrollbars="none" >
     </GridView>
 
 </LinearLayout>

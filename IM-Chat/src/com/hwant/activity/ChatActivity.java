@@ -1,10 +1,14 @@
 package com.hwant.activity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -26,12 +30,14 @@ import com.hwant.common.RecevierConst;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
 import com.hwant.entity.ContentEntity;
+import com.hwant.entity.ImageInfo;
 import com.hwant.pulltorefresh.PullToRefreshBase;
 import com.hwant.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import com.hwant.pulltorefresh.PullToRefreshListView;
 import com.hwant.services.IDoWork;
 import com.hwant.services.TaskManager;
 import com.hwant.utils.MessageUtils;
+import com.hwant.utils.TimeUtils;
 import com.hwant.view.faceview.FaceView;
 import com.hwant.view.faceview.FaceViewListener;
 import com.hwant.view.otherview.IOtherListItemListener;
@@ -47,6 +53,8 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -123,6 +131,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	private SimpleDateFormat format = null;
 	// 文件转换
 	private FileTransferManager ftmanager = null;
+	// 设置请求码
+	private int Intent_Pick_Image = 1;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -331,6 +341,40 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 
+	/**
+	 * 构建一条数据库里消息
+	 */
+	public ContentValues createDBMessage(String mto, String content) {
+		ContentValues values = new ContentValues();
+		// if(flag){
+		values.put("mfrom", application.user.getJid());
+		values.put("mto", mto);
+		// values.put("message", et_input.getText().toString());
+		values.put("message", content);
+		values.put("read", "1");
+		values.put("user", application.user.getJid());
+		Date date = new Date();
+		String time = String.valueOf(date.getTime());
+		values.put("time", time);
+		return values;
+	}
+
+	/**
+	 * 构建一条listview里消息
+	 */
+	public ChatMessage createLVMessage(String mto, String content, Date date) {
+		ChatMessage message = new ChatMessage();
+		message.setMfrom(application.user.getJid());
+		// message.setMessage(et_input.getText().toString());
+		message.setMessage(content);
+		String time = String.valueOf(date.getTime());
+		message.setTime(time);
+		message.setMto(mto);
+		message.setInfo(application.user);
+		// adapter.addMessage(message);
+		return message;
+	}
+
 	class PreChatRecord implements IDoWork {
 		private ContentResolver resolver = null;
 		private String login = "";
@@ -421,9 +465,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 				service.manager.addTask(new SendMessage(MessageUtils
 						.setLocation(application.getBdLocation())));
 				client.stop();
-			}else if(position==7){
-				Intent intent=new Intent(this,PickImgActivity.class);
-				startActivity(intent);
+			} else if (position == 7) {
+				Intent intent = new Intent(this, PickImgActivity.class);
+				// startActivity(intent);
+				startActivityForResult(intent, Intent_Pick_Image);
 			}
 		}
 	}
@@ -516,7 +561,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 		public void onFaceItemClick(int position, String content) {
 			if (position != 20) {
 				String faceStr = MessageUtils.setFace(content);
-				
+
 				ContentEntity entity = new ContentEntity();
 				entity.setType(MessageUtils.TYPE_FACE);
 				entity.setMessage(content);
@@ -538,5 +583,102 @@ public class ChatActivity extends BaseActivity implements OnClickListener,
 	// 获取光标的位置
 	public int getEditCursor(EditText editText) {
 		return editText.getSelectionStart();
+	}
+
+	class SendImageTask implements IDoWork {
+		private WeakReference<Activity> weakReference = null;
+		private String path = "";
+		private String mto = "";
+		private Uri uri = null;
+		private ContentResolver resolver = null;
+
+		public SendImageTask(Activity activity, String path, String mto) {
+			weakReference = new WeakReference<Activity>(activity);
+			this.path = path;
+			this.mto = mto;
+			uri = Uri.parse("content://org.hwant.im.chat/chat");
+			resolver = application.getContentResolver();
+		}
+
+		@Override
+		public Object doWhat() {
+			Bitmap bitmap = null;
+			// ImageInfo info = null;
+			ChatMessage message = null;
+			FileOutputStream stream = null;
+			Options options = new Options();
+			options.inJustDecodeBounds = true;
+			bitmap = BitmapFactory.decodeFile(this.path, options);
+			int width = options.outWidth;
+			int height = options.outHeight;
+			int size = Math.max(width, height);
+			int insample = (size / 350 == 0 ? 1 : size / 350);
+			options.inSampleSize = insample;
+			options.inJustDecodeBounds = false;
+			bitmap = BitmapFactory.decodeFile(this.path, options);
+			String newPath = Environment.getExternalStorageDirectory()
+					+ Common.Path_Media
+					+ TimeUtils.getName("yyyyMMddHHmmssSSS") + ".png";
+			File file = new File(newPath);
+			try {
+				stream = new FileOutputStream(file);
+				bitmap.compress(CompressFormat.PNG, 100, stream);
+				// 将传图片的信息插入到数据库
+				String content = MessageUtils.setImage(newPath);
+				ContentValues values = createDBMessage(mto, content);
+				this.resolver.insert(this.uri, values);
+				// 创建一条listview数据
+				message = createLVMessage(newPath, content, new Date());
+				if (service.getConnection().isConnected()
+						&& service.getConnection().isAuthenticated()) {
+					ftmanager = new FileTransferManager(service.getConnection());
+					OutgoingFileTransfer transfer = ftmanager
+							.createOutgoingFileTransfer(connect.getJid()
+									+ "/Smack");
+					try {
+						transfer.sendFile(file, "huwei");
+					} catch (XMPPException e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} finally {
+				if (stream != null) {
+					try {
+						stream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			return message;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+			if (weakReference.get() != null) {
+				if (obj != null) {
+					ChatMessage message = (ChatMessage) obj;
+					adapter.addItem(message, adapter.getCount());
+				}
+			}
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestcode, int resultcode, Intent data) {
+		if (resultcode == RESULT_OK) {
+			if (requestcode == Intent_Pick_Image) {
+				ArrayList<String> list = data.getStringArrayListExtra("images");
+				// 发送图片
+				if (list != null) {
+					for (String path : list) {
+						service.manager.addTask(new SendImageTask(this, path,
+								connect.getJid()));
+					}
+				}
+			}
+		}
 	}
 }

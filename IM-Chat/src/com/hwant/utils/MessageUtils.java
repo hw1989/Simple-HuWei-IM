@@ -60,7 +60,12 @@ public class MessageUtils {
 		builder.append(face).append(")");
 		return builder.toString();
 	}
-
+	public static String setImage(String path) {
+		StringBuilder builder = new StringBuilder("(").append(TYPE_IMG);
+		builder.append(":");
+		builder.append(path).append(")");
+		return builder.toString();
+	}
 	/**
 	 * 使用正则表达式解析出 (type:content)里的信息
 	 * 

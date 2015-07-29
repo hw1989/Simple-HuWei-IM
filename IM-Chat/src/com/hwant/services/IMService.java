@@ -29,7 +29,7 @@ public class IMService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		asmack = new AsmackInit(getApplication());
-		connection = asmack.setConnect("192.168.192.32", 5222, false);
+		connection = asmack.setConnect("192.168.192.56", 5222, false);
 		manager = TaskManager.init();
 	}
 

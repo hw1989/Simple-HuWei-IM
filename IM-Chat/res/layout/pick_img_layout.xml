@@ -48,7 +48,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1.0"
+        android:horizontalSpacing="3dp"
+        android:verticalSpacing="3dp"
         android:numColumns="3"
+        android:focusable="true"
+        android:listSelector="@null"
         android:scrollbars="none" >
     </GridView>
 
