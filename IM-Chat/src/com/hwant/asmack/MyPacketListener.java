@@ -6,6 +6,7 @@ import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.carbons.Carbon.Private;
+import org.jivesoftware.smackx.ping.packet.Ping;
 import org.wind.util.StringHelper;
 
 import com.hwant.application.IMApplication;
@@ -85,6 +86,7 @@ public class MyPacketListener implements PacketListener {
 				// 群聊人聊天
 
 			}
+		}else if(packet instanceof Ping){
 
 		}
 	}

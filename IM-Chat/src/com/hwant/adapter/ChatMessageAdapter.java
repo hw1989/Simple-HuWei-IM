@@ -1,30 +1,21 @@
 package com.hwant.adapter;
 
-import java.io.File;
 import java.util.ArrayList;
-
 import org.wind.adapter.OtherAdapter;
 import org.wind.adapter.ViewHolder;
-
 import com.hwant.activity.R;
 import com.hwant.application.IMApplication;
 import com.hwant.entity.ChatMessage;
-import com.hwant.entity.ConnectInfo;
 import com.hwant.entity.ContentEntity;
-import com.hwant.entity.UserInfo;
 import com.hwant.utils.MessageUtils;
-
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.view.LayoutInflater;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.util.LruCache;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,10 +28,20 @@ public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
 	private Bitmap selfimg = null, connectimg = null;
 	private ArrayList<ContentEntity> entities = null;
 	private CharSequence builder = null;
+	private LruCache<String, Bitmap> cache = null;
+	private Bitmap bitmap = null;
+	private BitmapDrawable drawable = null;
 
 	public ChatMessageAdapter(Context context, ArrayList<ChatMessage> list) {
 		super(context, list);
 		this.application = (IMApplication) context;
+		long size = Runtime.getRuntime().maxMemory() / 1024 / 1024 / 6;
+		cache = new LruCache<String, Bitmap>((int) size) {
+			@Override
+			protected int sizeOf(String key, Bitmap value) {
+				return value.getRowBytes() * value.getHeight();
+			}
+		};
 	}
 
 	@Override
@@ -68,10 +69,31 @@ public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
 			ll_left.setVisibility(View.GONE);
 			ll_right.setVisibility(View.VISIBLE);
 			if (entities.size() > 0) {
-				builder = MessageUtils.getFaceContent(application,
-						String.valueOf(message.getMessage()), entities);
-				tv_self.setText(builder);
-			}else{
+				// 非文本的信息
+				if (MessageUtils.TYPE_IMG
+						.equalsIgnoreCase(entities.get(0).type)) {
+					// 处理图片
+					bitmap = cache.get(entities.get(0).message);
+					if (bitmap == null) {
+						bitmap = BitmapFactory
+								.decodeFile(entities.get(0).message);
+						cache.put(entities.get(0).message, bitmap);
+						drawable = new BitmapDrawable(bitmap);
+						drawable.setBounds(0, 0, 200, 200);
+						tv_self.setBackground(drawable);
+					} else {
+						drawable = new BitmapDrawable(bitmap);
+						drawable.setBounds(0, 0, 200, 200);
+						tv_self.setBackground(drawable);
+					}
+				} else if (MessageUtils.TYPE_FACE.equalsIgnoreCase(entities
+						.get(0).type)) {
+					builder = MessageUtils.getFaceContent(application,
+							String.valueOf(message.getMessage()), entities);
+					tv_self.setText(builder);
+				}
+			} else {
+				// 文本信息
 				tv_self.setText(message.getMessage());
 			}
 			if (selfimg == null) {
@@ -79,14 +101,40 @@ public class ChatMessageAdapter extends OtherAdapter<ChatMessage> {
 			} else {
 				iv_right.setImageBitmap(selfimg);
 			}
-		} else {
+		}
+		// ----------------------------------------------------------------
+		else {
 			ll_right.setVisibility(View.GONE);
 			ll_left.setVisibility(View.VISIBLE);
 			if (entities.size() > 0) {
-				builder = MessageUtils.getFaceContent(application,
-						String.valueOf(message.getMessage()), entities);
-				tv_other.setText(builder);
-			}else{
+				
+				// 非文本的信息
+				if (MessageUtils.TYPE_IMG
+						.equalsIgnoreCase(entities.get(0).type)) {
+					// 处理图片
+					bitmap = cache.get(entities.get(0).message);
+					if (bitmap == null) {
+						bitmap = BitmapFactory
+								.decodeFile(entities.get(0).message);
+						cache.put(entities.get(0).message, bitmap);
+						drawable = new BitmapDrawable(bitmap);
+						drawable.setBounds(0, 0, 200, 200);
+						tv_other.setBackground(drawable);
+					} else {
+						drawable = new BitmapDrawable(bitmap);
+						drawable.setBounds(0, 0, 200, 200);
+						tv_other.setBackground(drawable);
+					}
+				} else if (MessageUtils.TYPE_FACE.equalsIgnoreCase(entities
+						.get(0).type)) {
+					builder = MessageUtils.getFaceContent(application,
+							String.valueOf(message.getMessage()), entities);
+					tv_other.setText(builder);
+				}
+//				builder = MessageUtils.getFaceContent(application,
+//						String.valueOf(message.getMessage()), entities);
+//				tv_other.setText(builder);
+			} else {
 				tv_other.setText(message.getMessage());
 			}
 			// tv_other.setText(String.valueOf(message.getMessage()));
