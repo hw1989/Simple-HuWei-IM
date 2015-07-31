@@ -29,6 +29,13 @@
             android:background="@drawable/chat_othermsg_select"
             android:orientation="vertical" >
 
+            <ImageView
+                android:id="@+id/iv_msgimage_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="250dp"
+                android:maxWidth="250dp" />
+
             <TextView
                 android:id="@+id/tv_chat_lefttxt"
                 android:layout_width="wrap_content"
@@ -61,6 +68,13 @@
             android:layout_toLeftOf="@id/iv_chat_right"
             android:background="@drawable/chat_selfmsg_select"
             android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/iv_msgimage_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="250dp"
+                android:maxWidth="250dp" />
 
             <TextView
                 android:id="@+id/tv_chat_righttxt"

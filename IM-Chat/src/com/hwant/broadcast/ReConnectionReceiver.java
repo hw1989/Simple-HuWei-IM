@@ -39,24 +39,24 @@ public class ReConnectionReceiver extends BroadcastReceiver {
 						this.service.getpTimeoutIntent());// 此时需要启动超时判断的闹钟了，时间间隔为30+3秒
 			}
 		} else if (intent.getAction().equals(PING_TIMEOUT)) {
-
+			// ping超时的处理
 		}
 	}
 
-	class PingTaskWork implements IDoWork {
-
-		@Override
-		public Object doWhat() {
-			Ping ping = new Ping();
-			ping.setType(Type.GET);
-			ping.setTo(Common.Service_IP);
-			return null;
-		}
-
-		@Override
-		public void Finish2Do(Object obj) {
-
-		}
-
-	}
+	// class PingTaskWork implements IDoWork {
+	//
+	// @Override
+	// public Object doWhat() {
+	// Ping ping = new Ping();
+	// ping.setType(Type.GET);
+	// ping.setTo(Common.Service_IP);
+	// return null;
+	// }
+	//
+	// @Override
+	// public void Finish2Do(Object obj) {
+	//
+	// }
+	//
+	// }
 }

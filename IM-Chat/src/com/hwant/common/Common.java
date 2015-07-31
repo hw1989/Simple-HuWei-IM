@@ -4,7 +4,7 @@ import java.io.File;
 
 public class Common {
 	public static final String GMAIL_SERVER = "talk.google.com";
-	public static final String Service_IP = "192.168.192.71";
+	public static final String Service_IP = "192.168.192.36";
 	public static final int Service_Port = 5222;
 	public static final String SP_UserName="username"; 
 	public static final String SP_UserPsw="userpsw"; 

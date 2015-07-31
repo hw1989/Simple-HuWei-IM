@@ -21,14 +21,14 @@ public class IMService extends Service {
 	public TaskManager manager = null;
 	private XMPPConnection connection;
 	private ReConnectionReceiver connReceiver = null;
-    //设置闹钟的pendingintent
+	// 设置闹钟的pendingintent
 	private PendingIntent pAlarmIntent = null;
+
 	public PendingIntent getpAlarmIntent() {
 		return pAlarmIntent;
 	}
 
-
-	//设置ping超时的pending
+	// 设置ping超时的pending
 	private PendingIntent pTimeoutIntent = null;
 
 	public PendingIntent getpTimeoutIntent() {
@@ -48,14 +48,15 @@ public class IMService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		asmack = new AsmackInit(getApplication());
-		connection = asmack.setConnect(Common.Service_IP, Common.Service_Port, false);
+		asmack = new AsmackInit(getApplication(), this);
+		connection = asmack.setConnect(Common.Service_IP, Common.Service_Port,
+				false);
 		manager = TaskManager.init();
-		pAlarmIntent= PendingIntent.getBroadcast(
-				getApplicationContext(), 0, ReConnectionReceiver.pingIntent,
+		pAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
+				ReConnectionReceiver.pingIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
-		pTimeoutIntent = PendingIntent.getBroadcast(
-				getApplicationContext(), 0, ReConnectionReceiver.timeoutIntent,
+		pTimeoutIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
+				ReConnectionReceiver.timeoutIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);// 超时闹钟
 		connReceiver = new ReConnectionReceiver(this);
 		// 设置ping和超时
@@ -64,7 +65,7 @@ public class IMService extends Service {
 		connFilter.addAction(ReConnectionReceiver.PING_TIMEOUT);
 		registerReceiver(connReceiver, connFilter);
 	}
-    
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -86,6 +87,10 @@ public class IMService extends Service {
 			// 取消广播的注册
 			unregisterReceiver(connReceiver);
 		}
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+				.cancel(pAlarmIntent);
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+				.cancel(pTimeoutIntent);
 	}
 
 	public class SBinder extends Binder {
@@ -112,6 +117,6 @@ public class IMService extends Service {
 				.setInexactRepeating(AlarmManager.RTC_WAKEUP,
 						System.currentTimeMillis() + 10 * 60 * 1000,
 						(long) (10 * 60 * 1000), pAlarmIntent);// 10分钟ping以此服务器
-		
+
 	}
 }

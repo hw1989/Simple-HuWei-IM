@@ -33,6 +33,7 @@ import android.util.Log;
 
 import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
+import com.hwant.services.IMService;
 
 public class AsmackInit {
 	private static int TimeOut = 5000;
@@ -40,16 +41,17 @@ public class AsmackInit {
 	private ConnectionConfiguration configuration = null;
 	private XMPPConnection connection = null;
 	private Application application = null;
-
+    private IMService service=null;
 	// private FileTransferListener ftlistener = null;
 
 	public synchronized XMPPConnection getConnection() {
 		return connection;
 	}
 
-	public AsmackInit(Application application) {
+	public AsmackInit(Application application,IMService service) {
 		this.application = application;
 		this.context = application.getApplicationContext();
+		this.service=service;
 	}
 
 	/**
@@ -80,7 +82,7 @@ public class AsmackInit {
 		// connection.addConnectionListener(new AConnectionListener());
 		PacketTypeFilter filter = new PacketTypeFilter(Message.class);
 		// 对发送消息进行监听
-		connection.addPacketListener(new MyPacketListener(application), filter);
+		connection.addPacketListener(new MyPacketListener(application,this.service), filter);
 		connection.addPacketInterceptor(new PacketInterceptor() {
 
 			@Override

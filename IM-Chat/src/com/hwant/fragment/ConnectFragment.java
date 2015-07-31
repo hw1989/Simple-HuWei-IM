@@ -237,8 +237,8 @@ public class ConnectFragment extends Fragment implements
 					Uri uri = Uri.parse("content://com.hwant.im.friend/friend");
 					ContentValues values = new ContentValues();
 					values.put("userimg", filename);
-					resolver.update(uri, values, " jid=? ",
-							new String[] { user });
+					resolver.update(uri, values, " jid=? and userimg!=? ",
+							new String[] { user,filename });
 				}
 				ImageView iv_img = (ImageView) elv_friend.findViewWithTag(user);
 				if (iv_img != null) {

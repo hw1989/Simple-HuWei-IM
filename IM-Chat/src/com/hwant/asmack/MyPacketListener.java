@@ -13,7 +13,9 @@ import com.hwant.application.IMApplication;
 import com.hwant.common.RecevierConst;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.UserInfo;
+import com.hwant.services.IMService;
 
+import android.app.AlarmManager;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -27,11 +29,13 @@ public class MyPacketListener implements PacketListener {
 	private ContentResolver resolver = null;
 	private IMApplication application = null;
 	private Intent intent = null;
+	private IMService service = null;
 
-	public MyPacketListener(Application application) {
+	public MyPacketListener(Application application, IMService service) {
 		this.application = (IMApplication) application;
 		this.resolver = application.getApplicationContext()
 				.getContentResolver();
+		this.service = service;
 	}
 
 	@Override
@@ -57,7 +61,7 @@ public class MyPacketListener implements PacketListener {
 				}
 				values.put("mfrom", mfrom);
 				values.put("mto", mto);
-				//服务器传过来有后缀 /Spark /Smack
+				// 服务器传过来有后缀 /Spark /Smack
 				// values.put("mfrom", mess.getFrom());
 				// values.put("mto", application.user.getJid());
 				values.put("message", mess.getBody());
@@ -67,16 +71,16 @@ public class MyPacketListener implements PacketListener {
 				values.put("time", String.valueOf(date.getTime()));
 				resolver.insert(uri, values);
 				intent = new Intent();
-				//A与B聊天，C发消息给A会异常(当前界面出现C的消息)
-//				ChatMessage message = new ChatMessage();
-//				message.setMfrom(mess.getFrom());
-//				message.setMessage(mess.getBody());
-//				message.setMto(application.user.getJid());
-//				UserInfo info = new UserInfo();
-//				info.setJid(mess.getFrom());
-//				message.setInfo(info);
-//				intent.setAction(RecevierConst.Chat_One_Get);
-//				intent.putExtra("msg", message);
+				// A与B聊天，C发消息给A会异常(当前界面出现C的消息)
+				// ChatMessage message = new ChatMessage();
+				// message.setMfrom(mess.getFrom());
+				// message.setMessage(mess.getBody());
+				// message.setMto(application.user.getJid());
+				// UserInfo info = new UserInfo();
+				// info.setJid(mess.getFrom());
+				// message.setInfo(info);
+				// intent.setAction(RecevierConst.Chat_One_Get);
+				// intent.putExtra("msg", message);
 				intent.setAction(RecevierConst.Chat_DB_Get);
 				intent.putExtra("mfrom", mfrom);
 				intent.putExtra("mto", mto);
@@ -86,8 +90,12 @@ public class MyPacketListener implements PacketListener {
 				// 群聊人聊天
 
 			}
-		}else if(packet instanceof Ping){
-
+		} else if (packet instanceof Ping) {
+			if (service != null) {
+				((AlarmManager) (application
+						.getSystemService(Context.ALARM_SERVICE)))
+						.cancel(service.getpTimeoutIntent());
+			}
 		}
 	}
 
