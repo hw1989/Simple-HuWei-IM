@@ -75,6 +75,10 @@
             android:name=".PickImgActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".AddConnectActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name="com.hwant.services.IMService" >
         </service>

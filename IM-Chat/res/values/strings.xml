@@ -42,6 +42,9 @@
     <string name="location_title">位置</string>
     <!-- 相册 -->
     <string name="photo_title">相册</string>
+    <!-- 添加联系人 -->
+    <string name="addconnect_title">个人信息</string>
+    <string name="addconnect_add">添加好友</string>
     <!--  -->
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Release to refresh…</string>
