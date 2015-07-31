@@ -1,6 +1,7 @@
 package com.hwant.activity;
 
 import org.wind.util.FileUtils;
+import org.wind.util.StringHelper;
 
 import com.hwant.application.IMApplication;
 import com.hwant.common.Common;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 public class BaseActivity extends FragmentActivity {
 	private ServiceConnection connection = null;
@@ -70,7 +72,12 @@ public class BaseActivity extends FragmentActivity {
 		FileUtils.createorexistsPath(Environment.getExternalStorageDirectory()
 				+ Common.Path_Media, true);
 	}
-
+	public void showToast(String text) {
+		if (!StringHelper.isEmpty(text)) {
+			Toast.makeText(getApplicationContext(), text,
+						Toast.LENGTH_SHORT).show();
+		}
+	}
 	public void bindFinished(TaskManager manager) {
 
 	}

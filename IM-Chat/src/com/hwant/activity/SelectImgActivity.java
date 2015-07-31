@@ -23,6 +23,9 @@ import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 import org.wind.util.FileUtils;
 
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.UploadFileListener;
+
 import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
 import com.hwant.services.IDoWork;
@@ -72,6 +75,8 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 	private String filename = "";
 	//
 	private File tempFile = null;
+	// 初始化
+	private BmobFile bmobFile = null;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -183,10 +188,10 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 			}
 		} else if (requestcode == Pick_Cut) {
 			boolean flag = false;
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ Common.Path_Image, filename);
 			if (data != null) {
 				Bitmap bitmap = data.getParcelableExtra("data");
-				File file = new File(Environment.getExternalStorageDirectory()
-						+ Common.Path_Image, filename);
 				FileOutputStream fos = null;
 				try {
 					fos = new FileOutputStream(file);
@@ -212,7 +217,11 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 				e.printStackTrace();
 			}
 			if (flag) {
-				manager.addTask(new UploadIcon(this));
+				// 设置人员的头像
+				// manager.addTask(new UploadIcon(this));
+				// 将图片存在bmob平台
+				bmobFile = new BmobFile(file);
+				bmobFile.upload(this, new BmobFileListener());
 			}
 		}
 	}
@@ -327,15 +336,36 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 				// 发送个人信息改变的广播
 				intent = new Intent();
 				intent.setAction(RecevierConst.User_Info_Icon);
-//				File file = new File(Environment.getExternalStorageDirectory()
-//						+ Common.Path_Image, filename);
-//				intent.putExtra("value", file.getAbsolutePath());
-				intent.putExtra("value",filename);
+				// File file = new
+				// File(Environment.getExternalStorageDirectory()
+				// + Common.Path_Image, filename);
+				// intent.putExtra("value", file.getAbsolutePath());
+				intent.putExtra("value", filename);
 				sendBroadcast(intent);
 				if (weak.get() != null) {
 					finish();
 				}
 			}
+		}
+
+	}
+
+	class BmobFileListener extends UploadFileListener {
+
+		@Override
+		public void onFailure(int arg0, String arg1) {
+			showToast("-->uploadMovoieFile-->onFailure:" + arg0 + ",msg = "
+					+ arg1);
+			finish();
+		}
+
+		@Override
+		public void onSuccess() {
+			// 发送个人信息改变的广播
+			intent = new Intent();
+			intent.setAction(RecevierConst.User_Info_Icon);
+			intent.putExtra("value", filename);
+			sendBroadcast(intent);
 		}
 
 	}

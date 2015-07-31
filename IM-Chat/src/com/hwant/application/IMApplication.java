@@ -7,10 +7,14 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smackx.carbons.Carbon.Private;
 import org.wind.util.PreferenceUtils;
 
+import cn.bmob.v3.Bmob;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.GeofenceClient;
 import com.baidu.location.LocationClient;
+import com.bmob.BmobConfiguration;
+import com.bmob.BmobPro;
 import com.hwant.asmack.AsmackInit;
 import com.hwant.common.Common;
 import com.hwant.db.MySQLiteOpenHelper;
@@ -46,6 +50,10 @@ public class IMApplication extends Application implements BDLocationListener {
 	public void onCreate() {
 		super.onCreate();
 		SmackAndroid.init(this);
+		//初始化bmob
+		BmobConfiguration config = new BmobConfiguration.Builder(this).customExternalCacheDir("hwchat").build();
+		BmobPro.getInstance(this).initConfig(config);
+		Bmob.initialize(getApplicationContext(),"c982ca7349ee6fdf2fcfe57d50e71e0a");
 		user = new UserInfo();
 		sharepreference = PreferenceUtils.init(this, Common.IM_Config);
 		helper = new MySQLiteOpenHelper(this);

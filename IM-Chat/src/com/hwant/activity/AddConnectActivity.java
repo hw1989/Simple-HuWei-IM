@@ -1,7 +1,5 @@
 package com.hwant.activity;
 
-import java.text.BreakIterator;
-
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
