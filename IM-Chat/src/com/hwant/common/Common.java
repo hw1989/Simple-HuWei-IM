@@ -4,7 +4,7 @@ import java.io.File;
 
 public class Common {
 	public static final String GMAIL_SERVER = "talk.google.com";
-	public static final String Service_IP = "192.168.192.36";
+	public static final String Service_IP = "192.168.192.20";
 	public static final int Service_Port = 5222;
 	public static final String SP_UserName="username"; 
 	public static final String SP_UserPsw="userpsw"; 
@@ -19,7 +19,7 @@ public class Common {
 	// 设置数据库查询的排列
 	public static final String Table_Order_ASC = " _id asc ";
 	// 域名
-	public static final String DomainName = "@gta-huwei6";
+	public static final String DomainName = "gta-huwei6";
 	// 图片存放位置
 	public static final String Path_Image = File.separator + "HWim"
 			+ File.separator + "image" + File.separator;

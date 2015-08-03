@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ah"
+    android:background="#DADADA"
     android:orientation="vertical" >
 
     <ImageView
@@ -49,5 +49,14 @@
         android:layout_marginTop="@dimen/margin_10"
         android:background="@drawable/login_btn_select"
         android:text="@string/login_btn" />
-
+   <Button
+        android:id="@+id/btn_login_regist"
+        style="@style/txt_style_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_btn_hei"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
+        android:background="@drawable/login_btn_select"
+        android:text="@string/login_regist_btn" />
 </LinearLayout>

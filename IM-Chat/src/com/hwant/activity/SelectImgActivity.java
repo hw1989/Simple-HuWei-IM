@@ -361,11 +361,13 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void onSuccess() {
+			
 			// 发送个人信息改变的广播
 			intent = new Intent();
 			intent.setAction(RecevierConst.User_Info_Icon);
 			intent.putExtra("value", filename);
 			sendBroadcast(intent);
+			finish();
 		}
 
 	}

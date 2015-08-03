@@ -13,6 +13,7 @@
     <!-- login -->
     <string name="login_btn">登录</string>
     <string name="login_tip1">用户名与密码不能为空!</string>
+    <string name="login_regist_btn">注册</string>
     <!-- chat -->
     <string name="chat_send">发送</string>
     <string name="chat_msg_back">消息</string>
@@ -47,7 +48,10 @@
     <string name="addconnect_add">添加好友</string>
     <!-- 注册 -->
     <string name="register_title">注册</string>
-    <!-- -->
+    <string name="register_username">用户名</string>
+    <string name="register_userpsw">密码</string>
+    <string name="register_sure">注册</string>
+    <!--  -->
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Release to refresh…</string>
     <string name="pull_to_refresh_refreshing_label">Loading…</string>

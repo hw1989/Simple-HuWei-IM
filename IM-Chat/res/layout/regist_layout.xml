@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:hwbg="http://schemas.android.com/apk/res/com.hwant.activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
+    android:background="#F0EFF4"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -14,7 +13,7 @@
         android:paddingTop="10dip" >
 
         <TextView
-            android:id="@+id/tv_setting_back"
+            android:id="@+id/tv_regist_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
@@ -33,11 +32,29 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <com.hwant.view.XTextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/et_regist_name"
+        style="@style/et_halfcircle"
+        android:drawableLeft="@drawable/login_ic_user" />
+
+    <EditText
+        android:id="@+id/et_regist_psw"
+        style="@style/et_halfcircle"
+        android:drawableLeft="@drawable/login_ic_pwd"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/btn_regist_sure"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_bg1"
-        hwbg:length="150"
-        hwbg:radiu="120" />
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/btn_regist_select"
+        android:gravity="center"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip"
+        android:text="@string/register_sure"
+        android:textColor="#fff"
+        android:textSize="18sp" />
 
 </LinearLayout>
