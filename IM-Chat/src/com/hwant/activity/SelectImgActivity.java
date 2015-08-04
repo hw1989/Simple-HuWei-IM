@@ -24,8 +24,10 @@ import org.wind.annotation.ViewInject;
 import org.wind.util.FileUtils;
 
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
+import com.hwant.bomb.entity.BmobUserInfo;
 import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
 import com.hwant.services.IDoWork;
@@ -222,6 +224,19 @@ public class SelectImgActivity extends BaseActivity implements OnClickListener {
 				// 将图片存在bmob平台
 				bmobFile = new BmobFile(file);
 				bmobFile.upload(this, new BmobFileListener());
+				BmobUserInfo userInfo=new BmobUserInfo();
+				userInfo.setUserimg(filename);
+				userInfo.update(this,application.user.getObjid(),new UpdateListener() {
+					@Override
+					public void onSuccess() {
+						application.user.setUserimg(filename);
+					}
+					
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						showToast(arg1);
+					}
+				});
 			}
 		}
 	}

@@ -3,7 +3,9 @@ package com.hwant.bomb.entity;
 import cn.bmob.v3.BmobObject;
 
 public class BmobUserInfo extends BmobObject {
-
+    public BmobUserInfo(){
+    	this.setTableName("userinfo");
+    }
 	/**
 	 * 
 	 */

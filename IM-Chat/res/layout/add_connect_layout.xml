@@ -2,45 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/setting_title_bg"
-        android:paddingBottom="10dip"
-        android:paddingTop="10dip" >
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ezz" />
 
         <TextView
             android:id="@+id/tv_addconnect_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
             android:drawableLeft="@drawable/gbk"
             android:gravity="center_vertical"
             android:text="@string/back"
             android:textColor="#ffffff"
             android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_addconnect_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dip"
-            android:gravity="center_vertical"
-            android:text="@string/addconnect_add"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/addconnect_title"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_addconnect_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/add_connect_msg_select"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip"
+        android:text="@string/addconnect_msg"
+        android:textColor="#fff"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_addconnect_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/add_connect_select"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip"
+        android:text="@string/addconnect_add"
+        android:textColor="#fff"
+        android:textSize="16sp" />
 
 </LinearLayout>

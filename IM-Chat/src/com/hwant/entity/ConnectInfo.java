@@ -6,7 +6,7 @@ import org.wind.annotation.Field;
 import org.wind.annotation.Table;
 import org.wind.database.DataType;
 
-@Table(DTname = "connect",UnionKey="jid,user")
+@Table(DTname = "connect", UnionKey = "jid,user")
 public class ConnectInfo implements Serializable {
 
 	/**
@@ -103,4 +103,5 @@ public class ConnectInfo implements Serializable {
 	public void setUserimg(String userimg) {
 		this.userimg = userimg;
 	}
+
 }

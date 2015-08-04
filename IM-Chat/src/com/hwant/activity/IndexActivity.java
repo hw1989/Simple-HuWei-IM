@@ -14,6 +14,8 @@ import org.jivesoftware.smack.packet.Presence.Mode;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 
+import com.bmob.BmobProFile;
+import com.bmob.btp.callback.DownloadListener;
 import com.hwant.application.IMApplication;
 import com.hwant.db.IndexContentObserver;
 import com.hwant.fragment.ConnectFragment;
@@ -49,7 +51,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class IndexActivity extends BaseActivity implements OnClickListener,
-		OnCheckedChangeListener {
+		OnCheckedChangeListener,DownloadListener{
 	private ConnectFragment connect = null;
 	private MessageFragment message = null;
 	private ResideMenu menu = null;
@@ -94,7 +96,6 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
 				super.handleMessage(msg);
 			}
 		};
@@ -222,12 +223,12 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 			// 获取所有的好友
 			if (service.getConnection().isConnected()
 					&& service.getConnection().isAuthenticated()) {
-//				Collection<RosterEntry> entries = service.getConnection()
-//						.getRoster().getEntries();
-				Roster roster=service.getConnection().getRoster();
+				// Collection<RosterEntry> entries = service.getConnection()
+				// .getRoster().getEntries();
+				Roster roster = service.getConnection().getRoster();
 				Iterator<RosterEntry> iterator = roster.getEntries().iterator();
 				resolver = application.getContentResolver();
-				
+
 				Presence presence = null;
 				while (iterator.hasNext()) {
 					RosterEntry entry = iterator.next();
@@ -238,8 +239,11 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 					values.put("date", new Date().getTime());
 					values.put("status", -1);
 					presence = roster.getPresence(entry.getUser());
-//					Toast.makeText(application, presence.getMode()+"", Toast.LENGTH_SHORT).show();
-					Log.i("info", presence.getStatus()+"-----"+presence.getType()+"  "+presence.getMode());
+					// Toast.makeText(application, presence.getMode()+"",
+					// Toast.LENGTH_SHORT).show();
+					Log.i("info",
+							presence.getStatus() + "-----" + presence.getType()
+									+ "  " + presence.getMode());
 					resolver.insert(uri, values);
 				}
 			}
@@ -257,32 +261,35 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 
 	}
 
-	// /**
-	// * 获取用户信息的任务
-	// */
-	// class UserInfo implements IDoWork {
-	//
-	// @Override
-	// public Object doWhat() {
-	// return null;
-	// }
-	//
-	// @Override
-	// public void Finish2Do(Object obj) {
-	//
-	// }
-	//
-	// }
-
 	/**
 	 * 设置图片
 	 */
 	public void setImage() {
 		String filename = application.user.getUserimg();
+		if(filename==null){
+			return;
+		}
 		if (FileUtils.isExistsImg(filename)) {
 			iv_myicon.setImageBitmap(FileUtils.getImageBitemap(filename));
 		} else {
-			// 图片不存在，需要在服务器上获取
+			// 图片不存在，需要在服务器上获取  在bmob上获取
+			BmobProFile.getInstance(this).download(filename, this);
 		}
 	}
+
+	@Override
+	public void onError(int arg0, String arg1) {
+		
+	}
+
+	@Override
+	public void onProgress(String arg0, int arg1) {
+		
+	}
+
+	@Override
+	public void onSuccess(String arg0) {
+		iv_myicon.setImageBitmap(FileUtils.getImageBitemap(arg0));
+	}
+	
 }

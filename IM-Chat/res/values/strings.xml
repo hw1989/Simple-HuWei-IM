@@ -46,6 +46,7 @@
     <!-- 添加联系人 -->
     <string name="addconnect_title">个人信息</string>
     <string name="addconnect_add">添加好友</string>
+    <string name="addconnect_msg">发送消息</string>
     <!-- 注册 -->
     <string name="register_title">注册</string>
     <string name="register_username">用户名</string>

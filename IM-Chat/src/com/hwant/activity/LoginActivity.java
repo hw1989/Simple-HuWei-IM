@@ -1,21 +1,18 @@
 package com.hwant.activity;
 
-import java.util.List;
-
+import org.json.JSONArray;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 import org.wind.util.PreferenceUtils;
 import org.wind.util.StringHelper;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.FindCallback;
 
 import com.hwant.application.IMApplication;
 import com.hwant.asmack.AsmackInit;
-import com.hwant.bomb.entity.BmobUserInfo;
 import com.hwant.common.Common;
 import com.hwant.dialog.LoginDialog;
-import com.hwant.entity.UserInfo;
 import com.hwant.services.IDoWork;
 import com.hwant.services.IMService;
 import com.hwant.services.IMService.SBinder;
@@ -26,7 +23,6 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
@@ -38,7 +34,6 @@ import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -168,17 +163,21 @@ public class LoginActivity extends Activity implements OnClickListener {
 			Cursor cursor = resolver.query(uri, null, " jid=? ",
 					new String[] { name }, null);
 			cursor.moveToFirst();
-            if(cursor.moveToNext()){
-            	application.user.setObjid(cursor.getColumnName(cursor.getColumnIndex("objid")));
-            	cursor.close();
-            	//用户已经存在
-            	manager.addTask(new LoginServer(name, psw));
-            }else{
-            	cursor.close();
-            	//用户不存在
-            	getUserInfo(name, psw);
-            }
-            cursor.close();
+			if (cursor.moveToNext()) {
+				application.user.setJid(name + "@" + Common.DomainName);
+				application.user.setObjid(cursor.getColumnName(cursor
+						.getColumnIndex("objid")));
+				application.user.setUserimg(cursor.getColumnName(cursor
+						.getColumnIndex("userimg")));
+				cursor.close();
+				// 用户已经存在
+				manager.addTask(new LoginServer(name, psw, true));
+			} else {
+				cursor.close();
+				// 用户不存在
+				getUserInfo(name, psw);
+			}
+			cursor.close();
 			break;
 		case R.id.btn_login_regist:
 			Intent intent = new Intent(this, RegisterActivity.class);
@@ -204,10 +203,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 	class LoginServer implements IDoWork {
 		private String username;
 		private String userpsw;
+		private boolean exit = false;
 
-		public LoginServer(String username, String userpsw) {
+		public LoginServer(String username, String userpsw, boolean exit) {
 			this.username = username;
 			this.userpsw = userpsw;
+			this.exit = exit;
 		}
 
 		@Override
@@ -221,26 +222,28 @@ public class LoginActivity extends Activity implements OnClickListener {
 		public void Finish2Do(Object obj) {
 			Boolean flag = (Boolean) obj;
 			if (obj != null && flag) {
-				application.user
-						.setJid(this.username + "@" + Common.DomainName);
-				// 插入登陆用户的信息，已经做了重复的处理
-
-				ContentValues values = new ContentValues();
-				values.put("jid", this.username + "@" + Common.DomainName);
-				values.put("password", this.userpsw);
-				resolver.insert(uri, values);
-				// 获取登陆用户的信息
-				Cursor cursor = resolver
-						.query(uri, null, " jid=? ",
-								new String[] { this.username + "@"
-										+ Common.DomainName }, null);
-				cursor.moveToFirst();
-				while (!cursor.isAfterLast()) {
-					application.user.setUserimg(cursor.getString(cursor
-							.getColumnIndex("userimg")));
-					cursor.moveToNext();
+				if (!exit) {
+					application.user.setJid(this.username + "@"
+							+ Common.DomainName);
+					// 插入登陆用户的信息，已经做了重复的处理
+					ContentValues values = new ContentValues();
+					values.put("jid", this.username + "@" + Common.DomainName);
+					values.put("password", this.userpsw);
+					resolver.insert(uri, values);
+					// 获取登陆用户的信息
+					Cursor cursor = resolver.query(uri, null, " jid=? ",
+							new String[] { this.username + "@"
+									+ Common.DomainName }, null);
+					cursor.moveToFirst();
+					while (!cursor.isAfterLast()) {
+						application.user.setUserimg(cursor.getString(cursor
+								.getColumnIndex("userimg")));
+						application.user.setObjid(cursor.getColumnName(cursor
+								.getColumnIndex("objid")));
+						cursor.moveToNext();
+					}
+					cursor.close();
 				}
-				cursor.close();
 				service.addConnectListener();
 				// 存储当前用户的信息
 				PreferenceUtils.putString(Common.SP_UserName, this.username);
@@ -259,41 +262,47 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	public void getUserInfo(final String name, final String psw) {
-		BmobQuery<BmobUserInfo> query = new BmobQuery<BmobUserInfo>();
+		BmobQuery query = new BmobQuery("userinfo");
 		query.addWhereEqualTo("userid", name);
 		query.setLimit(1);
-		query.findObjects(this, new FindListener<BmobUserInfo>() {
+		query.findObjects(this, new FindCallback() {
+
 			@Override
-			public void onSuccess(List<BmobUserInfo> arg0) {
-				if (arg0.size() > 0) {
-					// PreferenceUtils.putString("objid",
-					// arg0.get(0).getObjectId());
-					// resolver.qu
-					manager.addTask(new LoginServer(name, psw));
+			public void onFailure(int arg0, String arg1) {
+				Toast.makeText(LoginActivity.this, "登陆失败:" + arg1,
+						Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onSuccess(JSONArray arg0) {
+				if (arg0.length() > 0) {
+					manager.addTask(new LoginServer(name, psw, false));
 				} else {
 					Toast.makeText(LoginActivity.this, "登陆失败!",
 							Toast.LENGTH_SHORT).show();
 				}
 			}
-			@Override
-			public void onError(int arg0, String arg1) {
-				Toast.makeText(LoginActivity.this, "登陆失败:" + arg1,
-						Toast.LENGTH_SHORT).show();
-			}
 		});
+		// BmobQuery<BmobUserInfo> query = new
+		// BmobQuery<BmobUserInfo>("userinfo");
+		// query.addWhereEqualTo("userid", name);
+		// query.setLimit(1);
+		// query.findObjects(this, new FindListener<BmobUserInfo>() {
+		// @Override
+		// public void onSuccess(List<BmobUserInfo> arg0) {
+		// if (arg0.size() > 0) {
+		// manager.addTask(new LoginServer(name, psw));
+		// } else {
+		// Toast.makeText(LoginActivity.this, "登陆失败!",
+		// Toast.LENGTH_SHORT).show();
+		// }
+		// }
+		//
+		// @Override
+		// public void onError(int arg0, String arg1) {
+		// Toast.makeText(LoginActivity.this, "登陆失败:" + arg1,
+		// Toast.LENGTH_SHORT).show();
+		// }
+		// });
 	}
-	// class Register implements IDoWork {
-	//
-	// @Override
-	// public Object doWhat() {
-	// // 将用户存到数据库
-	// return null;
-	// }
-	//
-	// @Override
-	// public void Finish2Do(Object obj) {
-	//
-	// }
-	//
-	// }
 }

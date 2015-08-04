@@ -79,6 +79,7 @@ public class UserInfo implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	@Field(name = "objid", size = 20)
 	private String objid;
 

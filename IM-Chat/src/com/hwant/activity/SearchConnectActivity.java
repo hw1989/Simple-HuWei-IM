@@ -1,45 +1,29 @@
 package com.hwant.activity;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.ReportedData;
 import org.jivesoftware.smackx.ReportedData.Row;
-import org.jivesoftware.smackx.packet.VCard;
 import org.jivesoftware.smackx.search.UserSearchManager;
 import org.wind.annotation.ActivityInject;
 import org.wind.annotation.ViewInject;
 import org.wind.util.StringHelper;
 
 import com.hwant.adapter.SearchConnectAdapter;
-import com.hwant.common.Common;
 import com.hwant.entity.ConnectInfo;
-import com.hwant.fragment.ConnectFragment;
 import com.hwant.services.IDoWork;
-
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap.CompressFormat;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -47,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class SearchConnectActivity extends BaseActivity implements
-		OnClickListener {
+		OnClickListener,OnItemClickListener{
 	@ViewInject(id = R.id.et_input_connect)
 	private EditText et_input;
 	@ViewInject(id = R.id.tv_connect_search)
@@ -59,6 +43,7 @@ public class SearchConnectActivity extends BaseActivity implements
 	@ViewInject(id = R.id.iv_search_inputclear)
 	private ImageView iv_clear;
 	private SearchConnectAdapter adapter = null;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -73,6 +58,7 @@ public class SearchConnectActivity extends BaseActivity implements
 		tv_search.setOnClickListener(this);
 		tv_back.setOnClickListener(this);
 		iv_clear.setOnClickListener(this);
+		
 		et_input.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -97,6 +83,7 @@ public class SearchConnectActivity extends BaseActivity implements
 			}
 		});
 		adapter = new SearchConnectAdapter(this, null);
+		lv_search.setOnItemClickListener(this);
 		lv_search.setAdapter(adapter);
 	}
 
@@ -187,78 +174,11 @@ public class SearchConnectActivity extends BaseActivity implements
 
 	}
 
-//	/**
-//	 * 加载联系人的头像并写入数据库中
-//	 */
-//	public class LoadImage implements IDoWork {
-//		private VCard vcard = null;
-//		// private Bitmap bitmap=null;
-//		private WeakReference<Activity> weakReference = null;
-//		private String user = "";
-//		private FileOutputStream fos = null;
-//		private SimpleDateFormat format = null;
-//		// 文件名
-//		private String filename = "";
-//
-//		public LoadImage(String user) {
-//			this.user = user;
-//			vcard = new VCard();
-//			weakReference = new WeakReference<Activity>(SearchConnectActivity.this);
-//			format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-//			filename = format.format(new Date()) + ".png";
-//		}
-//
-//		@Override
-//		public Object doWhat() {
-//			Bitmap bitmap = null;
-//			if (StringHelper.isEmpty(user)) {
-//				return null;
-//			}
-//			if (!service.getConnection().isConnected()
-//					|| !service.getConnection().isAuthenticated()) {
-//				return null;
-//			}
-//			try {
-//				vcard.load(service.getConnection(), user);
-//				if (vcard != null && vcard.getAvatar() != null) {
-//					bitmap = BitmapFactory.decodeByteArray(vcard.getAvatar(),
-//							0, vcard.getAvatar().length);
-//				}
-//			} catch (XMPPException e) {
-//				e.printStackTrace();
-//			}
-//			if (bitmap != null) {
-//				// String name = format.format(new Date()) + ".png";
-//				try {
-//					fos = new FileOutputStream(new File(
-//							Environment.getExternalStorageDirectory()
-//									+ Common.Path_Image, filename));
-//					bitmap.compress(CompressFormat.PNG, 1, fos);
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//				} finally {
-//					if (fos != null) {
-//						try {
-//							fos.close();
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//				}
-//			}
-//			return bitmap;
-//		}
-//
-//		@Override
-//		public void Finish2Do(Object obj) {
-//			if (obj != null || weakReference.get() != null) {
-//				ImageView iv_img = (ImageView) lv_search.findViewWithTag(user);
-//				if (iv_img != null) {
-//					adapter.putCache(user, (Bitmap) obj);
-//					iv_img.setImageBitmap((Bitmap) obj);
-//				}
-//			}
-//		}
-//	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent=new Intent(this,AddConnectActivity.class);
+		startActivity(intent);
+	}
 
 }
