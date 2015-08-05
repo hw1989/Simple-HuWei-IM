@@ -52,14 +52,26 @@
     <string name="register_username">用户名</string>
     <string name="register_userpsw">密码</string>
     <string name="register_sure">注册</string>
+    <!-- 新联系人 -->
+    <string name="newconnect_title">新联系人</string>
     <!--  -->
-    <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
-    <string name="pull_to_refresh_release_label">Release to refresh…</string>
-    <string name="pull_to_refresh_refreshing_label">Loading…</string>
 
     <!-- Just use standard Pull Down String when pulling up. These can be set for languages which require it -->
     <string name="pull_to_refresh_from_bottom_pull_label">@string/pull_to_refresh_pull_label</string>
     <string name="pull_to_refresh_from_bottom_release_label">@string/pull_to_refresh_release_label</string>
     <string name="pull_to_refresh_from_bottom_refreshing_label">@string/pull_to_refresh_refreshing_label</string>
-
+    <!-- 下拉上拉左右滑动listview -->
+    <string name="pull_to_refresh_pull_label">下拉可以刷新</string>
+    <string name="pull_to_refresh_release_label">松开可以刷新</string>
+    <string name="pull_to_refresh_refreshing_label">加载中...</string>
+    <string name="pull_to_refresh_tap_label">下拉可以刷新</string>
+    <string name="pull_to_refresh_update">最近更新：</string>
+    
+    <!-- 界面上下滑动加载数据时显示的数据 -->
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载...</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
 </resources>

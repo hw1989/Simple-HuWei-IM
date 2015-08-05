@@ -13,11 +13,12 @@ import android.view.ViewGroup;
 
 public class MessageFragment extends Fragment {
 	private ContentResolver resolver = null;
-
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		resolver = getActivity().getContentResolver();
+
 	}
 
 	@Override
@@ -25,7 +26,13 @@ public class MessageFragment extends Fragment {
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.message_list_layout, container,
 				false);
+		
 		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
 	}
 
 	private void getMessages() {

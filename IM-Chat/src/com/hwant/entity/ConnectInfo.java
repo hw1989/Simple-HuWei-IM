@@ -69,7 +69,7 @@ public class ConnectInfo implements Serializable {
 	@Field(name = "status", type = DataType.Type_Int)
 	private int status;
 	// 请求时间
-	@Field(name = "date", size = 20)
+	@Field(name = "date", size = 25)
 	private String date;
 
 	public String getDate() {

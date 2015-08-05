@@ -51,11 +51,13 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class IndexActivity extends BaseActivity implements OnClickListener,
-		OnCheckedChangeListener,DownloadListener{
+		OnCheckedChangeListener, DownloadListener {
 	private ConnectFragment connect = null;
 	private MessageFragment message = null;
 	private ResideMenu menu = null;
 	private ResideMenuItem item_setting;
+	private ResideMenuItem item_connect;
+	private ResideMenuItem item_group;
 	// 聊天
 	@ViewInject(id = R.id.cb_index_mess)
 	private CheckBox cb_mess;
@@ -110,6 +112,15 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		menu.setScaleValue(0.6f);
 		item_setting = new ResideMenuItem(this, R.drawable.ic_launcher, "设置");
 		item_setting.setOnClickListener(this);
+		// 联系人操作
+		item_connect = new ResideMenuItem(this, R.drawable.ic_launcher, "新朋友");
+		item_connect.setOnClickListener(this);
+		// 联系人操作
+		item_group = new ResideMenuItem(this, R.drawable.ic_launcher, "群组");
+		item_group.setOnClickListener(this);
+
+		menu.addMenuItem(item_connect, ResideMenu.DIRECTION_LEFT);
+		menu.addMenuItem(item_group, ResideMenu.DIRECTION_LEFT);
 		menu.addMenuItem(item_setting, ResideMenu.DIRECTION_LEFT);
 		// 禁止右滑
 		menu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
@@ -132,6 +143,11 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 		if (v == item_setting) {
 			intent = new Intent(this, SettingActivity.class);
 			startActivity(intent);
+		} else if (v == item_connect) {
+			intent = new Intent(this, NewConnectActivity.class);
+			startActivity(intent);
+		} else if (v == item_group) {
+
 		} else {
 			switch (v.getId()) {
 			case R.id.iv_index_icon:
@@ -266,30 +282,30 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 	 */
 	public void setImage() {
 		String filename = application.user.getUserimg();
-		if(filename==null){
+		if (filename == null) {
 			return;
 		}
 		if (FileUtils.isExistsImg(filename)) {
 			iv_myicon.setImageBitmap(FileUtils.getImageBitemap(filename));
 		} else {
-			// 图片不存在，需要在服务器上获取  在bmob上获取
+			// 图片不存在，需要在服务器上获取 在bmob上获取
 			BmobProFile.getInstance(this).download(filename, this);
 		}
 	}
 
 	@Override
 	public void onError(int arg0, String arg1) {
-		
+
 	}
 
 	@Override
 	public void onProgress(String arg0, int arg1) {
-		
+
 	}
 
 	@Override
 	public void onSuccess(String arg0) {
 		iv_myicon.setImageBitmap(FileUtils.getImageBitemap(arg0));
 	}
-	
+
 }

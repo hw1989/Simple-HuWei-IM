@@ -43,7 +43,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	@ViewInject(id = R.id.btn_regist_sure)
 	private Button btn_regist = null;
 	@ViewInject(id = R.id.tv_regist_back)
-	private TextView tv_back=null;
+	private TextView tv_back = null;
 	private String username = "";
 	private String userpsw = "";
 	// 标记服务绑定
@@ -98,6 +98,9 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if(connection!=null){
+			unbindService(connection);
+		}
 	}
 
 	@Override
@@ -175,7 +178,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
 					} else if (result.getType() == IQ.Type.RESULT) {
 						BmobUserInfo userInfo = new BmobUserInfo();
 						userInfo.setUserid(username);
-						userInfo.setTableName("userinfo");
 						userInfo.save(RegisterActivity.this,
 								new MySaveListener());
 					} else {
@@ -191,7 +193,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void onFailure(int arg0, String arg1) {
-
+			Toast.makeText(RegisterActivity.this, arg1, Toast.LENGTH_LONG)
+					.show();
 		}
 
 		@Override

@@ -177,7 +177,9 @@ public class SearchConnectActivity extends BaseActivity implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		ConnectInfo info=adapter.getItem(position);
 		Intent intent=new Intent(this,AddConnectActivity.class);
+		intent.putExtra("connect", info);
 		startActivity(intent);
 	}
 

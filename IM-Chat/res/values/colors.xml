@@ -17,4 +17,6 @@
     <color name="setting_body_bg">#F8F9FA</color>
     <color name="setting_select_txt">#0079FF</color>
     <color name="index_top_title">#18B4ED</color>
+    <!-- xlistview -->
+     <color name="main_white">#ffffff</color>
 </resources>

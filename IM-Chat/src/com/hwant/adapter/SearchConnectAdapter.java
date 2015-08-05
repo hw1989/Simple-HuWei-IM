@@ -37,7 +37,7 @@ public class SearchConnectAdapter extends OtherAdapter<ConnectInfo> {
 	private LruCache<String, Bitmap> cache = null;
 	private Bitmap bitmap = null;
 	private SearchConnectActivity activity = null;
-
+    
 	public SearchConnectAdapter(SearchConnectActivity activity,
 			ArrayList<ConnectInfo> list) {
 		super(activity, list);

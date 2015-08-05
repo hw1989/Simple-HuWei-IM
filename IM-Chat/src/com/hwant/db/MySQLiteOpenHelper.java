@@ -6,6 +6,7 @@ import com.hwant.common.Common;
 import com.hwant.entity.ChatMessage;
 import com.hwant.entity.ConnectInfo;
 import com.hwant.entity.GroupInfo;
+import com.hwant.entity.Relationship;
 import com.hwant.entity.UserInfo;
 
 import android.R.integer;
@@ -33,13 +34,15 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		TableHelper chatMessage = new TableHelper(ChatMessage.class);
 		TableHelper user=new TableHelper(UserInfo.class);
 		TableHelper group=new TableHelper(GroupInfo.class);
-		String sql=user.getSQL();
+		TableHelper relationship=new TableHelper(Relationship.class);
+//		String sql=user.getSQL();
 		db.beginTransaction();
 		try {
 			db.execSQL(connect.getSQL());
 			db.execSQL(chatMessage.getSQL());
 			db.execSQL(user.getSQL());
 			db.execSQL(group.getSQL());
+			db.execSQL(relationship.getSQL());
 			db.setTransactionSuccessful();
 		} catch (SQLException e) {
 			e.printStackTrace();

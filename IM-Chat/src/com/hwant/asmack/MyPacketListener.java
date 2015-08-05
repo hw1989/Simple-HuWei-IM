@@ -1,19 +1,37 @@
 package com.hwant.asmack;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smackx.carbons.Carbon.Private;
+import org.jivesoftware.smackx.packet.VCard;
 import org.jivesoftware.smackx.ping.packet.Ping;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wind.util.StringHelper;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindCallback;
+
+import com.baidu.navisdk.ui.widget.NewerGuideDialog;
 import com.hwant.application.IMApplication;
+import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
+import com.hwant.db.RelationshipProvider;
 import com.hwant.entity.ChatMessage;
+import com.hwant.entity.ConnectInfo;
 import com.hwant.entity.UserInfo;
+import com.hwant.services.IDoWork;
 import com.hwant.services.IMService;
+
+import f.in;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -30,6 +48,7 @@ public class MyPacketListener implements PacketListener {
 	private IMApplication application = null;
 	private Intent intent = null;
 	private IMService service = null;
+	private Uri uri = null;
 
 	public MyPacketListener(Application application, IMService service) {
 		this.application = (IMApplication) application;
@@ -48,7 +67,7 @@ public class MyPacketListener implements PacketListener {
 					return;
 				}
 				// 单人聊天
-				Uri uri = Uri.parse("content://org.hwant.im.chat/chat");
+				uri = Uri.parse("content://org.hwant.im.chat/chat");
 				ContentValues values = new ContentValues();
 				int indexfrom = mess.getFrom().lastIndexOf("/");
 				int indexto = mess.getTo().lastIndexOf("/");
@@ -96,7 +115,137 @@ public class MyPacketListener implements PacketListener {
 						.getSystemService(Context.ALARM_SERVICE)))
 						.cancel(service.getpTimeoutIntent());
 			}
+		} else if (packet instanceof Presence) {
+			Presence presence = (Presence) packet;
+			String from = presence.getFrom();
+			String to = presence.getTo();
+			Type type = presence.getType();
+			BmobQuery query = new BmobQuery("userinfo");
+			query.addWhereEqualTo("userid", from);
+			query.setLimit(1);
+			ContentValues values = new ContentValues();
+			query.findObjects(application, new MyBmobFind(application,from, to));
+
+			if (Presence.Type.subscribe.equals(type)) {
+				uri = uri.parse("org.hwant.im.relationship/relation");
+				RelationshipProvider provider = new RelationshipProvider();
+				values.put("mfrom", from);
+				values.put("mto", to);
+				values.put("muser", application.user.getJid());
+				values.put("date", String.valueOf(new Date().getTime()));
+				values.put("state", 1);
+				provider.insert(uri, values);
+				// 好友申请
+				intent = new Intent();
+				intent.setAction(RecevierConst.Connect_Subscribed);
+			} else if (Presence.Type.subscribed.equals(type)) {
+				uri = uri.parse("org.hwant.im.relationship/relation");
+				RelationshipProvider provider = new RelationshipProvider();
+				values.put("mfrom", from);
+				values.put("mto", to);
+				values.put("muser", application.user.getJid());
+				values.put("date", String.valueOf(new Date().getTime()));
+				values.put("state", 2);
+				provider.insert(uri, values);
+				// 同意添加为好友
+				intent = new Intent();
+				intent.setAction(RecevierConst.Connect_Subscribe);
+			} else if (Presence.Type.unsubscribe.equals(type)) {
+				uri = uri.parse("org.hwant.im.relationship/relation");
+				RelationshipProvider provider = new RelationshipProvider();
+				values.put("mfrom", from);
+				values.put("mto", to);
+				values.put("muser", application.user.getJid());
+				values.put("date", String.valueOf(new Date().getTime()));
+				values.put("state", 3);
+				provider.insert(uri, values);
+				// 拒绝添加好友
+				intent = new Intent();
+				intent.setAction(RecevierConst.Connect_Unsubscribe);
+			} else if (Presence.Type.unsubscribed.equals(type)) {
+				uri = uri.parse("org.hwant.im.relationship/relation");
+				RelationshipProvider provider = new RelationshipProvider();
+				values.put("mfrom", from);
+				values.put("mto", to);
+				values.put("muser", application.user.getJid());
+				values.put("date", String.valueOf(new Date().getTime()));
+				values.put("state", 4);
+				provider.insert(uri, values);
+				// 删除好友
+				intent = new Intent();
+				intent.setAction(RecevierConst.Connect_Unsubscribed);
+			} else if (Presence.Type.unavailable.equals(type)) {
+				// 联系人下线
+				intent = new Intent();
+				intent.setAction(RecevierConst.Connect_Unavailable);
+			} else if (Presence.Type.available.equals(type)) {
+				// 联系人在线
+				intent = new Intent();
+				intent.setAction(RecevierConst.Connect_Available);
+			}
+			if (intent != null) {
+//				intent.putExtra("connect", info);
+//				service.sendBroadcast(intent);
+			}
 		}
 	}
 
+	class MyBmobFind implements FindCallback {
+		private String from = "";
+		private String to = "";
+
+		public MyBmobFind(Context context, String from, String to) {
+			this.from = from;
+			this.to = to;
+		}
+
+		@Override
+		public void onFailure(int arg0, String arg1) {
+
+		}
+
+		@Override
+		public void onSuccess(JSONArray array) {
+			try {
+				JSONObject jobj = array.getJSONObject(0);
+				//发广播
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	class GetConnectInfoWork implements IDoWork {
+		private IMService service;
+		private String jid = "";
+        private int state;
+		public GetConnectInfoWork(IMService service, String jid,int state) {
+			this.service = service;
+			this.jid = jid;
+			this.state=state;
+		}
+
+		@Override
+		public Object doWhat() {
+			VCard vCard = new VCard();
+			if (service.getConnection().isConnected()
+					&& service.getConnection().isAuthenticated()) {
+				try {
+					vCard.load(service.getConnection(), jid + "@"
+							+ Common.DomainName);
+					ContentValues values=new ContentValues();
+					values.put("nickname",vCard.getNickName());
+				} catch (XMPPException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public void Finish2Do(Object obj) {
+          //发广播
+		}
+
+	}
 }

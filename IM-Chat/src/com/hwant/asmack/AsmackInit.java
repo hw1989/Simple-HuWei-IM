@@ -41,17 +41,18 @@ public class AsmackInit {
 	private ConnectionConfiguration configuration = null;
 	private XMPPConnection connection = null;
 	private Application application = null;
-    private IMService service=null;
+	private IMService service = null;
+
 	// private FileTransferListener ftlistener = null;
 
 	public synchronized XMPPConnection getConnection() {
 		return connection;
 	}
 
-	public AsmackInit(Application application,IMService service) {
+	public AsmackInit(Application application, IMService service) {
 		this.application = application;
 		this.context = application.getApplicationContext();
-		this.service=service;
+		this.service = service;
 	}
 
 	/**
@@ -69,6 +70,11 @@ public class AsmackInit {
 			this.context.sendBroadcast(intent);
 			return null;
 		}
+		try {
+			Class.forName("org.jivesoftware.smack.ReconnectionManager");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		configuration = new ConnectionConfiguration(ip, port);
 		// 设置自动连接
 		configuration.setReconnectionAllowed(true);
@@ -82,7 +88,8 @@ public class AsmackInit {
 		// connection.addConnectionListener(new AConnectionListener());
 		PacketTypeFilter filter = new PacketTypeFilter(Message.class);
 		// 对发送消息进行监听
-		connection.addPacketListener(new MyPacketListener(application,this.service), filter);
+		connection.addPacketListener(new MyPacketListener(application,
+				this.service), filter);
 		connection.addPacketInterceptor(new PacketInterceptor() {
 
 			@Override
