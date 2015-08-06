@@ -111,6 +111,11 @@
             android:authorities="com.hwant.im.login"
             android:exported="false" >
         </provider>
+        <provider
+            android:name="com.hwant.db.RelationshipProvider"
+            android:authorities="org.hwant.im.relationship"
+            android:exported="false" >
+        </provider>
 
         <service
             android:name="com.baidu.location.f"

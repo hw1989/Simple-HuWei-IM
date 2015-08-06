@@ -71,13 +71,13 @@ public class AddConnectActivity extends BaseActivity implements OnClickListener 
 	class AddConnectWork implements IDoWork {
 		private IMService service = null;
 		private WeakReference<Activity> weakReference = null;
-		private String connect = null;
+		private String id = null;
 
 		public AddConnectWork(IMService service, Activity activity,
-				String connect) {
+				String id) {
 			this.service = service;
 			this.weakReference = new WeakReference<Activity>(activity);
-			this.connect = connect;
+			this.id = id;
 		}
 
 		@Override
@@ -86,7 +86,7 @@ public class AddConnectActivity extends BaseActivity implements OnClickListener 
 					&& service.getConnection().isAuthenticated()) {
 				Roster roster = service.getConnection().getRoster();
 				try {
-					roster.createEntry(connect + "@" + Common.DomainName, null,
+					roster.createEntry(id + "@" + Common.DomainName, null,
 							new String[] { "firends" });
 					return true;
 				} catch (XMPPException e) {

@@ -86,7 +86,8 @@ public class AsmackInit {
 		connection = new XMPPConnection(configuration);
 		// 设置连接的监听
 		// connection.addConnectionListener(new AConnectionListener());
-		PacketTypeFilter filter = new PacketTypeFilter(Message.class);
+//		PacketTypeFilter filter = new PacketTypeFilter(Message.class);
+		PacketTypeFilter filter = new PacketTypeFilter(Packet.class);
 		// 对发送消息进行监听
 		connection.addPacketListener(new MyPacketListener(application,
 				this.service), filter);

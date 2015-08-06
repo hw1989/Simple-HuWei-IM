@@ -37,10 +37,6 @@ public class RelationshipProvider extends ContentProvider {
 			builder.appendWhere(" _id=");
 			builder.appendWhere(uri.getPathSegments().get(1));
 			break;
-		case 3:
-			break;
-		case 4:
-			break;
 		default:
 			throw new IllegalArgumentException("uri错误!");
 		}
@@ -70,11 +66,11 @@ public class RelationshipProvider extends ContentProvider {
 			throw new IllegalArgumentException("对象不能为null!");
 		}
 		if(matcher.match(uri)!=1){
-			int i=matcher.match(uri);
 			throw new IllegalArgumentException("uri在insert中错误!");
 		}
 		database=sqlite.getWritableDatabase();
-		database.insert("relationship", null, values);
+//		database.insert("relationship", null, values);
+		database.insert("relationship","image", values);
 		return uri;
 	}
 
