@@ -46,8 +46,7 @@ public class ManageConnectAdapter extends BaseSwipeAdapter {
 
 	@Override
 	public View generateView(int position, View convertView, ViewGroup parent) {
-		View view = inflater.inflate(R.layout.new_connect_item_layout, parent,
-				false);
+		View view = inflater.inflate(R.layout.new_connect_item_layout, null,false);
 
 		return view;
 	}

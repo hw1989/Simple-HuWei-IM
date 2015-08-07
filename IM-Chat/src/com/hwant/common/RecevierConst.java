@@ -33,4 +33,6 @@ public class RecevierConst {
 	public static final String Connect_Unavailable = "com.hw.connect.unavailable";
 	// 联系人zai线
 	public static final String Connect_Available = "com.hw.connect.available";
+	// service处理发布说说
+	public static final String Service_Work_Dynamic = "com.hw.service.work.dynamic";
 }

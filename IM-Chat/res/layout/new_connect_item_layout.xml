@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.hwant.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.hwant.activity"
-    android:layout_width="match_parent"
-    android:layout_height="80dip"
-    android:background="#ffffff"
     android:id="@+id/sl_manage_item"
+    android:layout_width="match_parent"
+    android:layout_height="150dip"
+    android:background="#ffffff"
     app:clickToClose="true" >
 
     <LinearLayout
@@ -13,30 +13,48 @@
         android:orientation="horizontal" >
 
         <TextView
+            android:id="@+id/tv_manageconnect_agree"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            android:background="#00AEEF"
+            android:gravity="center"
+            android:text="@string/agree"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_manageconnect_refuse"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            android:background="#F64E78"
+            android:gravity="center"
+            android:text="@string/refuse"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingBottom="5dip"
+        android:paddingLeft="8dip"
+        android:paddingTop="5dip" >
 
-        <ImageView
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:src="@drawable/ic_launcher" />
+        <com.hwant.ximageview.CircleImageView
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:background="@drawable/ic_launcher"
+            app:border_color="#D3D3D3"
+            app:border_width="2dp" />
 
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="match_parent"
+            android:layout_marginLeft="8dip"
             android:layout_weight="1.0"
             android:gravity="center_vertical"
             android:orientation="vertical" >

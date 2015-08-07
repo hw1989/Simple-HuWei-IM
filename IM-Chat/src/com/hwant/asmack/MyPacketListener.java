@@ -1,6 +1,5 @@
 package com.hwant.asmack;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jivesoftware.smack.PacketListener;
@@ -9,7 +8,6 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Presence.Type;
-import org.jivesoftware.smackx.carbons.Carbon.Private;
 import org.jivesoftware.smackx.packet.VCard;
 import org.jivesoftware.smackx.ping.packet.Ping;
 import org.json.JSONArray;
@@ -18,24 +16,14 @@ import org.json.JSONObject;
 import org.wind.util.StringHelper;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindCallback;
-
-import com.baidu.navisdk.ui.widget.NewerGuideDialog;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.DownloadListener;
 import com.hwant.application.IMApplication;
 import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
-import com.hwant.db.RelationshipProvider;
-import com.hwant.entity.ChatMessage;
-import com.hwant.entity.ConnectInfo;
-import com.hwant.entity.UserInfo;
 import com.hwant.services.IDoWork;
 import com.hwant.services.IMService;
-
-import f.in;
-
 import android.app.AlarmManager;
 import android.app.Application;
 import android.content.ContentResolver;
@@ -43,7 +31,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.telephony.gsm.SmsMessage.MessageClass;
 
 public class MyPacketListener implements PacketListener {
 	// private Context context;

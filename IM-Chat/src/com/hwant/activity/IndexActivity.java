@@ -200,6 +200,8 @@ public class IndexActivity extends BaseActivity implements OnClickListener,
 			case R.id.cb_index_dynamic:
 				cb_connect.setChecked(false);
 				cb_mess.setChecked(false);
+				intent = new Intent(this, DynamicidActivity.class);
+				startActivity(intent);
 				break;
 			case R.id.cb_index_mess:
 				setMenuFragment(message);
