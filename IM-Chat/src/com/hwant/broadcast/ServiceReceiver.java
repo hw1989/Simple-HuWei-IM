@@ -8,11 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.UploadBatchListener;
 
 import com.bmob.BmobProFile;
-import com.bmob.btp.callback.UploadBatchListener;
 import com.hwant.common.Common;
 import com.hwant.common.RecevierConst;
 
@@ -24,16 +26,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory.Options;
 import android.os.Environment;
+import android.util.Log;
 
 public class ServiceReceiver extends BroadcastReceiver {
 	private SimpleDateFormat format = null;
-	private Options options = null;
+	// private Options options = null;
 	private String root = "";
+	private UUID uuid = null;
 
 	public ServiceReceiver() {
 		format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		options = new Options();
+		// options = new Options();
 		root = Environment.getExternalStorageDirectory().getAbsolutePath();
+
 	}
 
 	@Override
@@ -48,9 +53,11 @@ public class ServiceReceiver extends BroadcastReceiver {
 			FileOutputStream foStream = null;
 			File file = null;
 			for (int i = 0; i < images.size() - 1; i++) {
-				String filename = format.format(new Date()) + ".png";
+				// String filename = format.format(new Date()) + ".png";
+				String filename = UUID.randomUUID().toString() + ".png";
 				file = new File(root + Common.Path_Cache + filename);
 				String item = images.get(i);
+				Options options = new Options();
 				options.inJustDecodeBounds = true;
 				Bitmap bitmap = BitmapFactory.decodeFile(item, options);
 				int max = Math.max(options.outWidth, options.outHeight);
@@ -75,8 +82,9 @@ public class ServiceReceiver extends BroadcastReceiver {
 					}
 				}
 			}
-			BmobProFile.getInstance(context).uploadBatch(paths,
-					new MyUploadBatchListener());
+			// BmobProFile.getInstance(context).uploadBatch(paths,
+			// new MyUploadBatchListener());
+			Bmob.uploadBatch(context, paths, new MyUploadBatchListener());
 		}
 	}
 
@@ -93,9 +101,11 @@ public class ServiceReceiver extends BroadcastReceiver {
 		}
 
 		@Override
-		public void onSuccess(boolean arg0, String[] arg1, String[] arg2,
-				BmobFile[] arg3) {
-
+		public void onSuccess(List<BmobFile> arg0, List<String> arg1) {
+			ArrayList<String> list = (ArrayList<String>) arg1;
+			for (String str : arg1) {
+				list.add(str);
+			}
 		}
 	}
 }

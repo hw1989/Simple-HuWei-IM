@@ -14,7 +14,10 @@ import org.wind.annotation.ViewInject;
 import com.bmob.BmobProFile;
 import com.hwant.adapter.SendDynamAdapter;
 import com.hwant.common.Common;
+import com.hwant.common.RecevierConst;
 import com.hwant.view.XGridView;
+
+import f.in;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -44,11 +47,11 @@ public class SendDynamicidActivity extends BaseActivity implements
 	private XGridView gv_imgs;
 	private SendDynamAdapter adapter = null;
 	private Intent intent = null;
-    
-    private Bitmap bitmap=null;
-    private String item="";
-   
-    private ArrayList<String> files=null;
+
+	private Bitmap bitmap = null;
+	private String item = "";
+	private ArrayList<String> files = null;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -64,8 +67,8 @@ public class SendDynamicidActivity extends BaseActivity implements
 		adapter = new SendDynamAdapter(this, null);
 		gv_imgs.setAdapter(adapter);
 		adapter.addItem("", 0);
-		
-		files=new ArrayList<String>();
+
+		files = new ArrayList<String>();
 	}
 
 	@Override
@@ -74,13 +77,17 @@ public class SendDynamicidActivity extends BaseActivity implements
 		case R.id.tv_sdynamic_back:
 			finish();
 			break;
-		case R.id.gv_sdynamic_imgs:
-            String content=et_content.getText().toString().trim();
-            if("".equals(content)&&adapter.getCount()<=1){
-            	showToast("发表的内容不能为空!");
-            	return;
-            }
-           
+		case R.id.tv_sdynamic_send:
+			String content = et_content.getText().toString().trim();
+			if ("".equals(content) && adapter.getCount() <= 1) {
+				showToast("发表的内容不能为空!");
+				return;
+			}
+			intent = new Intent();
+			intent.setAction(RecevierConst.Service_Work_Dynamic);
+			intent.putExtra("content",content);
+			intent.putStringArrayListExtra("images", adapter.getAllItem());
+			sendBroadcast(intent);
 			break;
 		}
 	}

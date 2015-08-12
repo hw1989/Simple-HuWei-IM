@@ -6,7 +6,9 @@ import org.jivesoftware.smack.XMPPConnection;
 import com.hwant.asmack.AsmackInit;
 import com.hwant.asmack.MyRosterListener;
 import com.hwant.broadcast.ReConnectionReceiver;
+import com.hwant.broadcast.ServiceReceiver;
 import com.hwant.common.Common;
+import com.hwant.common.RecevierConst;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -23,7 +25,8 @@ public class IMService extends Service {
 	private ReConnectionReceiver connReceiver = null;
 	// 设置闹钟的pendingintent
 	private PendingIntent pAlarmIntent = null;
-
+    //发表说说
+	private ServiceReceiver serReceiver=null;
 	public PendingIntent getpAlarmIntent() {
 		return pAlarmIntent;
 	}
@@ -52,6 +55,7 @@ public class IMService extends Service {
 		connection = asmack.setConnect(Common.Service_IP, Common.Service_Port,
 				false);
 		manager = TaskManager.init();
+		serReceiver=new ServiceReceiver();
 		pAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
 				ReConnectionReceiver.pingIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
@@ -64,6 +68,9 @@ public class IMService extends Service {
 		connFilter.addAction(ReConnectionReceiver.PING_ALARM);
 		connFilter.addAction(ReConnectionReceiver.PING_TIMEOUT);
 		registerReceiver(connReceiver, connFilter);
+		IntentFilter serFilter=new IntentFilter();
+		serFilter.addAction(RecevierConst.Service_Work_Dynamic);
+		registerReceiver(serReceiver, serFilter);
 	}
 
 	@Override
@@ -86,6 +93,9 @@ public class IMService extends Service {
 		if (connReceiver != null) {
 			// 取消广播的注册
 			unregisterReceiver(connReceiver);
+		}
+		if(serReceiver!=null){
+			unregisterReceiver(serReceiver);
 		}
 		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
 				.cancel(pAlarmIntent);
